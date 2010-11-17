@@ -1,0 +1,46 @@
+package net.chwthewke.hamcrest.annotations;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+import org.hamcrest.Matcher;
+import org.junit.Before;
+import org.junit.Test;
+
+public class BasicAnnotatedMatcherTest {
+
+    private Matcher<BasicMatchable> basicSpecificationMatcher;
+
+    @Before
+    public void setupMatcher( ) {
+    }
+
+    @Test
+    public void basicMatcherSpecDifferentiatesOnValue( ) throws Exception {
+        // Setup
+        final BasicMatchable first = new BasicMatchable( 1L );
+        final BasicMatchable second = new BasicMatchable( 4D );
+        basicSpecificationMatcher =
+                new AnnotationMatcher<BasicMatchable>( first, BasicMatcherSpec.class );
+        // Exercise
+        final boolean match = basicSpecificationMatcher.matches( second );
+        // Verify
+        assertThat( match, is( false ) );
+
+    }
+
+    @Test
+    public void basicMatcherSpecRespectsIdentity( ) throws Exception {
+        // Setup
+        final Object value = new Object( );
+        final BasicMatchable first = new BasicMatchable( value );
+        final BasicMatchable second = new BasicMatchable( value );
+        basicSpecificationMatcher =
+                new AnnotationMatcher<BasicMatchable>( first, BasicMatcherSpec.class );
+        // Exercise
+        final boolean match = basicSpecificationMatcher.matches( second );
+        // Verify
+        assertThat( match, is( true ) );
+
+    }
+}
