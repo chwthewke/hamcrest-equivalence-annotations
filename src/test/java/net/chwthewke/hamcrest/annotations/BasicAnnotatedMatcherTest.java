@@ -1,10 +1,13 @@
 package net.chwthewke.hamcrest.annotations;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.StringDescription;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class BasicAnnotatedMatcherTest {
@@ -15,6 +18,21 @@ public class BasicAnnotatedMatcherTest {
     public void setupMatcher( ) {
     }
 
+    @Test
+    public void descriptionIncludesMatchedClassNameAndProperties( ) throws Exception {
+        // Setup
+        basicSpecificationMatcher =
+                new AnnotationMatcher<BasicMatchable>( new BasicMatchable( 1L ), BasicMatcherSpec.class );
+
+        final StringDescription description = new StringDescription( );
+        // Exercise
+        basicSpecificationMatcher.describeTo( description );
+        // Verify
+        assertThat( description.toString( ),
+            is( equalTo( "a " + BasicMatchable.class.getSimpleName( ) ) ) );
+    }
+
+    @Ignore
     @Test
     public void basicMatcherSpecDifferentiatesOnValue( ) throws Exception {
         // Setup
@@ -29,6 +47,7 @@ public class BasicAnnotatedMatcherTest {
 
     }
 
+    @Ignore
     @Test
     public void basicMatcherSpecRespectsIdentity( ) throws Exception {
         // Setup
