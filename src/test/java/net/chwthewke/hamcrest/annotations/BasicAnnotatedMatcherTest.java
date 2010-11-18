@@ -28,8 +28,8 @@ public class BasicAnnotatedMatcherTest {
         // Exercise
         basicSpecificationMatcher.describeTo( description );
         // Verify
-        assertThat( description.toString( ),
-            is( equalTo( "a " + BasicMatchable.class.getSimpleName( ) ) ) );
+        final String expected = "a BasicMatchable with value=<1L>";
+        assertThat( description.toString( ), is( equalTo( expected ) ) );
     }
 
     @Ignore
