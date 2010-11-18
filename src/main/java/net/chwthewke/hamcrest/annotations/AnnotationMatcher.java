@@ -1,5 +1,9 @@
 package net.chwthewke.hamcrest.annotations;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -10,6 +14,8 @@ public class AnnotationMatcher<T> extends TypeSafeMatcher<T> {
             final Class<?> matcherSpecification ) {
         this.expected = expected;
         this.matcherSpecification = matcherSpecification;
+
+        initSubMatchers( );
     }
 
     public void describeTo( final Description description ) {
@@ -30,7 +36,18 @@ public class AnnotationMatcher<T> extends TypeSafeMatcher<T> {
         return false;
     }
 
+    private void initSubMatchers( ) {
+        final Method[ ] methods = matcherSpecification.getMethods( );
+        for ( final Method propertyMethod : methods )
+        {
+            final SubMatcher<T> sub;
+        }
+    }
+
     private final T expected;
     private final Class<?> matcherSpecification;
+
+    private final Collection<SubMatcher<T>> subMatchers =
+            new ArrayList<SubMatcher<T>>( );
 
 }
