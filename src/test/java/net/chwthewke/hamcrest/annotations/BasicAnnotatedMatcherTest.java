@@ -29,11 +29,10 @@ public class BasicAnnotatedMatcherTest {
         // Exercise
         basicSpecificationMatcher.describeTo( description );
         // Verify
-        final String expected = "a BasicMatchable with value=<1L>";
+        final String expected = "a BasicMatchable with getValue=<1L>";
         assertThat( description.toString( ), is( equalTo( expected ) ) );
     }
 
-    @Ignore
     @Test
     public void basicMatcherSpecDifferentiatesOnValue( ) throws Exception {
         // Setup
@@ -48,7 +47,6 @@ public class BasicAnnotatedMatcherTest {
 
     }
 
-    @Ignore
     @Test
     public void basicMatcherSpecRespectsIdentity( ) throws Exception {
         // Setup
@@ -61,6 +59,21 @@ public class BasicAnnotatedMatcherTest {
         final boolean match = basicSpecificationMatcher.matches( second );
         // Verify
         assertThat( match, is( true ) );
+    }
 
+    @Test
+    @Ignore
+    public void basicMatcherSpecMismatchDescription( ) {
+        // Setup
+        final BasicMatchable first = new BasicMatchable( 1L );
+        final BasicMatchable second = new BasicMatchable( 4D );
+        basicSpecificationMatcher =
+                new AnnotationMatcher<BasicMatchable>( first, BasicMatchable.class, BasicMatcherSpec.class );
+        final StringDescription description = new StringDescription( );
+        // Exercise
+        basicSpecificationMatcher.matches( second );
+        basicSpecificationMatcher.describeTo( description );
+        // Verify
+        assertThat( description.toString( ), is( equalTo( null ) ) );
     }
 }

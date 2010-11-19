@@ -33,6 +33,16 @@ public class AnnotationMatcher<T> extends TypeSafeMatcher<T> {
         {
             throw new RuntimeException( e ); // TODO exception
         }
+        catch ( final SecurityException e )
+        {
+            // TODO Auto-generated catch block
+            throw new RuntimeException( e );
+        }
+        catch ( final NoSuchMethodException e )
+        {
+            // TODO Auto-generated catch block
+            throw new RuntimeException( e );
+        }
     }
 
     public void describeTo( final Description description ) {
@@ -60,20 +70,30 @@ public class AnnotationMatcher<T> extends TypeSafeMatcher<T> {
 
     @Override
     protected boolean matchesSafely( final T item ) {
-        // TODO Auto-generated method stub
-        return false;
+        for ( final SubMatcher<T> subMatcher : subMatchers )
+        {
+            if ( !subMatcher.matches( item ) )
+                return false;
+        }
+
+        return true;
     }
 
-    private void initSubMatchers( ) throws IllegalAccessException, InvocationTargetException {
+    private void initSubMatchers( ) throws IllegalAccessException, InvocationTargetException, SecurityException,
+            NoSuchMethodException {
         final Method[ ] methods = matcherSpecification.getMethods( );
         for ( final Method propertyMethod : methods )
         {
             // TODO find matching method on real class dumbass!
+            final Method extractor = matchedClass.getMethod( propertyMethod.getName( ) );
+
+            if ( !propertyMethod.getReturnType( ).isAssignableFrom( extractor.getReturnType( ) ) )
+                throw new IllegalArgumentException( /* TODO */);
 
             // TODO expected property binding time
-            final Object expectedProperty = propertyMethod.invoke( expected );
+            final Object expectedProperty = extractor.invoke( expected );
 
-            final SubMatcher<T> sub = new SubMatcher<T>( propertyMethod, equalTo( expectedProperty ) );
+            final SubMatcher<T> sub = new SubMatcher<T>( extractor, equalTo( expectedProperty ) );
             subMatchers.add( sub );
         }
     }

@@ -23,7 +23,7 @@ public class SubMatcher<T> extends TypeSafeMatcher<T> {
         description
             .appendText( "with " )
             .appendText( extractor.getName( ) )
-            .appendText( " " )
+            .appendText( "=" )
             .appendDescriptionOf( matcher );
     }
 
