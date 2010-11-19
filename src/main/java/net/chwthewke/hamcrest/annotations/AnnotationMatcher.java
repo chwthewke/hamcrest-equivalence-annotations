@@ -1,5 +1,8 @@
 package net.chwthewke.hamcrest.annotations;
 
+import static org.hamcrest.Matchers.equalTo;
+
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,25 +12,50 @@ import org.hamcrest.TypeSafeMatcher;
 
 public class AnnotationMatcher<T> extends TypeSafeMatcher<T> {
 
-    // TODO need to pass in the Class<T> object ?
+    // TODO factory method that takes the Class<T> object from the annotation
     public AnnotationMatcher( final T expected,
+            final Class<T> matchedClass,
             final Class<?> matcherSpecification ) {
         this.expected = expected;
         this.matcherSpecification = matcherSpecification;
+        this.matchedClass = matchedClass;
 
-        initSubMatchers( );
+        checkMatchedClass( );
+        try
+        {
+            initSubMatchers( );
+        }
+        catch ( final IllegalAccessException e )
+        {
+            throw new RuntimeException( e ); // TODO exception
+        }
+        catch ( final InvocationTargetException e )
+        {
+            throw new RuntimeException( e ); // TODO exception
+        }
     }
 
     public void describeTo( final Description description ) {
 
-        final MatcherOf annotation =
-                matcherSpecification.getAnnotation( MatcherOf.class );
         description
             .appendText( "a " )
-            .appendText( annotation.value( ).getSimpleName( ) );
+            .appendText( matchedClass.getSimpleName( ) );
 
-        // TODO Auto-generated method stub
+        for ( final SubMatcher<T> subMatcher : subMatchers )
+        {
+            description
+                .appendText( " " )
+                .appendDescriptionOf( subMatcher );
+        }
+    }
 
+    private void checkMatchedClass( ) {
+        final MatcherOf annotation =
+                matcherSpecification.getAnnotation( MatcherOf.class );
+        if ( annotation == null )
+            throw new IllegalArgumentException( /* TODO */);
+        if ( annotation.value( ) != matchedClass ) // TODO can use isAssignableFrom ?
+            throw new IllegalArgumentException( /* TODO */);
     }
 
     @Override
@@ -36,16 +64,23 @@ public class AnnotationMatcher<T> extends TypeSafeMatcher<T> {
         return false;
     }
 
-    private void initSubMatchers( ) {
+    private void initSubMatchers( ) throws IllegalAccessException, InvocationTargetException {
         final Method[ ] methods = matcherSpecification.getMethods( );
         for ( final Method propertyMethod : methods )
         {
-            final SubMatcher<T> sub;
+            // TODO find matching method on real class dumbass!
+
+            // TODO expected property binding time
+            final Object expectedProperty = propertyMethod.invoke( expected );
+
+            final SubMatcher<T> sub = new SubMatcher<T>( propertyMethod, equalTo( expectedProperty ) );
+            subMatchers.add( sub );
         }
     }
 
     private final T expected;
     private final Class<?> matcherSpecification;
+    private final Class<T> matchedClass;
 
     private final Collection<SubMatcher<T>> subMatchers =
             new ArrayList<SubMatcher<T>>( );

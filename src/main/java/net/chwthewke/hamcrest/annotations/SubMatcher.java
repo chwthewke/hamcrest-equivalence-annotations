@@ -9,6 +9,11 @@ import org.hamcrest.TypeSafeMatcher;
 
 public class SubMatcher<T> extends TypeSafeMatcher<T> {
 
+    SubMatcher( final Method extractor, final Matcher<?> matcher ) {
+        this.matcher = matcher;
+        this.extractor = extractor;
+    }
+
     @Override
     public boolean matchesSafely( final T item ) {
         return matcher.matches( extract( item ) );
@@ -39,6 +44,6 @@ public class SubMatcher<T> extends TypeSafeMatcher<T> {
         }
     }
 
-    private Matcher<?> matcher;
-    private Method extractor; // Function<T, U> ?
+    private final Matcher<?> matcher;
+    private final Method extractor; // Function<T, U> ?
 }
