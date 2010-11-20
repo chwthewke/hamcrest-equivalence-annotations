@@ -7,7 +7,11 @@ import static org.hamcrest.Matchers.sameInstance;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -15,6 +19,7 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 public class AnnotationMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
+    // TODO this factory method stinks
     public static <T> AnnotationMatcher<T> of( final Class<?> matcherSpecification,
             final T expected ) {
         final Class<?> matchedClass =
@@ -30,7 +35,6 @@ public class AnnotationMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
         return new AnnotationMatcher<T>( expected, matchedClass, matcherSpecification );
     }
 
-    // TODO factory method that takes the Class<T> object from the annotation
     private AnnotationMatcher( final T expected,
             final Class<T> matchedClass,
             final Class<?> matcherSpecification ) {
@@ -106,7 +110,15 @@ public class AnnotationMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
     private void initSubMatchers( ) throws IllegalAccessException, InvocationTargetException, SecurityException,
             NoSuchMethodException {
-        final Method[ ] methods = matcherSpecification.getMethods( );
+        final List<Method> methods =
+                Arrays.asList( matcherSpecification.getMethods( ) );
+
+        Collections.sort( methods, new Comparator<Method>( ) {
+            public int compare( final Method left, final Method right ) {
+                return left.getName( ).compareTo( right.getName( ) );
+            }
+        } );
+
         for ( final Method propertyMethod : methods )
         {
             final Method extractor = matchedClass.getMethod( propertyMethod.getName( ) );
