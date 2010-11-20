@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.is;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class BasicAnnotatedMatcherTest {
@@ -29,7 +28,7 @@ public class BasicAnnotatedMatcherTest {
         // Exercise
         basicSpecificationMatcher.describeTo( description );
         // Verify
-        final String expected = "a BasicMatchable with getValue=<1L>";
+        final String expected = "a BasicMatchable with getValue()=<1L>";
         assertThat( description.toString( ), is( equalTo( expected ) ) );
     }
 
@@ -62,7 +61,6 @@ public class BasicAnnotatedMatcherTest {
     }
 
     @Test
-    @Ignore
     public void basicMatcherSpecMismatchDescription( ) {
         // Setup
         final BasicMatchable first = new BasicMatchable( 1L );
@@ -71,9 +69,9 @@ public class BasicAnnotatedMatcherTest {
                 new AnnotationMatcher<BasicMatchable>( first, BasicMatchable.class, BasicMatcherSpec.class );
         final StringDescription description = new StringDescription( );
         // Exercise
-        basicSpecificationMatcher.matches( second );
-        basicSpecificationMatcher.describeTo( description );
+        // basicSpecificationMatcher.matches( second );
+        basicSpecificationMatcher.describeMismatch( second, description );
         // Verify
-        assertThat( description.toString( ), is( equalTo( null ) ) );
+        assertThat( description.toString( ), is( equalTo( "getValue() was <4.0>" ) ) );
     }
 }

@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 
-public class SubMatcher<T> extends TypeSafeMatcher<T> {
+public class SubMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
     SubMatcher( final Method extractor, final Matcher<?> matcher ) {
         this.matcher = matcher;
@@ -15,19 +15,28 @@ public class SubMatcher<T> extends TypeSafeMatcher<T> {
     }
 
     @Override
-    public boolean matchesSafely( final T item ) {
-        return matcher.matches( extract( item ) );
+    public boolean matchesSafely( final T item, final Description mismatchDescription ) {
+        final Object matchedProperty = extract( item );
+
+        final boolean matches = matcher.matches( matchedProperty );
+        if ( !matches )
+        {
+            mismatchDescription
+                .appendText( extractor.getName( ) )
+                .appendText( "() " );
+            matcher.describeMismatch( matchedProperty, mismatchDescription );
+        }
+        return matches;
     }
 
     public void describeTo( final Description description ) {
         description
             .appendText( "with " )
             .appendText( extractor.getName( ) )
-            .appendText( "=" )
+            .appendText( "()=" )
             .appendDescriptionOf( matcher );
     }
 
-    @SuppressWarnings( "unchecked" )
     private Object extract( final T item ) {
         try
         {

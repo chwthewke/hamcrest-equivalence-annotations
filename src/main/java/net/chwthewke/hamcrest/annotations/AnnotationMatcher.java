@@ -8,14 +8,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 
-public class AnnotationMatcher<T> extends TypeSafeMatcher<T> {
+public class AnnotationMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
     // TODO factory method that takes the Class<T> object from the annotation
     public AnnotationMatcher( final T expected,
             final Class<T> matchedClass,
             final Class<?> matcherSpecification ) {
+        super( matchedClass );
         this.expected = expected;
         this.matcherSpecification = matcherSpecification;
         this.matchedClass = matchedClass;
@@ -69,11 +70,14 @@ public class AnnotationMatcher<T> extends TypeSafeMatcher<T> {
     }
 
     @Override
-    protected boolean matchesSafely( final T item ) {
+    protected boolean matchesSafely( final T item, final Description mismatchDescription ) {
         for ( final SubMatcher<T> subMatcher : subMatchers )
         {
             if ( !subMatcher.matches( item ) )
+            {
+                subMatcher.describeMismatch( item, mismatchDescription );
                 return false;
+            }
         }
 
         return true;
@@ -84,7 +88,6 @@ public class AnnotationMatcher<T> extends TypeSafeMatcher<T> {
         final Method[ ] methods = matcherSpecification.getMethods( );
         for ( final Method propertyMethod : methods )
         {
-            // TODO find matching method on real class dumbass!
             final Method extractor = matchedClass.getMethod( propertyMethod.getName( ) );
 
             if ( !propertyMethod.getReturnType( ).isAssignableFrom( extractor.getReturnType( ) ) )
