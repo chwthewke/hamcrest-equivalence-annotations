@@ -8,4 +8,7 @@ public interface GasTankMatching {
 
     @Approximate( 0.000001d )
     double getVolume( );
+
+    @Identical
+    String getHazardLevel( );
 }
