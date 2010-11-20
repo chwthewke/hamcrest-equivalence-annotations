@@ -1,17 +1,19 @@
 package net.chwthewke.hamcrest.annotations;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
+import com.google.common.base.Function;
+
 public class SubMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
-    SubMatcher( final Method extractor, final Matcher<?> matcher ) {
-        this.matcher = matcher;
-        this.extractor = extractor;
+    SubMatcher( final String propertyName,
+            final Function<T, ?> propertyExtractor,
+            final Matcher<?> propertyMatcher ) {
+        this.matcher = propertyMatcher;
+        this.propertyName = propertyName;
+        this.propertyExtractor = propertyExtractor;
     }
 
     @Override
@@ -22,7 +24,7 @@ public class SubMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
         if ( !matches )
         {
             mismatchDescription
-                .appendText( extractor.getName( ) )
+                .appendText( propertyName )
                 .appendText( "() " );
             matcher.describeMismatch( matchedProperty, mismatchDescription );
         }
@@ -31,27 +33,17 @@ public class SubMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
     public void describeTo( final Description description ) {
         description
-            .appendText( extractor.getName( ) )
+            .appendText( propertyName )
             .appendText( "()=" )
             .appendDescriptionOf( matcher );
     }
 
     private Object extract( final T item ) {
-        try
-        {
-            // TODO type-check at construction
-            return extractor.invoke( item );
-        }
-        catch ( final IllegalAccessException e )
-        {
-            throw new RuntimeException( e );
-        }
-        catch ( final InvocationTargetException e )
-        {
-            throw new RuntimeException( e );
-        }
+        return propertyExtractor.apply( item );
     }
 
     private final Matcher<?> matcher;
-    private final Method extractor; // Function<T, U> ?
+
+    private final String propertyName;
+    private final Function<T, ?> propertyExtractor;
 }

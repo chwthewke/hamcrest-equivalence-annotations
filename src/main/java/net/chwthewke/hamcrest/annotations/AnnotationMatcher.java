@@ -1,21 +1,19 @@
 package net.chwthewke.hamcrest.annotations;
 
-import static org.hamcrest.Matchers.closeTo;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.sameInstance;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Ordering;
 
 public class AnnotationMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
@@ -110,39 +108,21 @@ public class AnnotationMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
     private void initSubMatchers( ) throws IllegalAccessException, InvocationTargetException, SecurityException,
             NoSuchMethodException {
-        final List<Method> methods =
-                Arrays.asList( matcherSpecification.getMethods( ) );
+        final List<Method> methods = newArrayList( matcherSpecification.getMethods( ) );
 
-        Collections.sort( methods, new Comparator<Method>( ) {
-            public int compare( final Method left, final Method right ) {
-                return left.getName( ).compareTo( right.getName( ) );
-            }
-        } );
+        Collections.sort( methods,
+            Ordering.natural( ).onResultOf( new Function<Method, String>( ) {
+                public String apply( final Method method ) {
+                    return method.getName( );
+                }
+            } ) );
 
-        for ( final Method propertyMethod : methods )
+        final SubMatcherFactory<T> factory = new SubMatcherFactory<T>( matchedClass );
+
+        for ( final Method propertyDescriptor : methods )
         {
-            final Method extractor = matchedClass.getMethod( propertyMethod.getName( ) );
 
-            if ( !propertyMethod.getReturnType( ).isAssignableFrom( extractor.getReturnType( ) ) )
-                throw new IllegalArgumentException( /* TODO */);
-
-            // TODO expected property binding time
-            final Object expectedProperty = extractor.invoke( expected );
-
-            // TODO better default than @Equals
-            Matcher<?> propertyMatcher;
-            if ( propertyMethod.isAnnotationPresent( Identical.class ) )
-                propertyMatcher = sameInstance( expectedProperty );
-            else if ( propertyMethod.isAnnotationPresent( Approximate.class ) )
-            {
-                // TODO type check
-                propertyMatcher = closeTo( (Double) expectedProperty,
-                    propertyMethod.getAnnotation( Approximate.class ).value( ) );
-            }
-            else
-                propertyMatcher = equalTo( expectedProperty );
-
-            final SubMatcher<T> sub = new SubMatcher<T>( extractor, propertyMatcher );
+            final SubMatcher<T> sub = factory.createSubMatcher( propertyDescriptor, expected );
             subMatchers.add( sub );
         }
     }
