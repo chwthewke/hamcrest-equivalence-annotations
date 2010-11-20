@@ -31,7 +31,6 @@ public class SubMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
     public void describeTo( final Description description ) {
         description
-            .appendText( "with " )
             .appendText( extractor.getName( ) )
             .appendText( "()=" )
             .appendDescriptionOf( matcher );

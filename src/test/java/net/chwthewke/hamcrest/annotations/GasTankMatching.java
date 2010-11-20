@@ -10,5 +10,5 @@ public interface GasTankMatching {
     double getVolume( );
 
     @Identical
-    String getHazardLevel( );
+    GasTank.Hazard getHazardLevel( );
 }

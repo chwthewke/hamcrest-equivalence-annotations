@@ -21,8 +21,7 @@ public class BasicAnnotatedMatcherTest {
     public void descriptionIncludesMatchedClassNameAndProperties( ) throws Exception {
         // Setup
         basicSpecificationMatcher =
-                new AnnotationMatcher<BasicMatchable>(
-                    new BasicMatchable( 1L ), BasicMatchable.class, BasicMatcherSpec.class );
+                AnnotationMatcher.of( BasicMatchable.class, BasicMatcherSpec.class, new BasicMatchable( 1L ) );
 
         final StringDescription description = new StringDescription( );
         // Exercise
@@ -38,7 +37,7 @@ public class BasicAnnotatedMatcherTest {
         final BasicMatchable first = new BasicMatchable( 1L );
         final BasicMatchable second = new BasicMatchable( 4D );
         basicSpecificationMatcher =
-                new AnnotationMatcher<BasicMatchable>( first, BasicMatchable.class, BasicMatcherSpec.class );
+                AnnotationMatcher.of( BasicMatchable.class, BasicMatcherSpec.class, first );
         // Exercise
         final boolean match = basicSpecificationMatcher.matches( second );
         // Verify
@@ -53,7 +52,7 @@ public class BasicAnnotatedMatcherTest {
         final BasicMatchable first = new BasicMatchable( value );
         final BasicMatchable second = new BasicMatchable( value );
         basicSpecificationMatcher =
-                new AnnotationMatcher<BasicMatchable>( first, BasicMatchable.class, BasicMatcherSpec.class );
+                AnnotationMatcher.of( BasicMatchable.class, BasicMatcherSpec.class, first );
         // Exercise
         final boolean match = basicSpecificationMatcher.matches( second );
         // Verify
@@ -66,7 +65,7 @@ public class BasicAnnotatedMatcherTest {
         final BasicMatchable first = new BasicMatchable( 1L );
         final BasicMatchable second = new BasicMatchable( 4D );
         basicSpecificationMatcher =
-                new AnnotationMatcher<BasicMatchable>( first, BasicMatchable.class, BasicMatcherSpec.class );
+                AnnotationMatcher.of( BasicMatchable.class, BasicMatcherSpec.class, first );
         final StringDescription description = new StringDescription( );
         // Exercise
         // basicSpecificationMatcher.matches( second );
