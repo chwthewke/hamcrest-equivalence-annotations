@@ -17,17 +17,6 @@ import com.google.common.collect.Ordering;
 
 public class AnnotationMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
-    // TODO this factory method stinks
-    public static <T> AnnotationMatcher<T> of( final Class<?> matcherSpecification,
-            final T expected ) {
-        final Class<?> matchedClass =
-                matcherSpecification.getAnnotation( MatcherOf.class ).value( );
-        if ( expected.getClass( ) != matchedClass )
-            throw new IllegalArgumentException( /* TODO */);
-
-        return of( (Class<T>) matchedClass, matcherSpecification, expected );
-    }
-
     public static <T> AnnotationMatcher<T> of( final Class<T> matchedClass, final Class<?> matcherSpecification,
             final T expected ) {
         return new AnnotationMatcher<T>( expected, matchedClass, matcherSpecification );
