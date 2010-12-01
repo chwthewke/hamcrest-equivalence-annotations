@@ -37,11 +37,13 @@ public class AnnotationMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
         }
         catch ( final IllegalAccessException e )
         {
-            throw new RuntimeException( e ); // TODO exception
+            // TODO Auto-generated catch block
+            throw new RuntimeException( e );
         }
         catch ( final InvocationTargetException e )
         {
-            throw new RuntimeException( e ); // TODO exception
+            // TODO Auto-generated catch block
+            throw new RuntimeException( e );
         }
         catch ( final SecurityException e )
         {
