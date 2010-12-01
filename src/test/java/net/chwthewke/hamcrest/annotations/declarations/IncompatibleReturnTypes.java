@@ -3,12 +3,11 @@ package net.chwthewke.hamcrest.annotations.declarations;
 import net.chwthewke.hamcrest.annotations.Equals;
 import net.chwthewke.hamcrest.annotations.MatcherOf;
 
-public class MethodWithArgs {
-
+public class IncompatibleReturnTypes {
     @MatcherOf( Matched.class )
     public static interface MatcherSpecification {
         @Equals
-        String getName( );
+        Double getName( );
     }
 
     public static class Matched {
@@ -16,10 +15,11 @@ public class MethodWithArgs {
             this.name = name;
         }
 
-        public String getName( final Object arg ) {
-            return name + arg.toString( );
+        public String getName( ) {
+            return name;
         }
 
         private final String name;
     }
+
 }

@@ -1,14 +1,15 @@
 package net.chwthewke.hamcrest.annotations;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.fail;
+import net.chwthewke.hamcrest.annotations.declarations.IncompatibleReturnTypes;
 import net.chwthewke.hamcrest.annotations.declarations.MethodWithArgs;
 import net.chwthewke.hamcrest.annotations.declarations.MissingMethod;
 
 import org.junit.Test;
 
-public class MatchingInterfaceErrorsTest {
+public class MatchingInterfaceSignatureTest {
 
     @Test
     public void matchingInterfaceTargetsMissingMethod( ) throws Exception {
@@ -25,7 +26,7 @@ public class MatchingInterfaceErrorsTest {
         }
         catch ( final IllegalArgumentException e )
         {
-            assertThat( e.getMessage( ), containsString( "Missing method name()" ) );
+            assertThat( e.getMessage( ), startsWith( "Missing method name()" ) );
         }
     }
 
@@ -45,8 +46,30 @@ public class MatchingInterfaceErrorsTest {
         }
         catch ( final IllegalArgumentException e )
         {
-            assertThat( e.getMessage( ), containsString( "Missing method getName()" ) );
+            assertThat( e.getMessage( ), startsWith( "Missing method getName()" ) );
         }
-
     }
+
+    @Test
+    public void matchingInterfaceHasIncompatibleReturnType( ) throws Exception {
+        // Setup
+
+        // Exercise
+        try
+        {
+            AnnotationMatcher.of(
+                IncompatibleReturnTypes.Matched.class,
+                IncompatibleReturnTypes.MatcherSpecification.class,
+                new IncompatibleReturnTypes.Matched( "test" ) );
+            // Verify
+            fail( );
+        }
+        catch ( final IllegalArgumentException e )
+        {
+            assertThat(
+                e.getMessage( ),
+                startsWith( "Incompatible return types: getName: class java.lang.Double vs. class java.lang.String" ) );
+        }
+    }
+
 }

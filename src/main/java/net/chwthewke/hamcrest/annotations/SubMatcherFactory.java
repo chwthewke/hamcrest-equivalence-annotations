@@ -23,7 +23,10 @@ public class SubMatcherFactory<T> {
             final Method propertyMethod = matchedClass.getMethod( propertyDescriptor.getName( ) );
 
             if ( !propertyDescriptor.getReturnType( ).isAssignableFrom( propertyMethod.getReturnType( ) ) )
-                throw new IllegalArgumentException( /* TODO */);
+                throw new IllegalArgumentException(
+                    String.format( "Incompatible return types: %s: %s vs. %s",
+                        propertyDescriptor.getName( ), propertyDescriptor.getReturnType( ),
+                        propertyMethod.getReturnType( ) ) );
 
             // TODO expected property binding time
             final Object expectedProperty = propertyMethod.invoke( expected );
