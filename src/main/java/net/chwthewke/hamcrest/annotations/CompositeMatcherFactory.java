@@ -3,7 +3,6 @@ package net.chwthewke.hamcrest.annotations;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Comparator;
@@ -66,21 +65,9 @@ public class CompositeMatcherFactory<T> {
 
         final Method property = getAndCheckProperty( propertyName, propertyType );
 
-        // tmp conditional dispatch of matcher selection
-        SubMatcherTemplate<T, ?> subMatcherTemplate;
-        if ( specificationMethod.isAnnotationPresent( ApproximateEquality.class ) )
-        {
-            subMatcherTemplate = createApproximateSubMatcher( property, propertyName,
-                specificationMethod.getAnnotation( ApproximateEquality.class ).value( ) );
-        }
-        else if ( specificationMethod.isAnnotationPresent( Identity.class ) )
-        {
-            subMatcherTemplate = createIdentitySubMatcher( property, propertyName, propertyType );
-        }
-        else
-        {
-            subMatcherTemplate = createEqualitySubMatcher( property, propertyName, propertyType );
-        }
+        final SubMatcherTemplate<T, ?> subMatcherTemplate =
+                new SubMatcherTemplateFactory2<T>( property, specificationMethod )
+                    .getSubMatcherTemplate( );
         subMatcherTemplates.add( subMatcherTemplate );
     }
 
@@ -108,69 +95,6 @@ public class CompositeMatcherFactory<T> {
                     matcherSpecification.getName( ) ) );
 
         return property;
-    }
-
-    private SubMatcherTemplate<T, Double> createApproximateSubMatcher( final Method property,
-            final String propertyName,
-            final double tolerance ) {
-        return SubMatcherFactory.closeTo( propertyName,
-            propertyFunction( property, Double.class ), tolerance );
-    }
-
-    private <U> SubMatcherTemplate<T, U> createIdentitySubMatcher( final Method property,
-            final String propertyName,
-            final Class<U> propertyType ) {
-        return SubMatcherFactory.<T, U>sameInstance( propertyName,
-            propertyFunction( property, propertyType ) );
-    }
-
-    private <U> SubMatcherTemplate<T, U> createEqualitySubMatcher( final Method property,
-            final String propertyName,
-            final Class<U> propertyType ) {
-
-        return SubMatcherFactory.<T, U>equalTo( propertyName,
-            propertyFunction( property, propertyType ) );
-    }
-
-    // TODO something can, and will go wrong if propertyType is property.getReturnType() and primitive.
-    private <U> Function<T, U> propertyFunction( final Method property, final Class<U> propertyType ) {
-        return new Function<T, U>( ) {
-            public U apply( final T item ) {
-                return extractProperty( propertyType, property, item );
-            }
-        };
-    }
-
-    private <U> U extractProperty( final Class<U> propertyType,
-            final Method property, final T item ) {
-
-        try
-        {
-            final Object rawProperty = property.invoke( item );
-            try
-            {
-                return propertyType.cast( rawProperty );
-            }
-            catch ( final ClassCastException e )
-            {
-                throw new RuntimeException(
-                    String.format( "Cannot cast result of property '%s()' on instance of %s to %s, actual type is %s.",
-                        property.getName( ), item.getClass( ).getName( ),
-                        propertyType.getName( ), rawProperty.getClass( ).getName( ) ),
-                        e );
-            }
-        }
-        catch ( final IllegalAccessException e )
-        {
-            throw new IllegalStateException( "Unpredicted illegal access", e );
-        }
-        catch ( final InvocationTargetException e )
-        {
-            throw new RuntimeException(
-                String.format( "Exception while reading property %s on instance of %s.",
-                    property.getName( ), item.getClass( ).getName( ) ),
-                    e );
-        }
     }
 
     private void checkValidProperty( final Method method ) {
