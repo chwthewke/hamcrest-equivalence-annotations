@@ -8,19 +8,15 @@ class SubMatcherProvider<T, U> {
 
     static <T, U> SubMatcherProvider<T, U> create(
             final String propertyName,
-            final Class<U> propertyType,
             final Function<T, U> propertyMethod,
             final Function<U, Matcher<? super U>> matcherFactory ) {
-        return new SubMatcherProvider<T, U>( propertyName, propertyType,
-                propertyMethod, matcherFactory );
+        return new SubMatcherProvider<T, U>( propertyName, propertyMethod, matcherFactory );
     }
 
     private SubMatcherProvider( final String propertyName,
-            final Class<U> propertyType,
             final Function<T, U> propertyMethod,
             final Function<U, Matcher<? super U>> matcherFactory ) {
         this.propertyName = propertyName;
-        this.propertyType = propertyType;
         this.propertyMethod = propertyMethod;
         this.matcherFactory = matcherFactory;
     }
@@ -38,7 +34,6 @@ class SubMatcherProvider<T, U> {
     }
 
     private final String propertyName;
-    private final Class<U> propertyType;
     private final Function<T, U> propertyMethod;
     private final Function<U, Matcher<? super U>> matcherFactory;
 

@@ -111,7 +111,7 @@ public class CompositeMatcherFactory<T> {
     private <U> SubMatcherProvider<T, U> createIdentitySubMatcher( final Method property,
             final String propertyName,
             final Class<U> propertyType ) {
-        return SubMatcherFactory.sameInstance( propertyName, propertyType,
+        return SubMatcherFactory.<T, U>sameInstance( propertyName,
             propertyFunction( property, propertyType ) );
     }
 
@@ -119,7 +119,7 @@ public class CompositeMatcherFactory<T> {
             final String propertyName,
             final Class<U> propertyType ) {
 
-        return SubMatcherFactory.equalTo( propertyName, propertyType,
+        return SubMatcherFactory.<T, U>equalTo( propertyName,
             propertyFunction( property, propertyType ) );
     }
 

@@ -9,7 +9,6 @@ public class SubMatcherFactory {
 
     public static <T, U> SubMatcherProvider<T, U> equalTo(
             final String propertyName,
-            final Class<U> type,
             final Function<T, U> propertyMethod ) {
 
         final Function<U, Matcher<? super U>> equalToMatcherFactory =
@@ -21,14 +20,12 @@ public class SubMatcherFactory {
 
         return SubMatcherProvider.<T, U>create(
             propertyName,
-            type,
             propertyMethod,
             equalToMatcherFactory );
     }
 
     public static <T, U> SubMatcherProvider<T, U> sameInstance(
             final String propertyName,
-            final Class<U> type,
             final Function<T, U> propertyMethod ) {
 
         final Function<U, Matcher<? super U>> sameInstanceMatcherFactory =
@@ -40,7 +37,6 @@ public class SubMatcherFactory {
 
         return SubMatcherProvider.<T, U>create(
             propertyName,
-            type,
             propertyMethod,
             sameInstanceMatcherFactory );
     }
@@ -58,7 +54,6 @@ public class SubMatcherFactory {
 
         return SubMatcherProvider.<T, Double>create(
             propertyName,
-            Double.class,
             propertyMethod,
             closeToMatcherFactory );
     }
