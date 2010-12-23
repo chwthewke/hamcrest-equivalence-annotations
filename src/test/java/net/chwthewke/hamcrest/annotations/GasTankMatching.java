@@ -3,12 +3,12 @@ package net.chwthewke.hamcrest.annotations;
 @MatcherOf( GasTank.class )
 public interface GasTankMatching {
 
-    @Equals
+    @Equality
     String getGas( );
 
-    @Approximate( 0.000001d )
+    @ApproximateEquality( 0.000001d )
     double getVolume( );
 
-    @Identical
+    @Identity
     GasTank.Hazard getHazardLevel( );
 }

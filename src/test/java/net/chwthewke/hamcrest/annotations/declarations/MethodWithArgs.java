@@ -1,13 +1,13 @@
 package net.chwthewke.hamcrest.annotations.declarations;
 
-import net.chwthewke.hamcrest.annotations.Equals;
+import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.MatcherOf;
 
 public class MethodWithArgs {
 
     @MatcherOf( Matched.class )
     public static interface MatcherSpecification {
-        @Equals
+        @Equality
         String getName( );
     }
 

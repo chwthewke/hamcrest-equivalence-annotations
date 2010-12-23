@@ -1,6 +1,6 @@
 package net.chwthewke.hamcrest.annotations.declarations;
 
-import net.chwthewke.hamcrest.annotations.Equals;
+import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.MatcherOf;
 
 public class MissingMethod {
@@ -9,7 +9,7 @@ public class MissingMethod {
     public static interface MatcherSpecification {
         // The interface method does not have the exact same name
         // as the intended method on the matched class.
-        @Equals
+        @Equality
         String name( );
     }
 

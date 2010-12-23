@@ -33,13 +33,13 @@ public class SubMatcherFactory<T> {
 
             // TODO better default than @Equals
             Matcher<?> propertyMatcher;
-            if ( propertyDescriptor.isAnnotationPresent( Identical.class ) )
+            if ( propertyDescriptor.isAnnotationPresent( Identity.class ) )
                 propertyMatcher = sameInstance( expectedProperty );
-            else if ( propertyDescriptor.isAnnotationPresent( Approximate.class ) )
+            else if ( propertyDescriptor.isAnnotationPresent( ApproximateEquality.class ) )
             {
                 // TODO type check
                 propertyMatcher = closeTo( (Double) expectedProperty,
-                    propertyDescriptor.getAnnotation( Approximate.class ).value( ) );
+                    propertyDescriptor.getAnnotation( ApproximateEquality.class ).value( ) );
             }
             else
                 propertyMatcher = equalTo( expectedProperty );

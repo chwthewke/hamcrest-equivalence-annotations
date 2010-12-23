@@ -7,8 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import net.chwthewke.hamcrest.annotations.Approximate;
-import net.chwthewke.hamcrest.annotations.Identical;
+import net.chwthewke.hamcrest.annotations.ApproximateEquality;
+import net.chwthewke.hamcrest.annotations.Identity;
 import net.chwthewke.hamcrest.annotations.MatcherOf;
 
 import org.hamcrest.Matcher;
@@ -59,12 +59,12 @@ public class CompositeMatcherFactory<T> {
 
         // tmp conditional dispatch of matcher selection
         SubMatcherProvider<T, ?> subMatcherProvider;
-        if ( specificationMethod.isAnnotationPresent( Approximate.class ) )
+        if ( specificationMethod.isAnnotationPresent( ApproximateEquality.class ) )
         {
             subMatcherProvider = createApproximateSubMatcher( property, propertyName,
-                specificationMethod.getAnnotation( Approximate.class ).value( ) );
+                specificationMethod.getAnnotation( ApproximateEquality.class ).value( ) );
         }
-        else if ( specificationMethod.isAnnotationPresent( Identical.class ) )
+        else if ( specificationMethod.isAnnotationPresent( Identity.class ) )
         {
             subMatcherProvider = createIdentitySubMatcher( property, propertyName, propertyType );
         }
