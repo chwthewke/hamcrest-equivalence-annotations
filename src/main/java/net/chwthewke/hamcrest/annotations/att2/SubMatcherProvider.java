@@ -4,24 +4,32 @@ import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;
 
-public class SubMatcherTriplet<T, U> {
+class SubMatcherProvider<T, U> {
 
-    public static <T, U> SubMatcherTriplet<T, U> createSubMatcher(
+    SubMatcherProvider( final String propertyName,
             final Class<U> propertyType,
             final Function<T, U> propertyMethod,
             final Function<U, Matcher<? super U>> matcherFactory ) {
-        return new SubMatcherTriplet<T, U>( propertyType, propertyMethod, matcherFactory );
-    }
-
-    private SubMatcherTriplet( final Class<U> propertyType,
-            final Function<T, U> propertyMethod,
-            final Function<U, Matcher<? super U>> matcherFactory ) {
         super( );
+        this.propertyName = propertyName;
         this.propertyType = propertyType;
         this.propertyMethod = propertyMethod;
         this.matcherFactory = matcherFactory;
     }
 
+    public String getPropertyName( ) {
+        return propertyName;
+    }
+
+    public U extractProperty( final T item ) {
+        return propertyMethod.apply( item );
+    }
+
+    public Matcher<? super U> matcherOf( final T expected ) {
+        return matcherFactory.apply( propertyMethod.apply( expected ) );
+    }
+
+    private final String propertyName;
     private final Class<U> propertyType;
     private final Function<T, U> propertyMethod;
     private final Function<U, Matcher<? super U>> matcherFactory;

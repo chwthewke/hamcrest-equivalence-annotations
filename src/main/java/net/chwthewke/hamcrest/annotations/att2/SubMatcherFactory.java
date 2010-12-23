@@ -7,7 +7,8 @@ import com.google.common.base.Function;
 
 public class SubMatcherFactory {
 
-    public static <T, U> SubMatcherTriplet<T, U> equalTo(
+    public static <T, U> SubMatcherProvider<T, U> equalTo(
+            final String propertyName,
             final Class<U> type,
             final Function<T, U> propertyMethod ) {
 
@@ -18,13 +19,15 @@ public class SubMatcherFactory {
                     }
                 };
 
-        return SubMatcherTriplet.createSubMatcher(
+        return new SubMatcherProvider<T, U>(
+            propertyName,
             type,
             propertyMethod,
             equalToMatcherFactory );
     }
 
-    public static <T, U> SubMatcherTriplet<T, U> sameInstance(
+    public static <T, U> SubMatcherProvider<T, U> sameInstance(
+            final String propertyName,
             final Class<U> type,
             final Function<T, U> propertyMethod ) {
 
@@ -35,13 +38,15 @@ public class SubMatcherFactory {
                     }
                 };
 
-        return SubMatcherTriplet.createSubMatcher(
+        return new SubMatcherProvider<T, U>(
+            propertyName,
             type,
             propertyMethod,
             sameInstanceMatcherFactory );
     }
 
-    public static <T> SubMatcherTriplet<T, Double> closeTo(
+    public static <T> SubMatcherProvider<T, Double> closeTo(
+            final String propertyName,
             final Function<T, Double> propertyMethod,
             final double tolerance ) {
         final Function<Double, Matcher<? super Double>> closeToMatcherFactory =
@@ -51,7 +56,8 @@ public class SubMatcherFactory {
                     }
                 };
 
-        return SubMatcherTriplet.createSubMatcher(
+        return new SubMatcherProvider<T, Double>(
+            propertyName,
             Double.class,
             propertyMethod,
             closeToMatcherFactory );
