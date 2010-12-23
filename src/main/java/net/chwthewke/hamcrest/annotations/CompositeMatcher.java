@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.annotations.att2;
+package net.chwthewke.hamcrest.annotations;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.newLinkedHashMap;

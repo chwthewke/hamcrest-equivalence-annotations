@@ -1,11 +1,9 @@
-package net.chwthewke.hamcrest.annotations.att2;
+package net.chwthewke.hamcrest.annotations;
 
-import static net.chwthewke.hamcrest.annotations.att2.CompositeMatcherFactory.matcherBySpecification;
+import static net.chwthewke.hamcrest.annotations.CompositeMatcherFactory.matcherBySpecification;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import net.chwthewke.hamcrest.annotations.GasTank;
-import net.chwthewke.hamcrest.annotations.GasTankMatching;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

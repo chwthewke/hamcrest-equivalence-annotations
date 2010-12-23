@@ -1,6 +1,6 @@
-package net.chwthewke.hamcrest.annotations.att2;
+package net.chwthewke.hamcrest.annotations;
 
-import static net.chwthewke.hamcrest.annotations.att2.CompositeMatcherFactory.matcherBySpecification;
+import static net.chwthewke.hamcrest.annotations.CompositeMatcherFactory.matcherBySpecification;
 import net.chwthewke.hamcrest.annotations.declarations.ReflectivePrimitiveMatch;
 
 import org.junit.Ignore;
