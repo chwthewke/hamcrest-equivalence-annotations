@@ -5,7 +5,9 @@ import static com.google.common.collect.Lists.newArrayList;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import net.chwthewke.hamcrest.annotations.ApproximateEquality;
 import net.chwthewke.hamcrest.annotations.Identity;
@@ -14,6 +16,7 @@ import net.chwthewke.hamcrest.annotations.MatcherOf;
 import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Ordering;
 
 public class CompositeMatcherFactory<T> {
 
@@ -46,6 +49,16 @@ public class CompositeMatcherFactory<T> {
         final Method[ ] specificationMethods = matcherSpecification.getMethods( );
         for ( final Method method : specificationMethods )
             addSubMatcherProvider( method );
+
+        final Comparator<SubMatcherProvider<T, ?>> comparator =
+                Ordering.<String>natural( ).onResultOf(
+                    new Function<SubMatcherProvider<T, ?>, String>( ) {
+                        public String apply( final SubMatcherProvider<T, ?> subMatcherProvider ) {
+                            return subMatcherProvider.getPropertyName( );
+                        }
+                    } );
+
+        Collections.sort( subMatcherProviders, comparator );
     }
 
     private void addSubMatcherProvider( final Method specificationMethod ) {
@@ -95,7 +108,7 @@ public class CompositeMatcherFactory<T> {
                 String.format(
                     "The property '%s()' on %s has return type %s which is not assignable to %s as specified on %s.",
                     propertyName, matchedClass.getName( ),
-                    property.getReturnType( ), propertyType,
+                    property.getReturnType( ).getName( ), propertyType.getName( ),
                     matcherSpecification.getName( ) ) );
 
         return property;
@@ -203,5 +216,5 @@ public class CompositeMatcherFactory<T> {
 
     private final Class<T> matchedClass;
     private final Class<?> matcherSpecification;
-    private final Collection<SubMatcherProvider<T, ?>> subMatcherProviders = newArrayList( );
+    private final List<SubMatcherProvider<T, ?>> subMatcherProviders = newArrayList( );
 }

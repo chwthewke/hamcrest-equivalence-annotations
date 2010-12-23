@@ -2,16 +2,15 @@ package net.chwthewke.hamcrest.annotations.att2;
 
 import static net.chwthewke.hamcrest.annotations.att2.CompositeMatcherFactory.matcherBySpecification;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 import net.chwthewke.hamcrest.annotations.declarations.IncompatibleReturnTypes;
 import net.chwthewke.hamcrest.annotations.declarations.MethodWithArgs;
 import net.chwthewke.hamcrest.annotations.declarations.MissingMethod;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class MatchingInterfaceSignatureTest {
 
     @Test
@@ -29,7 +28,9 @@ public class MatchingInterfaceSignatureTest {
         }
         catch ( final IllegalArgumentException e )
         {
-            assertThat( e.getMessage( ), startsWith( "Missing method name()" ) );
+            assertThat(
+                e.getMessage( ),
+                is( equalTo( "The matched class net.chwthewke.hamcrest.annotations.declarations.MissingMethod$Matched lacks the property method 'name()' present on net.chwthewke.hamcrest.annotations.declarations.MissingMethod$MatcherSpecification." ) ) );
         }
     }
 
@@ -49,7 +50,9 @@ public class MatchingInterfaceSignatureTest {
         }
         catch ( final IllegalArgumentException e )
         {
-            assertThat( e.getMessage( ), startsWith( "Missing method getName()" ) );
+            assertThat(
+                e.getMessage( ),
+                is( equalTo( "The matched class net.chwthewke.hamcrest.annotations.declarations.MethodWithArgs$Matched lacks the property method 'getName()' present on net.chwthewke.hamcrest.annotations.declarations.MethodWithArgs$MatcherSpecification." ) ) );
         }
     }
 
@@ -71,7 +74,7 @@ public class MatchingInterfaceSignatureTest {
         {
             assertThat(
                 e.getMessage( ),
-                startsWith( "Incompatible return types: getName: class java.lang.Double vs. class java.lang.String" ) );
+                is( equalTo( "The property 'getName()' on net.chwthewke.hamcrest.annotations.declarations.IncompatibleReturnTypes$Matched has return type java.lang.String which is not assignable to java.lang.Double as specified on net.chwthewke.hamcrest.annotations.declarations.IncompatibleReturnTypes$MatcherSpecification." ) ) );
         }
     }
 

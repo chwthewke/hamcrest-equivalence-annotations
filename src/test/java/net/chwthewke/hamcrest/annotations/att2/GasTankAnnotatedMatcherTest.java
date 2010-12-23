@@ -10,7 +10,6 @@ import net.chwthewke.hamcrest.annotations.GasTankMatching;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class GasTankAnnotatedMatcherTest {
@@ -20,7 +19,6 @@ public class GasTankAnnotatedMatcherTest {
     }
 
     @Test
-    @Ignore
     public void matcherDescriptionContainsAllProperties( ) throws Exception {
         // Setup
         final GasTank expected = new GasTank( "Argon", 1.5d, GasTank.Hazard.LOW );

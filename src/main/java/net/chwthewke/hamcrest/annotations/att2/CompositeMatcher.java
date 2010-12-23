@@ -1,7 +1,7 @@
 package net.chwthewke.hamcrest.annotations.att2;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.newLinkedHashMap;
 
 import java.util.Collection;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
                 .appendText( subMatcherLeadin )
                 .appendText( " " )
                 .appendText( entry.getKey( ).getPropertyName( ) )
-                .appendText( "() " )
+                .appendText( "()=" )
                 .appendDescriptionOf( entry.getValue( ) );
             subMatcherLeadin = ",";
         }
@@ -69,6 +69,6 @@ public class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     private final Class<T> expectedType;
-    private final Map<SubMatcherProvider<T, ?>, Matcher<?>> subMatchers = newHashMap( );
+    private final Map<SubMatcherProvider<T, ?>, Matcher<?>> subMatchers = newLinkedHashMap( );
 
 }
