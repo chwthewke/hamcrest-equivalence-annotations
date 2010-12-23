@@ -5,9 +5,10 @@ import org.hamcrest.Matchers;
 
 import com.google.common.base.Function;
 
+@Deprecated
 public class SubMatcherFactory {
 
-    public static <T, U> SubMatcherProvider<T, U> equalTo(
+    public static <T, U> SubMatcherTemplate<T, U> equalTo(
             final String propertyName,
             final Function<T, U> propertyMethod ) {
 
@@ -18,13 +19,13 @@ public class SubMatcherFactory {
                     }
                 };
 
-        return SubMatcherProvider.<T, U>create(
+        return SubMatcherTemplate.<T, U>create(
             propertyName,
             propertyMethod,
             equalToMatcherFactory );
     }
 
-    public static <T, U> SubMatcherProvider<T, U> sameInstance(
+    public static <T, U> SubMatcherTemplate<T, U> sameInstance(
             final String propertyName,
             final Function<T, U> propertyMethod ) {
 
@@ -35,13 +36,13 @@ public class SubMatcherFactory {
                     }
                 };
 
-        return SubMatcherProvider.<T, U>create(
+        return SubMatcherTemplate.<T, U>create(
             propertyName,
             propertyMethod,
             sameInstanceMatcherFactory );
     }
 
-    public static <T> SubMatcherProvider<T, Double> closeTo(
+    public static <T> SubMatcherTemplate<T, Double> closeTo(
             final String propertyName,
             final Function<T, Double> propertyMethod,
             final double tolerance ) {
@@ -52,9 +53,10 @@ public class SubMatcherFactory {
                     }
                 };
 
-        return SubMatcherProvider.<T, Double>create(
+        return SubMatcherTemplate.<T, Double>create(
             propertyName,
             propertyMethod,
             closeToMatcherFactory );
     }
+
 }

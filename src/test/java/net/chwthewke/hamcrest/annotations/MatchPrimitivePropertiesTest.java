@@ -6,10 +6,10 @@ import net.chwthewke.hamcrest.annotations.declarations.ReflectivePrimitiveMatch;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class MatchPrimitivePropertiesTest {
 
     @Test
+    @Ignore
     public void createMatcherOfPrimitiveProperties( ) throws Exception {
         // Setup
         // Exercise

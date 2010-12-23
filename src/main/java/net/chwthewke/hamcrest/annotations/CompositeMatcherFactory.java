@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-
 import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;
@@ -24,8 +23,8 @@ public class CompositeMatcherFactory<T> {
     }
 
     // TODO alternative factory method
-    // public static <T> CompositeMatcherFactory<T> 
-    //      matcherBySpecification( Class<? extends MatcherSpecification<T>> matcherSpecification ) { ... }  
+    // public static <T> CompositeMatcherFactory<T>
+    //      matcherBySpecification( Class<? extends MatcherSpecification<T>> matcherSpecification ) { ... }
 
     CompositeMatcherFactory( final Class<T> matchedClass, final Class<?> matcherSpecification ) {
         this.matchedClass = checkNotNull( matchedClass );
@@ -35,7 +34,7 @@ public class CompositeMatcherFactory<T> {
     }
 
     public Matcher<T> of( final T expected ) {
-        return new CompositeMatcher<T>( matchedClass, subMatcherProviders, expected );
+        return new CompositeMatcher<T>( matchedClass, subMatcherTemplates, expected );
     }
 
     private void initializeSubMatcherProviders( ) {
@@ -45,20 +44,20 @@ public class CompositeMatcherFactory<T> {
 
         final Method[ ] specificationMethods = matcherSpecification.getMethods( );
         for ( final Method method : specificationMethods )
-            addSubMatcherProvider( method );
+            addSubMatcherTemplate( method );
 
-        final Comparator<SubMatcherProvider<T, ?>> comparator =
+        final Comparator<SubMatcherTemplate<T, ?>> comparator =
                 Ordering.<String>natural( ).onResultOf(
-                    new Function<SubMatcherProvider<T, ?>, String>( ) {
-                        public String apply( final SubMatcherProvider<T, ?> subMatcherProvider ) {
-                            return subMatcherProvider.getPropertyName( );
+                    new Function<SubMatcherTemplate<T, ?>, String>( ) {
+                        public String apply( final SubMatcherTemplate<T, ?> subMatcherTemplate ) {
+                            return subMatcherTemplate.getPropertyName( );
                         }
                     } );
 
-        Collections.sort( subMatcherProviders, comparator );
+        Collections.sort( subMatcherTemplates, comparator );
     }
 
-    private void addSubMatcherProvider( final Method specificationMethod ) {
+    private void addSubMatcherTemplate( final Method specificationMethod ) {
         checkValidProperty( specificationMethod );
 
         final Class<?> propertyType = specificationMethod.getReturnType( );
@@ -68,21 +67,21 @@ public class CompositeMatcherFactory<T> {
         final Method property = getAndCheckProperty( propertyName, propertyType );
 
         // tmp conditional dispatch of matcher selection
-        SubMatcherProvider<T, ?> subMatcherProvider;
+        SubMatcherTemplate<T, ?> subMatcherTemplate;
         if ( specificationMethod.isAnnotationPresent( ApproximateEquality.class ) )
         {
-            subMatcherProvider = createApproximateSubMatcher( property, propertyName,
+            subMatcherTemplate = createApproximateSubMatcher( property, propertyName,
                 specificationMethod.getAnnotation( ApproximateEquality.class ).value( ) );
         }
         else if ( specificationMethod.isAnnotationPresent( Identity.class ) )
         {
-            subMatcherProvider = createIdentitySubMatcher( property, propertyName, propertyType );
+            subMatcherTemplate = createIdentitySubMatcher( property, propertyName, propertyType );
         }
         else
         {
-            subMatcherProvider = createEqualitySubMatcher( property, propertyName, propertyType );
+            subMatcherTemplate = createEqualitySubMatcher( property, propertyName, propertyType );
         }
-        subMatcherProviders.add( subMatcherProvider );
+        subMatcherTemplates.add( subMatcherTemplate );
     }
 
     private Method getAndCheckProperty( final String propertyName, final Class<?> propertyType ) {
@@ -111,21 +110,21 @@ public class CompositeMatcherFactory<T> {
         return property;
     }
 
-    private SubMatcherProvider<T, Double> createApproximateSubMatcher( final Method property,
+    private SubMatcherTemplate<T, Double> createApproximateSubMatcher( final Method property,
             final String propertyName,
             final double tolerance ) {
         return SubMatcherFactory.closeTo( propertyName,
             propertyFunction( property, Double.class ), tolerance );
     }
 
-    private <U> SubMatcherProvider<T, U> createIdentitySubMatcher( final Method property,
+    private <U> SubMatcherTemplate<T, U> createIdentitySubMatcher( final Method property,
             final String propertyName,
             final Class<U> propertyType ) {
         return SubMatcherFactory.<T, U>sameInstance( propertyName,
             propertyFunction( property, propertyType ) );
     }
 
-    private <U> SubMatcherProvider<T, U> createEqualitySubMatcher( final Method property,
+    private <U> SubMatcherTemplate<T, U> createEqualitySubMatcher( final Method property,
             final String propertyName,
             final Class<U> propertyType ) {
 
@@ -213,5 +212,6 @@ public class CompositeMatcherFactory<T> {
 
     private final Class<T> matchedClass;
     private final Class<?> matcherSpecification;
-    private final List<SubMatcherProvider<T, ?>> subMatcherProviders = newArrayList( );
+    private final List<SubMatcherTemplate<T, ?>> subMatcherTemplates = newArrayList( );
+
 }

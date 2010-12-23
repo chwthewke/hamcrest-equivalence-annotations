@@ -20,7 +20,7 @@ public class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
         String subMatcherLeadin = " with";
 
-        for ( final Entry<SubMatcherProvider<T, ?>, Matcher<?>> entry : subMatchers.entrySet( ) )
+        for ( final Entry<SubMatcherTemplate<T, ?>, Matcher<?>> entry : subMatchers.entrySet( ) )
         {
             description
                 .appendText( subMatcherLeadin )
@@ -36,16 +36,16 @@ public class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
     @Override
     protected boolean matchesSafely( final T item, final Description mismatchDescription ) {
 
-        for ( final Entry<SubMatcherProvider<T, ?>, Matcher<?>> entry : subMatchers.entrySet( ) )
+        for ( final Entry<SubMatcherTemplate<T, ?>, Matcher<?>> entry : subMatchers.entrySet( ) )
         {
             final Matcher<?> matcher = entry.getValue( );
-            final SubMatcherProvider<T, ?> matcherProvider = entry.getKey( );
+            final SubMatcherTemplate<T, ?> matcherTemplate = entry.getKey( );
 
-            final Object propertyValue = matcherProvider.extractProperty( item );
+            final Object propertyValue = matcherTemplate.extractProperty( item );
             if ( !matcher.matches( propertyValue ) )
             {
                 mismatchDescription
-                    .appendText( matcherProvider.getPropertyName( ) )
+                    .appendText( matcherTemplate.getPropertyName( ) )
                     .appendText( "() " );
                 matcher.describeMismatch( propertyValue, mismatchDescription );
 
@@ -57,18 +57,18 @@ public class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     CompositeMatcher( final Class<T> expectedType,
-            final Collection<SubMatcherProvider<T, ?>> subMatcherProviders,
+            final Collection<SubMatcherTemplate<T, ?>> subMatcherTemplates,
             final T expected ) {
 
         super( expectedType );
 
         this.expectedType = checkNotNull( expectedType );
 
-        for ( final SubMatcherProvider<T, ?> subMatcherProvider : subMatcherProviders )
-            subMatchers.put( subMatcherProvider, subMatcherProvider.matcherOf( expected ) );
+        for ( final SubMatcherTemplate<T, ?> subMatcherTemplate : subMatcherTemplates )
+            subMatchers.put( subMatcherTemplate, subMatcherTemplate.specializeFor( expected ) );
     }
 
     private final Class<T> expectedType;
-    private final Map<SubMatcherProvider<T, ?>, Matcher<?>> subMatchers = newLinkedHashMap( );
+    private final Map<SubMatcherTemplate<T, ?>, Matcher<?>> subMatchers = newLinkedHashMap( );
 
 }

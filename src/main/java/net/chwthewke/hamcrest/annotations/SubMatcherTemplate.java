@@ -4,16 +4,16 @@ import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;
 
-class SubMatcherProvider<T, U> {
+class SubMatcherTemplate<T, U> {
 
-    static <T, U> SubMatcherProvider<T, U> create(
+    static <T, U> SubMatcherTemplate<T, U> create(
             final String propertyName,
             final Function<T, U> propertyMethod,
             final Function<U, Matcher<? super U>> matcherFactory ) {
-        return new SubMatcherProvider<T, U>( propertyName, propertyMethod, matcherFactory );
+        return new SubMatcherTemplate<T, U>( propertyName, propertyMethod, matcherFactory );
     }
 
-    private SubMatcherProvider( final String propertyName,
+    private SubMatcherTemplate( final String propertyName,
             final Function<T, U> propertyMethod,
             final Function<U, Matcher<? super U>> matcherFactory ) {
         this.propertyName = propertyName;
@@ -29,7 +29,7 @@ class SubMatcherProvider<T, U> {
         return propertyMethod.apply( item );
     }
 
-    public Matcher<? super U> matcherOf( final T expected ) {
+    public Matcher<? super U> specializeFor( final T expected ) {
         return matcherFactory.apply( propertyMethod.apply( expected ) );
     }
 
