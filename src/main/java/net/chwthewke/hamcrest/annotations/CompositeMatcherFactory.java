@@ -66,7 +66,7 @@ public class CompositeMatcherFactory<T> {
         final Method property = getAndCheckProperty( propertyName, propertyType );
 
         final SubMatcherTemplate<T, ?> subMatcherTemplate =
-                new SubMatcherTemplateFactory2<T>( property, specificationMethod )
+                new SubMatcherTemplateFactory<T>( property, specificationMethod )
                     .getSubMatcherTemplate( );
         subMatcherTemplates.add( subMatcherTemplate );
     }

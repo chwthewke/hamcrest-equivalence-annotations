@@ -12,7 +12,7 @@ import org.hamcrest.Matchers;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 
-class SubMatcherTemplateFactory2<T> {
+class SubMatcherTemplateFactory<T> {
 
     public SubMatcherTemplate<T, ?> getSubMatcherTemplate( ) {
         final Class<?> propertyType = toReference( property.getReturnType( ) );
@@ -28,7 +28,7 @@ class SubMatcherTemplateFactory2<T> {
         throw new UnsupportedOperationException( );
     }
 
-    SubMatcherTemplateFactory2( final Method property, final Method specificationMethod ) {
+    SubMatcherTemplateFactory( final Method property, final Method specificationMethod ) {
         this.property = property;
         this.specificationMethod = specificationMethod;
     }
