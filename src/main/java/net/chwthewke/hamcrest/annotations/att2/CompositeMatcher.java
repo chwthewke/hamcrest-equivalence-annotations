@@ -41,12 +41,13 @@ public class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
             final Matcher<?> matcher = entry.getValue( );
             final SubMatcherProvider<T, ?> matcherProvider = entry.getKey( );
 
-            if ( !matcher.matches( matcherProvider.extractProperty( item ) ) )
+            final Object propertyValue = matcherProvider.extractProperty( item );
+            if ( !matcher.matches( propertyValue ) )
             {
                 mismatchDescription
                     .appendText( matcherProvider.getPropertyName( ) )
                     .appendText( "() " );
-                matcher.describeMismatch( item, mismatchDescription );
+                matcher.describeMismatch( propertyValue, mismatchDescription );
 
                 return false;
             }

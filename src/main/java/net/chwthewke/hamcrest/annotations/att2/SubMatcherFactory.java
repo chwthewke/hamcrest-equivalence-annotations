@@ -19,7 +19,7 @@ public class SubMatcherFactory {
                     }
                 };
 
-        return new SubMatcherProvider<T, U>(
+        return SubMatcherProvider.<T, U>create(
             propertyName,
             type,
             propertyMethod,
@@ -38,7 +38,7 @@ public class SubMatcherFactory {
                     }
                 };
 
-        return new SubMatcherProvider<T, U>(
+        return SubMatcherProvider.<T, U>create(
             propertyName,
             type,
             propertyMethod,
@@ -56,11 +56,10 @@ public class SubMatcherFactory {
                     }
                 };
 
-        return new SubMatcherProvider<T, Double>(
+        return SubMatcherProvider.<T, Double>create(
             propertyName,
             Double.class,
             propertyMethod,
             closeToMatcherFactory );
     }
-
 }

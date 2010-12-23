@@ -6,11 +6,19 @@ import com.google.common.base.Function;
 
 class SubMatcherProvider<T, U> {
 
-    SubMatcherProvider( final String propertyName,
+    static <T, U> SubMatcherProvider<T, U> create(
+            final String propertyName,
             final Class<U> propertyType,
             final Function<T, U> propertyMethod,
             final Function<U, Matcher<? super U>> matcherFactory ) {
-        super( );
+        return new SubMatcherProvider<T, U>( propertyName, propertyType,
+                propertyMethod, matcherFactory );
+    }
+
+    private SubMatcherProvider( final String propertyName,
+            final Class<U> propertyType,
+            final Function<T, U> propertyMethod,
+            final Function<U, Matcher<? super U>> matcherFactory ) {
         this.propertyName = propertyName;
         this.propertyType = propertyType;
         this.propertyMethod = propertyMethod;
