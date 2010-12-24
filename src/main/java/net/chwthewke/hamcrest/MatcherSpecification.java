@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.annotations;
+package net.chwthewke.hamcrest;
 
 public interface MatcherSpecification<T> {
 

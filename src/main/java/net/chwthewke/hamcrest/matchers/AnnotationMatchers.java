@@ -1,4 +1,7 @@
-package net.chwthewke.hamcrest.annotations;
+package net.chwthewke.hamcrest.matchers;
+
+import net.chwthewke.hamcrest.MatcherFactory;
+import net.chwthewke.hamcrest.MatcherSpecification;
 
 public final class AnnotationMatchers {
 

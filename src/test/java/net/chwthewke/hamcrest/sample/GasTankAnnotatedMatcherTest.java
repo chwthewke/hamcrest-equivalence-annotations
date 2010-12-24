@@ -1,6 +1,6 @@
-package net.chwthewke.hamcrest.annotations;
+package net.chwthewke.hamcrest.sample;
 
-import static net.chwthewke.hamcrest.annotations.CompositeMatcherFactory.asSpecifiedBy;
+import static net.chwthewke.hamcrest.matchers.AnnotationMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

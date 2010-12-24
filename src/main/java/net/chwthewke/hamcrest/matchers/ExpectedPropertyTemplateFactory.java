@@ -1,10 +1,14 @@
-package net.chwthewke.hamcrest.annotations;
+package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkState;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
+
+import net.chwthewke.hamcrest.annotations.ApproximateEquality;
+import net.chwthewke.hamcrest.annotations.Equality;
+import net.chwthewke.hamcrest.annotations.Identity;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;

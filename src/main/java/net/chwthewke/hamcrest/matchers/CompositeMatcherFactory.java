@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.annotations;
+package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
@@ -7,6 +7,10 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import net.chwthewke.hamcrest.MatcherFactory;
+import net.chwthewke.hamcrest.MatcherSpecification;
+import net.chwthewke.hamcrest.annotations.MatcherOf;
 
 import org.hamcrest.Matcher;
 

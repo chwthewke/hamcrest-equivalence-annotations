@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.annotations;
+package net.chwthewke.hamcrest;
 
 import org.hamcrest.Matcher;
 
