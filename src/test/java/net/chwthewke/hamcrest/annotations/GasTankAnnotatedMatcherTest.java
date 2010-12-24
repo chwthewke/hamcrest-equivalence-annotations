@@ -1,6 +1,6 @@
 package net.chwthewke.hamcrest.annotations;
 
-import static net.chwthewke.hamcrest.annotations.CompositeMatcherFactory.matcherBySpecification;
+import static net.chwthewke.hamcrest.annotations.CompositeMatcherFactory.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -13,7 +13,7 @@ import org.junit.Test;
 public class GasTankAnnotatedMatcherTest {
 
     private static Matcher<GasTank> gasTankLike( final GasTank expected ) {
-        return matcherBySpecification( GasTank.class, GasTankMatching.class ).of( expected );
+        return asSpecifiedBy( GasTankMatching.class, GasTank.class ).equivalentTo( expected );
     }
 
     @Test

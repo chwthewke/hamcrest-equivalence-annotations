@@ -15,15 +15,18 @@ import com.google.common.collect.Ordering;
 
 public class CompositeMatcherFactory<T> {
 
-    // TODO rename/refactor to better fluency
-    public static <T> CompositeMatcherFactory<T>
-            matcherBySpecification( final Class<T> matchedClass, final Class<?> matcherSpecification ) {
+    public static <T> CompositeMatcherFactory<T> asSpecifiedBy( final Class<?> matcherSpecification,
+            final Class<T> matchedClass ) {
         return new CompositeMatcherFactory<T>( matchedClass, matcherSpecification );
     }
 
-    // TODO alternative factory method
-    // public static <T> CompositeMatcherFactory<T>
-    //      matcherBySpecification( Class<? extends MatcherSpecification<T>> matcherSpecification ) { ... }
+    @SuppressWarnings( "unchecked" )
+    public static <T> CompositeMatcherFactory<T>
+            asSpecifiedBy( final Class<? extends MatcherSpecification<T>> matcherSpecification ) {
+        return asSpecifiedBy(
+            matcherSpecification,
+            (Class<T>) checkAndGetMatchedClassInAnnotation( matcherSpecification ) );
+    }
 
     CompositeMatcherFactory( final Class<T> matchedClass, final Class<?> matcherSpecification ) {
         this.matchedClass = checkNotNull( matchedClass );
@@ -32,8 +35,8 @@ public class CompositeMatcherFactory<T> {
         initializeSubMatcherProviders( );
     }
 
-    public Matcher<T> of( final T expected ) {
-        return new CompositeMatcher<T>( matchedClass, subMatcherTemplates, expected );
+    public Matcher<T> equivalentTo( final T expected ) {
+        return new CompositeMatcher<T>( matchedClass, expectedPropertyTemplates, expected );
     }
 
     private void initializeSubMatcherProviders( ) {
@@ -45,15 +48,15 @@ public class CompositeMatcherFactory<T> {
         for ( final Method method : specificationMethods )
             addSubMatcherTemplate( method );
 
-        final Comparator<SubMatcherTemplate<T, ?>> comparator =
+        final Comparator<ExpectedPropertyTemplate<T, ?>> comparator =
                 Ordering.<String>natural( ).onResultOf(
-                    new Function<SubMatcherTemplate<T, ?>, String>( ) {
-                        public String apply( final SubMatcherTemplate<T, ?> subMatcherTemplate ) {
-                            return subMatcherTemplate.getPropertyName( );
+                    new Function<ExpectedPropertyTemplate<T, ?>, String>( ) {
+                        public String apply( final ExpectedPropertyTemplate<T, ?> expectedPropertyTemplate ) {
+                            return expectedPropertyTemplate.getPropertyName( );
                         }
                     } );
 
-        Collections.sort( subMatcherTemplates, comparator );
+        Collections.sort( expectedPropertyTemplates, comparator );
     }
 
     private void addSubMatcherTemplate( final Method specificationMethod ) {
@@ -65,10 +68,10 @@ public class CompositeMatcherFactory<T> {
 
         final Method property = getAndCheckProperty( propertyName, propertyType );
 
-        final SubMatcherTemplate<T, ?> subMatcherTemplate =
-                new SubMatcherTemplateFactory<T>( property, specificationMethod )
-                    .getSubMatcherTemplate( );
-        subMatcherTemplates.add( subMatcherTemplate );
+        final ExpectedPropertyTemplate<T, ?> expectedPropertyTemplate =
+                new ExpectedPropertyTemplateFactory<T>( property, specificationMethod )
+                    .getExpectedPropertyTemplate( );
+        expectedPropertyTemplates.add( expectedPropertyTemplate );
     }
 
     private Method getAndCheckProperty( final String propertyName, final Class<?> propertyType ) {
@@ -119,14 +122,8 @@ public class CompositeMatcherFactory<T> {
     }
 
     private void checkSpecificationForAnnotation( ) {
-        final MatcherOf annotation =
-                matcherSpecification.getAnnotation( MatcherOf.class );
-        if ( annotation == null )
-            throw new IllegalArgumentException(
-                String.format( "The 'matcherSpecification' %s must be annotated with %s.",
-                    matcherSpecification.getName( ),
-                    MatcherOf.class.getSimpleName( ) ) );
-        if ( annotation.value( ) != matchedClass )
+        final Class<?> value = checkAndGetMatchedClassInAnnotation( matcherSpecification );
+        if ( value != matchedClass )
             throw new IllegalArgumentException(
                 String.format( "The %s annotation on %s must have a value of %s.",
                     MatcherOf.class.getSimpleName( ),
@@ -134,8 +131,20 @@ public class CompositeMatcherFactory<T> {
                     matchedClass.getName( ) ) );
     }
 
+    private static Class<?> checkAndGetMatchedClassInAnnotation( final Class<?> specification ) {
+        final MatcherOf annotation = specification.getAnnotation( MatcherOf.class );
+        if ( annotation == null )
+        {
+            throw new IllegalArgumentException(
+                String.format( "The 'matcherSpecification' %s must be annotated with %s.",
+                    specification.getName( ),
+                    MatcherOf.class.getSimpleName( ) ) );
+        }
+        return annotation.value( );
+    }
+
     private final Class<T> matchedClass;
     private final Class<?> matcherSpecification;
-    private final List<SubMatcherTemplate<T, ?>> subMatcherTemplates = newArrayList( );
+    private final List<ExpectedPropertyTemplate<T, ?>> expectedPropertyTemplates = newArrayList( );
 
 }

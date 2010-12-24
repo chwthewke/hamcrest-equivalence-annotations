@@ -20,7 +20,7 @@ public class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
         String subMatcherLeadin = " with";
 
-        for ( final Entry<SubMatcherTemplate<T, ?>, Matcher<?>> entry : subMatchers.entrySet( ) )
+        for ( final Entry<ExpectedPropertyTemplate<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
         {
             description
                 .appendText( subMatcherLeadin )
@@ -36,12 +36,12 @@ public class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
     @Override
     protected boolean matchesSafely( final T item, final Description mismatchDescription ) {
 
-        for ( final Entry<SubMatcherTemplate<T, ?>, Matcher<?>> entry : subMatchers.entrySet( ) )
+        for ( final Entry<ExpectedPropertyTemplate<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
         {
             final Matcher<?> matcher = entry.getValue( );
-            final SubMatcherTemplate<T, ?> matcherTemplate = entry.getKey( );
+            final ExpectedPropertyTemplate<T, ?> matcherTemplate = entry.getKey( );
 
-            final Object propertyValue = matcherTemplate.extractProperty( item );
+            final Object propertyValue = matcherTemplate.extractPropertyValue( item );
             if ( !matcher.matches( propertyValue ) )
             {
                 mismatchDescription
@@ -57,18 +57,18 @@ public class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     CompositeMatcher( final Class<T> expectedType,
-            final Collection<SubMatcherTemplate<T, ?>> subMatcherTemplates,
+            final Collection<ExpectedPropertyTemplate<T, ?>> expectedPropertyTemplates,
             final T expected ) {
 
         super( expectedType );
 
         this.expectedType = checkNotNull( expectedType );
 
-        for ( final SubMatcherTemplate<T, ?> subMatcherTemplate : subMatcherTemplates )
-            subMatchers.put( subMatcherTemplate, subMatcherTemplate.specializeFor( expected ) );
+        for ( final ExpectedPropertyTemplate<T, ?> expectedPropertyTemplate : expectedPropertyTemplates )
+            expectedProperties.put( expectedPropertyTemplate, expectedPropertyTemplate.specializeFor( expected ) );
     }
 
     private final Class<T> expectedType;
-    private final Map<SubMatcherTemplate<T, ?>, Matcher<?>> subMatchers = newLinkedHashMap( );
+    private final Map<ExpectedPropertyTemplate<T, ?>, Matcher<?>> expectedProperties = newLinkedHashMap( );
 
 }

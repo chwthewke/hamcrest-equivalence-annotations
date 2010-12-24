@@ -10,33 +10,40 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableMap;
 
-class SubMatcherTemplateFactory<T> {
+class ExpectedPropertyTemplateFactory<T> {
 
-    public SubMatcherTemplate<T, ?> getSubMatcherTemplate( ) {
-        final Class<?> propertyType = toReference( property.getReturnType( ) );
+    public ExpectedPropertyTemplate<T, ?> getExpectedPropertyTemplate( ) {
+        final Class<?> originalPropertyType = property.getReturnType( );
+        final Class<?> propertyType = toReference( originalPropertyType );
 
         if ( specificationMethod.isAnnotationPresent( Equality.class ) )
-            return getEqualitySubMatcherTemplate( propertyType );
+            return getEqualityTemplate( propertyType );
+
         if ( specificationMethod.isAnnotationPresent( Identity.class ) )
-            return getIdentitySubMatcherTemplate( propertyType );
+        {
+            if ( originalPropertyType.isPrimitive( ) )
+                return getEqualityTemplate( propertyType );
+            return getIdentityTemplate( propertyType );
+        }
+
         if ( specificationMethod.isAnnotationPresent( ApproximateEquality.class ) )
-            return getApproximateEqualitySubMatcherTemplate( propertyType,
+            return getApproximateEqualityTemplate( propertyType,
                 specificationMethod.getAnnotation( ApproximateEquality.class ).value( ) );
-        // TODO sensible defaults
-        throw new UnsupportedOperationException( );
+
+        return getEqualityTemplate( propertyType );
     }
 
-    SubMatcherTemplateFactory( final Method property, final Method specificationMethod ) {
+    ExpectedPropertyTemplateFactory( final Method property, final Method specificationMethod ) {
         this.property = property;
         this.specificationMethod = specificationMethod;
     }
 
-    private SubMatcherTemplate<T, Double> getApproximateEqualitySubMatcherTemplate( final Class<?> propertyType,
+    private ExpectedPropertyTemplate<T, Double> getApproximateEqualityTemplate( final Class<?> propertyType,
             final double tolerance ) {
-        // TODO allow Float as well.
-        checkState( propertyType == Double.class );
+        checkState( propertyType == Double.class || propertyType == Float.class );
 
         final Function<Double, Matcher<? super Double>> closeToMatcherFactory =
                 new Function<Double, Matcher<? super Double>>( ) {
@@ -45,13 +52,21 @@ class SubMatcherTemplateFactory<T> {
                     }
                 };
 
-        return SubMatcherTemplate.<T, Double>create(
+        // This should be the safest way to extract the property to a Double.
+        final Function<T, Double> propertyFunction =
+                Functions.compose( new Function<Number, Double>( ) {
+                    public Double apply( final Number number ) {
+                        return number == null ? null : number.doubleValue( );
+                    }
+                }, propertyFunction( Number.class ) );
+
+        return ExpectedPropertyTemplate.<T, Double>create(
             property.getName( ),
-            propertyFunction( Double.class ),
+            propertyFunction,
             closeToMatcherFactory );
     }
 
-    private <U> SubMatcherTemplate<T, U> getIdentitySubMatcherTemplate( final Class<U> propertyType ) {
+    private <U> ExpectedPropertyTemplate<T, U> getIdentityTemplate( final Class<U> propertyType ) {
         final Function<U, Matcher<? super U>> sameInstanceMatcherFactory =
                 new Function<U, Matcher<? super U>>( ) {
                     public Matcher<? super U> apply( final U expected ) {
@@ -59,13 +74,13 @@ class SubMatcherTemplateFactory<T> {
                     }
                 };
 
-        return SubMatcherTemplate.<T, U>create(
+        return ExpectedPropertyTemplate.<T, U>create(
             property.getName( ),
             propertyFunction( propertyType ),
             sameInstanceMatcherFactory );
     }
 
-    private <U> SubMatcherTemplate<T, U> getEqualitySubMatcherTemplate( final Class<U> propertyType ) {
+    private <U> ExpectedPropertyTemplate<T, U> getEqualityTemplate( final Class<U> propertyType ) {
         final Function<U, Matcher<? super U>> equalToMatcherFactory =
                 new Function<U, Matcher<? super U>>( ) {
                     public Matcher<? super U> apply( final U expected ) {
@@ -73,7 +88,7 @@ class SubMatcherTemplateFactory<T> {
                     }
                 };
 
-        return SubMatcherTemplate.<T, U>create(
+        return ExpectedPropertyTemplate.<T, U>create(
             property.getName( ),
             propertyFunction( propertyType ),
             equalToMatcherFactory );

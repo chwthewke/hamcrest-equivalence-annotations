@@ -29,8 +29,7 @@ public class GasTank {
         public static final Hazard HIGH = new Hazard( "h" );
         public static final Hazard EXTREME = new Hazard( "x" );
 
-        // TODO make package-local again
-        public Hazard( final String type ) {
+        Hazard( final String type ) {
             this.type = type;
         }
 

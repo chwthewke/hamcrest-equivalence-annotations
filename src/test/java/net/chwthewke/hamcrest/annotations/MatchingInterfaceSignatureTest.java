@@ -1,6 +1,6 @@
 package net.chwthewke.hamcrest.annotations;
 
-import static net.chwthewke.hamcrest.annotations.CompositeMatcherFactory.matcherBySpecification;
+import static net.chwthewke.hamcrest.annotations.CompositeMatcherFactory.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -19,10 +19,8 @@ public class MatchingInterfaceSignatureTest {
         // Exercise
         try
         {
-            matcherBySpecification(
-                MissingMethod.Matched.class,
-                MissingMethod.MatcherSpecification.class )
-                .of( new MissingMethod.Matched( "test" ) );
+            asSpecifiedBy( MissingMethod.MatcherSpecification.class, MissingMethod.Matched.class )
+                .equivalentTo( new MissingMethod.Matched( "test" ) );
             // Verify
             fail( );
         }
@@ -41,10 +39,8 @@ public class MatchingInterfaceSignatureTest {
         // Exercise
         try
         {
-            matcherBySpecification(
-                MethodWithArgs.Matched.class,
-                MethodWithArgs.MatcherSpecification.class )
-                .of( new MethodWithArgs.Matched( "test" ) );
+            asSpecifiedBy( MethodWithArgs.MatcherSpecification.class, MethodWithArgs.Matched.class )
+                .equivalentTo( new MethodWithArgs.Matched( "test" ) );
             // Verify
             fail( );
         }
@@ -63,10 +59,8 @@ public class MatchingInterfaceSignatureTest {
         // Exercise
         try
         {
-            matcherBySpecification(
-                IncompatibleReturnTypes.Matched.class,
-                IncompatibleReturnTypes.MatcherSpecification.class )
-                .of( new IncompatibleReturnTypes.Matched( "test" ) );
+            asSpecifiedBy( IncompatibleReturnTypes.MatcherSpecification.class, IncompatibleReturnTypes.Matched.class )
+                .equivalentTo( new IncompatibleReturnTypes.Matched( "test" ) );
             // Verify
             fail( );
         }
