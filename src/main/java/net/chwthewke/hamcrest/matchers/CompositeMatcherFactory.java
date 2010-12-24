@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -43,7 +44,7 @@ class CompositeMatcherFactory<T> implements MatcherFactory<T> {
     }
 
     private void initialize( ) {
-        checkSpecificationIsAnInterface( );
+        checkSpecificationIsAPublicInterface( );
 
         checkSpecificationForAnnotation( );
 
@@ -125,10 +126,15 @@ class CompositeMatcherFactory<T> implements MatcherFactory<T> {
                     method.getDeclaringClass( ).getName( ) ) );
     }
 
-    private void checkSpecificationIsAnInterface( ) {
+    private void checkSpecificationIsAPublicInterface( ) {
         if ( !matcherSpecification.isInterface( ) )
             throw new IllegalArgumentException(
                 String.format( "The 'matcherSpecification' %s must be an interface.",
+                    matcherSpecification.getName( ) ) );
+
+        if ( !Modifier.isPublic( matcherSpecification.getModifiers( ) ) )
+            throw new IllegalArgumentException(
+                String.format( "The 'matcherSpecification' %s must have public visibility.",
                     matcherSpecification.getName( ) ) );
     }
 
