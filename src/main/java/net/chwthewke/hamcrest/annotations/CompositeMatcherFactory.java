@@ -13,18 +13,17 @@ import org.hamcrest.Matcher;
 import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 
-public class CompositeMatcherFactory<T> {
+class CompositeMatcherFactory<T> implements MatcherFactory<T> {
 
-    public static <T> CompositeMatcherFactory<T> asSpecifiedBy( final Class<?> matcherSpecification,
+    static <T> MatcherFactory<T> asSpecifiedBy( final Class<?> matcherSpecification,
             final Class<T> matchedClass ) {
         return new CompositeMatcherFactory<T>( matchedClass, matcherSpecification );
     }
 
     @SuppressWarnings( "unchecked" )
-    public static <T> CompositeMatcherFactory<T>
+    static <T> MatcherFactory<T>
             asSpecifiedBy( final Class<? extends MatcherSpecification<T>> matcherSpecification ) {
-        return asSpecifiedBy(
-            matcherSpecification,
+        return asSpecifiedBy( matcherSpecification,
             (Class<T>) checkAndGetMatchedClassInAnnotation( matcherSpecification ) );
     }
 
@@ -32,22 +31,24 @@ public class CompositeMatcherFactory<T> {
         this.matchedClass = checkNotNull( matchedClass );
         this.matcherSpecification = checkNotNull( matcherSpecification );
 
-        initializeSubMatcherProviders( );
+        initialize( );
     }
 
     public Matcher<T> equivalentTo( final T expected ) {
         return new CompositeMatcher<T>( matchedClass, expectedPropertyTemplates, expected );
     }
 
-    private void initializeSubMatcherProviders( ) {
+    private void initialize( ) {
         checkSpecificationIsAnInterface( );
 
         checkSpecificationForAnnotation( );
 
-        final Method[ ] specificationMethods = matcherSpecification.getMethods( );
-        for ( final Method method : specificationMethods )
-            addSubMatcherTemplate( method );
+        addExpectedPropertyTemplates( );
 
+        sortExpectedPropertyTemplates( );
+    }
+
+    private void sortExpectedPropertyTemplates( ) {
         final Comparator<ExpectedPropertyTemplate<T, ?>> comparator =
                 Ordering.<String>natural( ).onResultOf(
                     new Function<ExpectedPropertyTemplate<T, ?>, String>( ) {
@@ -59,7 +60,13 @@ public class CompositeMatcherFactory<T> {
         Collections.sort( expectedPropertyTemplates, comparator );
     }
 
-    private void addSubMatcherTemplate( final Method specificationMethod ) {
+    private void addExpectedPropertyTemplates( ) {
+        final Method[ ] specificationMethods = matcherSpecification.getMethods( );
+        for ( final Method method : specificationMethods )
+            addExpectedPropertyTemplate( method );
+    }
+
+    private void addExpectedPropertyTemplate( final Method specificationMethod ) {
         checkValidProperty( specificationMethod );
 
         final Class<?> propertyType = specificationMethod.getReturnType( );

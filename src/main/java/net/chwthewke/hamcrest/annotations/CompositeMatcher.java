@@ -11,7 +11,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
-public class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
+class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
     public void describeTo( final Description description ) {
         description

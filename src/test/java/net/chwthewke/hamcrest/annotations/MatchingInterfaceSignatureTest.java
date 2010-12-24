@@ -19,7 +19,9 @@ public class MatchingInterfaceSignatureTest {
         // Exercise
         try
         {
-            asSpecifiedBy( MissingMethod.MatcherSpecification.class, MissingMethod.Matched.class )
+            asSpecifiedBy(
+                MissingMethod.MatcherSpecification.class,
+                MissingMethod.Matched.class )
                 .equivalentTo( new MissingMethod.Matched( "test" ) );
             // Verify
             fail( );
@@ -39,7 +41,9 @@ public class MatchingInterfaceSignatureTest {
         // Exercise
         try
         {
-            asSpecifiedBy( MethodWithArgs.MatcherSpecification.class, MethodWithArgs.Matched.class )
+            asSpecifiedBy(
+                MethodWithArgs.MatcherSpecification.class,
+                MethodWithArgs.Matched.class )
                 .equivalentTo( new MethodWithArgs.Matched( "test" ) );
             // Verify
             fail( );
@@ -59,7 +63,9 @@ public class MatchingInterfaceSignatureTest {
         // Exercise
         try
         {
-            asSpecifiedBy( IncompatibleReturnTypes.MatcherSpecification.class, IncompatibleReturnTypes.Matched.class )
+            asSpecifiedBy(
+                IncompatibleReturnTypes.MatcherSpecification.class,
+                IncompatibleReturnTypes.Matched.class )
                 .equivalentTo( new IncompatibleReturnTypes.Matched( "test" ) );
             // Verify
             fail( );
