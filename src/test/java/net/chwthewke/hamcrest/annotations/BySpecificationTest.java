@@ -2,6 +2,9 @@ package net.chwthewke.hamcrest.annotations;
 
 import net.chwthewke.hamcrest.MatcherSpecification;
 
+import org.junit.Ignore;
+
+@Ignore
 public class BySpecificationTest {
 
     @MatcherOf( OuterMatched.class )
