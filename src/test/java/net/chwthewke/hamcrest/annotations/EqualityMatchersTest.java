@@ -7,7 +7,7 @@ import net.chwthewke.hamcrest.MatcherSpecification;
 
 import org.junit.Test;
 
-public class IdentityMatchersTest {
+public class EqualityMatchersTest {
 
     @Test
     public void identicalReferencesMatch( ) throws Exception {
@@ -24,7 +24,7 @@ public class IdentityMatchersTest {
     }
 
     @Test
-    public void equalButNotIdenticalReferencesDoNotMatch( ) throws Exception {
+    public void equalButNotIdenticalReferencesAlsoMatch( ) throws Exception {
         // Setup
         final Matched first = new Matched( new IntHolder( 12 ) );
         final Matched second = new Matched( new IntHolder( 12 ) );
@@ -36,7 +36,7 @@ public class IdentityMatchersTest {
             .equivalentTo( first )
             .matches( second );
         // Verify
-        assertThat( match, is( false ) );
+        assertThat( match, is( true ) );
     }
 
     public static class Matched {
@@ -54,7 +54,7 @@ public class IdentityMatchersTest {
 
     @MatcherOf( Matched.class )
     public static interface MatchingSpecification extends MatcherSpecification<Matched> {
-        @Identity
+        @Equality
         IntHolder getHolder( );
     }
 
