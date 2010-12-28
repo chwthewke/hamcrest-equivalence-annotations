@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import net.chwthewke.hamcrest.annotations.ApproximateEquality;
+import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.Identity;
 
@@ -22,6 +23,10 @@ class ExpectedPropertyTemplateFactory<T> {
     public ExpectedPropertyTemplate<T, ?> getExpectedPropertyTemplate( ) {
         final Class<?> originalPropertyType = property.getReturnType( );
         final Class<?> propertyType = toReference( originalPropertyType );
+
+        if ( specificationMethod.isAnnotationPresent( BySpecification.class ) )
+            return getBySpecificationTemplate( propertyType,
+                specificationMethod.getAnnotation( BySpecification.class ).value( ) );
 
         if ( specificationMethod.isAnnotationPresent( Equality.class ) )
             return getEqualityTemplate( propertyType );
@@ -96,6 +101,24 @@ class ExpectedPropertyTemplateFactory<T> {
             property.getName( ),
             propertyFunction( propertyType ),
             equalToMatcherFactory );
+    }
+
+    private <U> ExpectedPropertyTemplate<T, U> getBySpecificationTemplate( final Class<U> propertyType,
+            final Class<?> propertySpecification ) {
+
+        final CompositeMatcherFactory<U> matcherFactoryForProperty =
+                new CompositeMatcherFactory<U>( propertyType, propertySpecification );
+
+        final Function<U, Matcher<? super U>> matcherBySpecificationFactory =
+                new Function<U, Matcher<? super U>>( ) {
+                    public Matcher<? super U> apply( final U expected ) {
+                        return matcherFactoryForProperty.equivalentTo( expected );
+                    }
+                };
+        return ExpectedPropertyTemplate.<T, U>create(
+                    property.getName( ),
+                    propertyFunction( propertyType ),
+                    matcherBySpecificationFactory );
     }
 
     private <U> Function<T, U> propertyFunction( final Class<U> propertyType ) {

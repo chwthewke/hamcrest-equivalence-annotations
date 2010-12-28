@@ -1,16 +1,52 @@
 package net.chwthewke.hamcrest.annotations;
 
+import static net.chwthewke.hamcrest.matchers.AnnotationMatchers.asSpecifiedBy;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import net.chwthewke.hamcrest.MatcherSpecification;
 
-import org.junit.Ignore;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.StringDescription;
+import org.junit.Test;
 
-@Ignore
 public class BySpecificationTest {
+
+    @Test
+    public void matchBySpecificationOnProperty( ) throws Exception {
+        // Setup
+        final OuterMatched expected = new OuterMatched( new InnerMatched( "abcd" ) );
+        final OuterMatched actual = new OuterMatched( new InnerMatched( "abcd" ) );
+        final Matcher<OuterMatched> matcher = asSpecifiedBy( OuterSpecification.class )
+            .equivalentTo( expected );
+        // Exercise
+        final boolean match = matcher.matches( actual );
+        // Verify
+        assertThat( match, is( true ) );
+    }
+
+    @Test
+    public void mismatchBySpecificationOnProperty( ) throws Exception {
+        // Setup
+        final OuterMatched expected = new OuterMatched( new InnerMatched( "abcd" ) );
+        final OuterMatched actual = new OuterMatched( new InnerMatched( "abcde" ) );
+        final Matcher<OuterMatched> matcher = asSpecifiedBy( OuterSpecification.class )
+            .equivalentTo( expected );
+        // Exercise
+        final boolean match = matcher.matches( actual );
+        // Verify
+        assertThat( match, is( false ) );
+        final Description mismatchDescription = new StringDescription( );
+        matcher.describeMismatch( actual, mismatchDescription );
+        assertThat( mismatchDescription.toString( ),
+            is( equalTo( "getOuterValue() getInnerValue() was \"abcde\"" ) ) );
+    }
 
     @MatcherOf( OuterMatched.class )
     public static interface OuterSpecification extends MatcherSpecification<OuterMatched> {
         @BySpecification( InnerSpecification.class )
-        InnerMatched getValue( );
+        InnerMatched getOuterValue( );
     }
 
     public static class OuterMatched {
@@ -18,7 +54,7 @@ public class BySpecificationTest {
             this.value = value;
         }
 
-        public InnerMatched getValue( ) {
+        public InnerMatched getOuterValue( ) {
             return value;
         }
 
@@ -28,7 +64,7 @@ public class BySpecificationTest {
     @MatcherOf( InnerMatched.class )
     public static interface InnerSpecification extends MatcherSpecification<InnerMatched> {
         @Equality
-        String getValue( );
+        String getInnerValue( );
     }
 
     public static class InnerMatched {
@@ -36,7 +72,7 @@ public class BySpecificationTest {
             this.value = value;
         }
 
-        public String getValue( ) {
+        public String getInnerValue( ) {
             return value;
         }
 
