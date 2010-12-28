@@ -130,8 +130,11 @@ class ExpectedPropertyTemplateFactory<T> {
     }
 
     private <U> U extractProperty( final Class<U> propertyType, final T item ) {
+
+        final boolean wasAccessible = property.isAccessible( );
         try
         {
+            property.setAccessible( true );
             final Object rawProperty = property.invoke( item );
             try
             {
@@ -156,6 +159,10 @@ class ExpectedPropertyTemplateFactory<T> {
                 String.format( "Exception while reading property %s on instance of %s.",
                     property.getName( ), item.getClass( ).getName( ) ),
                     e );
+        }
+        finally
+        {
+            property.setAccessible( wasAccessible );
         }
     }
 
