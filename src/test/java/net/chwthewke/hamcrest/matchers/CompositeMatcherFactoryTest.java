@@ -9,10 +9,7 @@ import net.chwthewke.hamcrest.MatcherFactory;
 import net.chwthewke.hamcrest.MatcherSpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.MatcherOf;
-import net.chwthewke.hamcrest.annotations.NotPublic;
 
-import org.hamcrest.Matcher;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class CompositeMatcherFactoryTest {
@@ -255,20 +252,6 @@ public class CompositeMatcherFactoryTest {
     }
 
     @Test
-    @Ignore
-    public void matchingInterfaceTargetsAnnotatedPrivateProperty( ) throws Exception {
-        // Setup
-
-        // Exercise
-        final Matcher<Matched> matcher = asSpecifiedBy(
-                SpecificationWithAnnotatedPrivateProperty.class,
-                Matched.class )
-                .equivalentTo( new Matched( "test" ) );
-        // Verify
-        assertThat( matcher.matches( new Matched( "test" ) ), is( true ) );
-    }
-
-    @Test
     public void expectedPropertyThrowsException( ) throws Exception {
         // Setup
         final MatcherFactory<Matched> factory = asSpecifiedBy( ExpectedPropertyThrows.class );
@@ -372,13 +355,6 @@ public class CompositeMatcherFactoryTest {
     @MatcherOf( Matched.class )
     public static interface SpecificationWithPrivateProperty {
         @Equality
-        int getId( );
-    }
-
-    @MatcherOf( Matched.class )
-    public static interface SpecificationWithAnnotatedPrivateProperty {
-        @Equality
-        @NotPublic
         int getId( );
     }
 
