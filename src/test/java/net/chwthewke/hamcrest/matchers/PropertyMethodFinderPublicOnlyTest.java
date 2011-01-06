@@ -52,7 +52,7 @@ public class PropertyMethodFinderPublicOnlyTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( DerivedWithPublicProperty.class, Integer.class, "getIntValue", false );
+            .findPropertyMethod( DerivedWithPublicProperty.class, int.class, "getIntValue", false );
         // Verify
         assertThat( method, is( DerivedWithPublicProperty.class.getMethod( "getIntValue" ) ) );
     }
