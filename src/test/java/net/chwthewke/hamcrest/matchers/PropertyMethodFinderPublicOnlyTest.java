@@ -69,8 +69,9 @@ public class PropertyMethodFinderPublicOnlyTest {
         }
         catch ( final IllegalArgumentException e )
         {
-            assertThat( e.getMessage( ), is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.finder." +
-                    "DerivedWithProtectedProperty lacks the public property 'getValue()'." ) ) );
+            assertThat(
+                e.getMessage( ), is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.use_case_classes." +
+                        "DerivedWithProtectedProperty lacks the public property 'getValue()'." ) ) );
         }
 
     }
@@ -88,8 +89,9 @@ public class PropertyMethodFinderPublicOnlyTest {
         }
         catch ( final IllegalArgumentException e )
         {
-            assertThat( e.getMessage( ), is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.finder." +
-                    "DerivedWithProtectedProperty lacks the public property 'getIntValue()'." ) ) );
+            assertThat(
+                e.getMessage( ), is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.use_case_classes." +
+                        "DerivedWithProtectedProperty lacks the public property 'getIntValue()'." ) ) );
         }
 
     }

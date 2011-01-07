@@ -34,7 +34,7 @@ public class PropertyMethodFinderTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.finder." +
+                is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.use_case_classes." +
                         "WithPublicProperty lacks the public property 'getValue0()'." ) ) );
         }
     }
@@ -54,7 +54,7 @@ public class PropertyMethodFinderTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.finder." +
+                is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.use_case_classes." +
                         "WithNonPropertyMethod lacks the public property 'getValue()'." ) ) );
         }
     }
@@ -74,7 +74,7 @@ public class PropertyMethodFinderTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The property 'getValue()' on net.chwthewke.hamcrest.matchers.finder." +
+                is( equalTo( "The property 'getValue()' on net.chwthewke.hamcrest.matchers.use_case_classes." +
                         "WithPublicProperty has return type java.lang.String which is not " +
                         "assignable to java.lang.Integer." ) ) );
         }
