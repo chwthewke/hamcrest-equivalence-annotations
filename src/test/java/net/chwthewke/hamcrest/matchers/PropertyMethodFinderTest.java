@@ -35,7 +35,7 @@ public class PropertyMethodFinderTest {
             assertThat(
                 e.getMessage( ),
                 is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.finder." +
-                        "WithPublicProperty lacks the property method 'getValue0()'." ) ) );
+                        "WithPublicProperty lacks the public property 'getValue0()'." ) ) );
         }
     }
 
@@ -55,7 +55,7 @@ public class PropertyMethodFinderTest {
             assertThat(
                 e.getMessage( ),
                 is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.finder." +
-                        "WithNonPropertyMethod lacks the property method 'getValue()'." ) ) );
+                        "WithNonPropertyMethod lacks the public property 'getValue()'." ) ) );
         }
     }
 

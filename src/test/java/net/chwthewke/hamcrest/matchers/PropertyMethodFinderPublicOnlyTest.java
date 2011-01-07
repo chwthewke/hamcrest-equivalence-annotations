@@ -1,11 +1,12 @@
 package net.chwthewke.hamcrest.matchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 
-import net.chwthewke.hamcrest.matchers.finder.BaseWithProtectedProperty;
 import net.chwthewke.hamcrest.matchers.finder.DerivedWithProtectedProperty;
 import net.chwthewke.hamcrest.matchers.finder.DerivedWithPublicProperty;
 import net.chwthewke.hamcrest.matchers.finder.WithPublicProperty;
@@ -21,8 +22,6 @@ public class PropertyMethodFinderPublicOnlyTest {
     public void setupMethodFinder( ) {
         methodFinder = new PropertyMethodFinder( );
     }
-
-    // TODO migrate other failure cases from CMFT
 
     @Test
     public void findPublicProperty( ) throws Exception {
@@ -57,26 +56,41 @@ public class PropertyMethodFinderPublicOnlyTest {
         assertThat( method, is( DerivedWithPublicProperty.class.getMethod( "getIntValue" ) ) );
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void dontFindProtectedProperty( ) throws Exception {
         // Setup
 
         // Exercise
-        methodFinder.findPropertyMethod( DerivedWithProtectedProperty.class, String.class, "getValue", false );
+        try
+        {
+            methodFinder.findPropertyMethod( DerivedWithProtectedProperty.class, String.class, "getValue", false );
+            // Verify
+            fail( );
+        }
+        catch ( final IllegalArgumentException e )
+        {
+            assertThat( e.getMessage( ), is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.finder." +
+                    "DerivedWithProtectedProperty lacks the public property 'getValue()'." ) ) );
+        }
 
-        // Verify
-        // TODO better exception matching
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void dontFindBaseProtectedProperty( ) throws Exception {
         // Setup
 
         // Exercise
-        methodFinder.findPropertyMethod( BaseWithProtectedProperty.class, Integer.class, "getIntValue", false );
-
-        // Verify
-        // TODO better exception matching
+        try
+        {
+            methodFinder.findPropertyMethod( DerivedWithProtectedProperty.class, int.class, "getIntValue", false );
+            // Verify
+            fail( );
+        }
+        catch ( final IllegalArgumentException e )
+        {
+            assertThat( e.getMessage( ), is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.finder." +
+                    "DerivedWithProtectedProperty lacks the public property 'getIntValue()'." ) ) );
+        }
 
     }
 
