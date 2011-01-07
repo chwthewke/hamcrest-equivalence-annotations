@@ -4,8 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
-import net.chwthewke.hamcrest.matchers.finder.WithNonPropertyMethod;
-import net.chwthewke.hamcrest.matchers.finder.WithPublicProperty;
+import net.chwthewke.hamcrest.matchers.use_case_classes.WithNonPropertyMethod;
+import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;
 
 import org.junit.Before;
 import org.junit.Test;

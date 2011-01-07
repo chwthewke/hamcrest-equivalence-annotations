@@ -6,8 +6,9 @@ import static org.hamcrest.Matchers.is;
 
 import java.lang.reflect.Method;
 
-import net.chwthewke.hamcrest.matchers.finder.BaseWithProtectedProperty;
-import net.chwthewke.hamcrest.matchers.finder.DerivedWithProtectedProperty;
+import net.chwthewke.hamcrest.matchers.use_case_classes.BaseWithProtectedProperty;
+import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedWithProtectedProperty;
+import net.chwthewke.hamcrest.matchers.use_case_classes.WithPrivateProperty;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,17 @@ public class PropertyMethodFinderNonPublicTest {
         // Verify
         assertThat( method, is( equalTo( BaseWithProtectedProperty.class.getDeclaredMethod( "getIntValue" ) ) ) );
 
+    }
+
+    @Test
+    public void findPrivateProperty( ) throws Exception {
+        // Setup
+
+        // Exercise
+        final Method method = methodFinder
+            .findPropertyMethod( WithPrivateProperty.class, long.class, "getValue", true );
+        // Verify
+        assertThat( method, is( equalTo( WithPrivateProperty.class.getDeclaredMethod( "getValue" ) ) ) );
     }
 
 }

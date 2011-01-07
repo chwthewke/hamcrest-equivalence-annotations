@@ -7,9 +7,9 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 
-import net.chwthewke.hamcrest.matchers.finder.DerivedWithProtectedProperty;
-import net.chwthewke.hamcrest.matchers.finder.DerivedWithPublicProperty;
-import net.chwthewke.hamcrest.matchers.finder.WithPublicProperty;
+import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedWithProtectedProperty;
+import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedWithPublicProperty;
+import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;
 
 import org.junit.Before;
 import org.junit.Test;

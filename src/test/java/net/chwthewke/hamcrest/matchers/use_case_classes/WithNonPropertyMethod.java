@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.matchers.finder;
+package net.chwthewke.hamcrest.matchers.use_case_classes;
 
 public class WithNonPropertyMethod {
     public String getValue( final String base ) {

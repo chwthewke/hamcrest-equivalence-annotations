@@ -1,17 +1,17 @@
-package net.chwthewke.hamcrest.matchers.finder;
+package net.chwthewke.hamcrest.matchers.use_case_classes;
 
-public class BaseWithProtectedProperty {
+public class BaseWithPublicProperty {
 
-    public BaseWithProtectedProperty( final String value ) {
+    public BaseWithPublicProperty( final String value ) {
         super( );
         this.value = value;
     }
 
-    protected String getValue( ) {
+    public String getValue( ) {
         return value;
     }
 
-    protected int getIntValue( ) {
+    public int getIntValue( ) {
         try
         {
             return Integer.parseInt( value );
