@@ -1,6 +1,6 @@
 package net.chwthewke.hamcrest.matchers.use_case_classes;
 
-public class DerivedWithProtectedProperty extends BaseWithProtectedProperty {
+public class DerivedWithProtectedProperty extends WithProtectedProperty {
 
     public DerivedWithProtectedProperty( final String value ) {
         super( value );
