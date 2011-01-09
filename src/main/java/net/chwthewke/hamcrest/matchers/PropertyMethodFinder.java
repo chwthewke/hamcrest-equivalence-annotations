@@ -1,6 +1,7 @@
 package net.chwthewke.hamcrest.matchers;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 class PropertyMethodFinder {
 
@@ -10,7 +11,7 @@ class PropertyMethodFinder {
             final boolean allowNonPublic ) {
 
         final Method property = allowNonPublic ?
-                getAnyPropertyMethod( clazz, propertyName ) :
+                getVisiblePropertyMethod( clazz, propertyName ) :
                 getPublicPropertyMethod( clazz, propertyName );
 
         if ( !propertyType.isAssignableFrom( property.getReturnType( ) ) )
@@ -23,6 +24,27 @@ class PropertyMethodFinder {
                     propertyType.getName( ) ) );
 
         return property;
+    }
+
+    private Method getVisiblePropertyMethod( final Class<?> clazz, final String propertyName ) {
+        final Method method = getAnyPropertyMethod( clazz, propertyName );
+
+        final int mod = method.getModifiers( );
+
+        if ( Modifier.isPublic( mod ) || Modifier.isProtected( mod ) )
+            return method;
+
+        if ( Modifier.isPrivate( mod ) )
+        {
+            if ( method.getDeclaringClass( ).equals( clazz ) )
+                return method;
+            return raisePropertyNotFound( null, clazz, propertyName, VISIBLE_QUALIFIER );
+        }
+
+        if ( !method.getDeclaringClass( ).getPackage( ).equals( clazz.getPackage( ) ) )
+            return raisePropertyNotFound( null, clazz, propertyName, VISIBLE_QUALIFIER );
+
+        return method;
     }
 
     private Method getAnyPropertyMethod( final Class<?> clazz, final String propertyName ) {
