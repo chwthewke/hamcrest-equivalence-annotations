@@ -7,7 +7,8 @@ public class WithPrivateProperty {
         this.value = value;
     }
 
-    public long getValue( ) {
+    @SuppressWarnings( "unused" )
+    private long getValue( ) {
         return value;
     }
 

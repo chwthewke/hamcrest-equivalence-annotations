@@ -5,6 +5,8 @@ import java.lang.reflect.Modifier;
 
 class PropertyMethodFinder {
 
+    // TODO refactor to replace allowNonPublic with inheritance ?
+
     public Method findPropertyMethod( final Class<?> clazz,
             final Class<?> propertyType,
             final String propertyName,

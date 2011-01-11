@@ -18,7 +18,6 @@ import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;
 import net.chwthewke.hamcrest.matchers.use_case_classes.isolated.IsolatedDerivedWithPackageLocalProperty;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class PropertyMethodFinderNonPublicTest {
@@ -154,7 +153,6 @@ public class PropertyMethodFinderNonPublicTest {
     }
 
     @Test
-    @Ignore
     public void dontFindPrivatePropertyInSuperclass( ) throws Exception {
         // Setup
 
@@ -170,7 +168,7 @@ public class PropertyMethodFinderNonPublicTest {
         {
             assertThat(
                 e.getMessage( ), is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.use_case_classes." +
-                        "isolated.IsolatedDerivedWithPackageLocalProperty lacks the visible property 'getValue()'." ) ) );
+                        "DerivedFromPrivateProperty lacks the visible property 'getValue()'." ) ) );
         }
     }
 

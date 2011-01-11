@@ -1,6 +1,6 @@
 package net.chwthewke.hamcrest.matchers.use_case_classes;
 
-public class DerivedWithPublicProperty extends BaseWithPublicProperty {
+public class DerivedWithPublicProperty extends WithPublicProperty {
 
     public DerivedWithPublicProperty( final String value ) {
         super( value );
