@@ -12,6 +12,7 @@ import java.util.List;
 import net.chwthewke.hamcrest.MatcherFactory;
 import net.chwthewke.hamcrest.MatcherSpecification;
 import net.chwthewke.hamcrest.annotations.MatcherOf;
+import net.chwthewke.hamcrest.annotations.NotPublic;
 
 import org.hamcrest.Matcher;
 
@@ -74,11 +75,7 @@ class CompositeMatcherFactory<T> implements MatcherFactory<T> {
     private void addExpectedPropertyTemplate( final Method specificationMethod ) {
         checkValidProperty( specificationMethod );
 
-        final Class<?> propertyType = specificationMethod.getReturnType( );
-
-        final String propertyName = specificationMethod.getName( );
-
-        final Method property = getAndCheckProperty( propertyName, propertyType );
+        final Method property = findMatchingProperty( specificationMethod );
 
         final ExpectedPropertyTemplate<T, ?> expectedPropertyTemplate =
                 new ExpectedPropertyTemplateFactory<T>( property, specificationMethod )
@@ -86,30 +83,14 @@ class CompositeMatcherFactory<T> implements MatcherFactory<T> {
         expectedPropertyTemplates.add( expectedPropertyTemplate );
     }
 
-    private Method getAndCheckProperty( final String propertyName, final Class<?> propertyType ) {
-        final Method property;
-        try
-        {
-            property = matchedClass.getMethod( propertyName );
-        }
-        catch ( final NoSuchMethodException e )
-        {
-            throw new IllegalArgumentException(
-                String.format( "The matched class %s lacks the property method '%s()' present on %s.",
-                    matchedClass.getName( ),
-                    propertyName,
-                    matcherSpecification.getName( ) ), e );
-        }
+    private Method findMatchingProperty( final Method specificationMethod ) {
+        // TODO wrap errors with specification class/method info.
 
-        if ( !propertyType.isAssignableFrom( property.getReturnType( ) ) )
-            throw new IllegalArgumentException(
-                String.format(
-                    "The property '%s()' on %s has return type %s which is not assignable to %s as specified on %s.",
-                    propertyName, matchedClass.getName( ),
-                    property.getReturnType( ).getName( ), propertyType.getName( ),
-                    matcherSpecification.getName( ) ) );
-
-        return property;
+        return new PropertyMethodFinder( )
+            .findPropertyMethod( matchedClass,
+                specificationMethod.getReturnType( ),
+                specificationMethod.getName( ),
+                specificationMethod.isAnnotationPresent( NotPublic.class ) );
     }
 
     private void checkValidProperty( final Method method ) {

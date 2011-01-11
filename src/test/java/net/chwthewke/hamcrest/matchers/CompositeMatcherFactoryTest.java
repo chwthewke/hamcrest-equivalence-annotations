@@ -168,9 +168,8 @@ public class CompositeMatcherFactoryTest {
             assertThat(
                 e.getMessage( ),
                 is( equalTo( "The matched class net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$Matched lacks the property " +
-                        "method 'value()' present on net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithMisnamedMethod." ) ) );
+                        "CompositeMatcherFactoryTest$Matched lacks the public property " +
+                        "'value()'." ) ) );
         }
     }
 
@@ -193,9 +192,8 @@ public class CompositeMatcherFactoryTest {
             assertThat(
                 e.getMessage( ),
                 is( equalTo( "The matched class net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$Matched lacks the property method " +
-                        "'compute()' present on net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithArgumentsMismatch." ) ) );
+                        "CompositeMatcherFactoryTest$Matched lacks the public property " +
+                        "'compute()'." ) ) );
         }
     }
 
@@ -219,9 +217,7 @@ public class CompositeMatcherFactoryTest {
                 e.getMessage( ),
                 is( equalTo( "The property 'getValue()' on net.chwthewke.hamcrest.matchers." +
                         "CompositeMatcherFactoryTest$Matched has return type " +
-                        "java.lang.String which is not assignable to java.lang.Integer " +
-                        "as specified on net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithReturnTypeMismatch." ) ) );
+                        "java.lang.String which is not assignable to java.lang.Integer." ) ) );
         }
     }
 
@@ -244,9 +240,8 @@ public class CompositeMatcherFactoryTest {
             assertThat(
                 e.getMessage( ),
                 is( equalTo( "The matched class net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$Matched lacks the property method " +
-                        "'getId()' present on net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithPrivateProperty." ) ) );
+                        "CompositeMatcherFactoryTest$Matched lacks the public property " +
+                        "'getId()'." ) ) );
 
         }
     }

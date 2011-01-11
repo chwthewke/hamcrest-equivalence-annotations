@@ -29,7 +29,15 @@ class PropertyMethodFinder {
     }
 
     private Method getVisiblePropertyMethod( final Class<?> clazz, final String propertyName ) {
-        final Method method = getAnyPropertyMethod( clazz, propertyName );
+        Method method;
+        try
+        {
+            method = getAnyPropertyMethod( clazz, propertyName );
+        }
+        catch ( final NoSuchMethodException e )
+        {
+            return raisePropertyNotFound( e, clazz, propertyName, VISIBLE_QUALIFIER );
+        }
 
         final int mod = method.getModifiers( );
 
@@ -49,7 +57,7 @@ class PropertyMethodFinder {
         return method;
     }
 
-    private Method getAnyPropertyMethod( final Class<?> clazz, final String propertyName ) {
+    private Method getAnyPropertyMethod( final Class<?> clazz, final String propertyName ) throws NoSuchMethodException {
 
         try
         {
@@ -61,7 +69,7 @@ class PropertyMethodFinder {
         {
             final Class<?> superClazz = clazz.getSuperclass( );
             if ( superClazz == null )
-                raisePropertyNotFound( e, clazz, VISIBLE_QUALIFIER, propertyName );
+                throw e;
             return getAnyPropertyMethod( superClazz, propertyName );
         }
     }
