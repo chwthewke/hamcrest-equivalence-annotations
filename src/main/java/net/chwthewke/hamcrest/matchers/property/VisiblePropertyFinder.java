@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.matchers;
+package net.chwthewke.hamcrest.matchers.property;
 
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.lang.reflect.Modifier.isProtected;
@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 class VisiblePropertyFinder extends PropertyFinder {
 
-    public VisiblePropertyFinder( ) {
+    protected VisiblePropertyFinder( ) {
     }
 
     @Override

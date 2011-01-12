@@ -1,16 +1,23 @@
-package net.chwthewke.hamcrest.matchers;
+package net.chwthewke.hamcrest.matchers.property;
 
 import java.lang.reflect.Method;
 
-abstract class PropertyFinder {
+public abstract class PropertyFinder {
 
-    public PropertyFinder( ) {
+    public static PropertyFinder publicPropertyFinder( ) {
+        return new PublicPropertyFinder( );
+    }
+
+    public static PropertyFinder visiblePropertyFinder( ) {
+        return new VisiblePropertyFinder( );
+    }
+
+    protected PropertyFinder( ) {
     }
 
     protected abstract Method getPropertyMethod( final Class<?> clazz, final String propertyName );
 
-    public final Method findPropertyMethod( final Class<?> clazz, final Class<?> propertyType, final String propertyName ) {
-
+    public Method findPropertyMethod( final Class<?> clazz, final Class<?> propertyType, final String propertyName ) {
         final Method property = getPropertyMethod( clazz, propertyName );
 
         if ( !propertyType.isAssignableFrom( property.getReturnType( ) ) )

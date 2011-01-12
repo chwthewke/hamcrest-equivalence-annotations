@@ -2,6 +2,8 @@ package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
+import static net.chwthewke.hamcrest.matchers.property.PropertyFinder.publicPropertyFinder;
+import static net.chwthewke.hamcrest.matchers.property.PropertyFinder.visiblePropertyFinder;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -13,6 +15,7 @@ import net.chwthewke.hamcrest.MatcherFactory;
 import net.chwthewke.hamcrest.MatcherSpecification;
 import net.chwthewke.hamcrest.annotations.MatcherOf;
 import net.chwthewke.hamcrest.annotations.NotPublic;
+import net.chwthewke.hamcrest.matchers.property.PropertyFinder;
 
 import org.hamcrest.Matcher;
 
@@ -88,8 +91,8 @@ class CompositeMatcherFactory<T> implements MatcherFactory<T> {
 
         final PropertyFinder propertyFinder =
                 specificationMethod.isAnnotationPresent( NotPublic.class ) ?
-                        new VisiblePropertyFinder( ) :
-                            new PublicPropertyFinder( );
+                        visiblePropertyFinder( ) :
+                        publicPropertyFinder( );
 
         return propertyFinder.findPropertyMethod( matchedClass,
                 specificationMethod.getReturnType( ),

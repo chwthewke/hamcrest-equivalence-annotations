@@ -1,10 +1,10 @@
-package net.chwthewke.hamcrest.matchers;
+package net.chwthewke.hamcrest.matchers.property;
 
 import java.lang.reflect.Method;
 
 class PublicPropertyFinder extends PropertyFinder {
 
-    public PublicPropertyFinder( ) {
+    protected PublicPropertyFinder( ) {
     }
 
     @Override
