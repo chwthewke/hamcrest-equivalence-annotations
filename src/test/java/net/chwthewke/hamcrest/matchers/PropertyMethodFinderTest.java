@@ -8,15 +8,16 @@ import net.chwthewke.hamcrest.matchers.use_case_classes.WithNonPropertyMethod;
 import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class PropertyMethodFinderTest {
 
-    private PropertyMethodFinder methodFinder;
+    private PropertyFinder methodFinder;
 
     @Before
     public void setupMethodFinder( ) {
-        methodFinder = new PropertyMethodFinder( );
+        methodFinder = new PublicPropertyFinder( );
     }
 
     @Test
@@ -26,7 +27,7 @@ public class PropertyMethodFinderTest {
         // Exercise
         try
         {
-            methodFinder.findPropertyMethod( WithPublicProperty.class, String.class, "getValue0", false );
+            methodFinder.findPropertyMethod( WithPublicProperty.class, String.class, "getValue0" );
             // Verify
             fail( );
         }
@@ -46,7 +47,7 @@ public class PropertyMethodFinderTest {
         // Exercise
         try
         {
-            methodFinder.findPropertyMethod( WithNonPropertyMethod.class, String.class, "getValue", false );
+            methodFinder.findPropertyMethod( WithNonPropertyMethod.class, String.class, "getValue" );
             // Verify
             fail( );
         }
@@ -66,7 +67,7 @@ public class PropertyMethodFinderTest {
         // Exercise
         try
         {
-            methodFinder.findPropertyMethod( WithPublicProperty.class, Integer.class, "getValue", false );
+            methodFinder.findPropertyMethod( WithPublicProperty.class, Integer.class, "getValue" );
             // Verify
             fail( );
         }
@@ -78,6 +79,17 @@ public class PropertyMethodFinderTest {
                         "WithPublicProperty has return type java.lang.String which is not " +
                         "assignable to java.lang.Integer." ) ) );
         }
+    }
+
+    @Test
+    @Ignore
+    public void findCovariantMethod( ) throws Exception {
+        // Setup
+
+        // Exercise
+
+        // Verify
+        fail( );
     }
 
 }

@@ -22,11 +22,11 @@ import org.junit.Test;
 
 public class PropertyMethodFinderNonPublicTest {
 
-    private PropertyMethodFinder methodFinder;
+    private PropertyFinder methodFinder;
 
     @Before
     public void setupMethodFinder( ) {
-        methodFinder = new PropertyMethodFinder( );
+        methodFinder = new VisiblePropertyFinder( );
     }
 
     @Test
@@ -35,7 +35,7 @@ public class PropertyMethodFinderNonPublicTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( WithPublicProperty.class, String.class, "getValue", true );
+            .findPropertyMethod( WithPublicProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( WithPublicProperty.class.getMethod( "getValue" ) ) );
     }
@@ -46,7 +46,7 @@ public class PropertyMethodFinderNonPublicTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( DerivedWithPublicProperty.class, String.class, "getValue", true );
+            .findPropertyMethod( DerivedWithPublicProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( DerivedWithPublicProperty.class.getMethod( "getValue" ) ) );
     }
@@ -57,7 +57,7 @@ public class PropertyMethodFinderNonPublicTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( DerivedWithPublicProperty.class, int.class, "getIntValue", true );
+            .findPropertyMethod( DerivedWithPublicProperty.class, int.class, "getIntValue" );
         // Verify
         assertThat( method, is( DerivedWithPublicProperty.class.getMethod( "getIntValue" ) ) );
     }
@@ -69,7 +69,7 @@ public class PropertyMethodFinderNonPublicTest {
         // Exercise
 
         final Method method = methodFinder
-            .findPropertyMethod( DerivedWithProtectedProperty.class, String.class, "getValue", true );
+            .findPropertyMethod( DerivedWithProtectedProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( equalTo( DerivedWithProtectedProperty.class.getDeclaredMethod( "getValue" ) ) ) );
     }
@@ -80,7 +80,7 @@ public class PropertyMethodFinderNonPublicTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( DerivedWithProtectedProperty.class, int.class, "getIntValue", true );
+            .findPropertyMethod( DerivedWithProtectedProperty.class, int.class, "getIntValue" );
         // Verify
         assertThat( method, is( equalTo( WithProtectedProperty.class.getDeclaredMethod( "getIntValue" ) ) ) );
 
@@ -92,7 +92,7 @@ public class PropertyMethodFinderNonPublicTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( WithPackageLocalProperty.class, String.class, "getValue", true );
+            .findPropertyMethod( WithPackageLocalProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( equalTo( WithPackageLocalProperty.class.getDeclaredMethod( "getValue" ) ) ) );
     }
@@ -103,7 +103,7 @@ public class PropertyMethodFinderNonPublicTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( DerivedWithPackageLocalProperty.class, String.class, "getValue", true );
+            .findPropertyMethod( DerivedWithPackageLocalProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( equalTo( DerivedWithPackageLocalProperty.class.getDeclaredMethod( "getValue" ) ) ) );
 
@@ -115,7 +115,7 @@ public class PropertyMethodFinderNonPublicTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( DerivedWithPackageLocalProperty.class, int.class, "getIntValue", true );
+            .findPropertyMethod( DerivedWithPackageLocalProperty.class, int.class, "getIntValue" );
         // Verify
         assertThat( method, is( equalTo( WithPackageLocalProperty.class.getDeclaredMethod( "getIntValue" ) ) ) );
 
@@ -129,7 +129,7 @@ public class PropertyMethodFinderNonPublicTest {
         {
             // Exercise
             methodFinder
-                .findPropertyMethod( IsolatedDerivedWithPackageLocalProperty.class, String.class, "getValue", true );
+                .findPropertyMethod( IsolatedDerivedWithPackageLocalProperty.class, String.class, "getValue" );
             // Verify
             fail( );
         }
@@ -147,7 +147,7 @@ public class PropertyMethodFinderNonPublicTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( WithPrivateProperty.class, long.class, "getValue", true );
+            .findPropertyMethod( WithPrivateProperty.class, long.class, "getValue" );
         // Verify
         assertThat( method, is( equalTo( WithPrivateProperty.class.getDeclaredMethod( "getValue" ) ) ) );
     }
@@ -160,7 +160,7 @@ public class PropertyMethodFinderNonPublicTest {
         {
             // Exercise
             methodFinder
-                .findPropertyMethod( DerivedFromPrivateProperty.class, long.class, "getValue", true );
+                .findPropertyMethod( DerivedFromPrivateProperty.class, long.class, "getValue" );
             // Verify
             fail( );
         }

@@ -16,11 +16,11 @@ import org.junit.Test;
 
 public class PropertyMethodFinderPublicOnlyTest {
 
-    private PropertyMethodFinder methodFinder;
+    private PropertyFinder methodFinder;
 
     @Before
     public void setupMethodFinder( ) {
-        methodFinder = new PropertyMethodFinder( );
+        methodFinder = new PublicPropertyFinder( );
     }
 
     @Test
@@ -29,7 +29,7 @@ public class PropertyMethodFinderPublicOnlyTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( WithPublicProperty.class, String.class, "getValue", false );
+            .findPropertyMethod( WithPublicProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( WithPublicProperty.class.getMethod( "getValue" ) ) );
     }
@@ -40,7 +40,7 @@ public class PropertyMethodFinderPublicOnlyTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( DerivedWithPublicProperty.class, String.class, "getValue", false );
+            .findPropertyMethod( DerivedWithPublicProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( DerivedWithPublicProperty.class.getMethod( "getValue" ) ) );
     }
@@ -51,7 +51,7 @@ public class PropertyMethodFinderPublicOnlyTest {
 
         // Exercise
         final Method method = methodFinder
-            .findPropertyMethod( DerivedWithPublicProperty.class, int.class, "getIntValue", false );
+            .findPropertyMethod( DerivedWithPublicProperty.class, int.class, "getIntValue" );
         // Verify
         assertThat( method, is( DerivedWithPublicProperty.class.getMethod( "getIntValue" ) ) );
     }
@@ -63,7 +63,7 @@ public class PropertyMethodFinderPublicOnlyTest {
         // Exercise
         try
         {
-            methodFinder.findPropertyMethod( DerivedWithProtectedProperty.class, String.class, "getValue", false );
+            methodFinder.findPropertyMethod( DerivedWithProtectedProperty.class, String.class, "getValue" );
             // Verify
             fail( );
         }
@@ -83,7 +83,7 @@ public class PropertyMethodFinderPublicOnlyTest {
         // Exercise
         try
         {
-            methodFinder.findPropertyMethod( DerivedWithProtectedProperty.class, int.class, "getIntValue", false );
+            methodFinder.findPropertyMethod( DerivedWithProtectedProperty.class, int.class, "getIntValue" );
             // Verify
             fail( );
         }

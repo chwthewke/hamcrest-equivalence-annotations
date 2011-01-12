@@ -86,11 +86,14 @@ class CompositeMatcherFactory<T> implements MatcherFactory<T> {
     private Method findMatchingProperty( final Method specificationMethod ) {
         // TODO wrap errors with specification class/method info.
 
-        return new PropertyMethodFinder( )
-            .findPropertyMethod( matchedClass,
+        final PropertyFinder propertyFinder =
+                specificationMethod.isAnnotationPresent( NotPublic.class ) ?
+                        new VisiblePropertyFinder( ) :
+                            new PublicPropertyFinder( );
+
+        return propertyFinder.findPropertyMethod( matchedClass,
                 specificationMethod.getReturnType( ),
-                specificationMethod.getName( ),
-                specificationMethod.isAnnotationPresent( NotPublic.class ) );
+                specificationMethod.getName( ) );
     }
 
     private void checkValidProperty( final Method method ) {
