@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 class FindPublicPropertyFunction extends FindPropertyFunction {
 
-    protected FindPublicPropertyFunction( ) {
+    FindPublicPropertyFunction( ) {
     }
 
     @Override

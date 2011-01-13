@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 class FindVisiblePropertyFunction extends FindPropertyFunction {
 
-    protected FindVisiblePropertyFunction( ) {
+    FindVisiblePropertyFunction( ) {
     }
 
     @Override

@@ -10,6 +10,8 @@ import net.chwthewke.hamcrest.annotations.ApproximateEquality;
 import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.Identity;
+import net.chwthewke.hamcrest.matchers.property.PropertyFinder;
+import net.chwthewke.hamcrest.matchers.specification.MatcherSpecificationValidator;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -45,7 +47,13 @@ class ExpectedPropertyTemplateFactory<T> {
         return getEqualityTemplate( propertyType );
     }
 
-    ExpectedPropertyTemplateFactory( final Method property, final Method specificationMethod ) {
+    ExpectedPropertyTemplateFactory(
+            final PropertyFinder propertyFinder,
+            final MatcherSpecificationValidator specificationValidator,
+            final Method property,
+            final Method specificationMethod ) {
+        this.propertyFinder = propertyFinder;
+        this.specificationValidator = specificationValidator;
         this.property = property;
         this.specificationMethod = specificationMethod;
     }
@@ -107,7 +115,9 @@ class ExpectedPropertyTemplateFactory<T> {
             final Class<?> propertySpecification ) {
 
         final CompositeMatcherFactory<U> matcherFactoryForProperty =
-                new CompositeMatcherFactory<U>( propertyType, propertySpecification );
+                new CompositeMatcherFactory<U>( propertyFinder,
+                        specificationValidator,
+                        propertyType, propertySpecification );
 
         final Function<U, Matcher<? super U>> matcherBySpecificationFactory =
                 new Function<U, Matcher<? super U>>( ) {
@@ -172,6 +182,9 @@ class ExpectedPropertyTemplateFactory<T> {
             return type;
         return (Class<T>) primitiveToReference.get( type );
     }
+
+    private final PropertyFinder propertyFinder;
+    private final MatcherSpecificationValidator specificationValidator;
 
     private final Method property;
     private final Method specificationMethod;

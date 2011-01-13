@@ -2,19 +2,9 @@ package net.chwthewke.hamcrest.matchers.property;
 
 import java.lang.reflect.Method;
 
-public abstract class FindPropertyFunction {
+abstract class FindPropertyFunction {
 
-    @Deprecated
-    public static FindPropertyFunction publicPropertyFinder( ) {
-        return new FindPublicPropertyFunction( );
-    }
-
-    @Deprecated
-    public static FindPropertyFunction visiblePropertyFinder( ) {
-        return new FindVisiblePropertyFunction( );
-    }
-
-    protected FindPropertyFunction( ) {
+    FindPropertyFunction( ) {
     }
 
     protected abstract Method getPropertyMethod( final Class<?> clazz, final String propertyName );
