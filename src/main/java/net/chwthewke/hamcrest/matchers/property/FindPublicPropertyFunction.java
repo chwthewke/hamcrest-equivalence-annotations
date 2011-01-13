@@ -2,9 +2,9 @@ package net.chwthewke.hamcrest.matchers.property;
 
 import java.lang.reflect.Method;
 
-class PublicPropertyFinder extends PropertyFinder {
+class FindPublicPropertyFunction extends FindPropertyFunction {
 
-    protected PublicPropertyFinder( ) {
+    protected FindPublicPropertyFunction( ) {
     }
 
     @Override

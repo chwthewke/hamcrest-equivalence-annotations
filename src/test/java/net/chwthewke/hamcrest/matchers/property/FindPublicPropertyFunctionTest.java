@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 
-import net.chwthewke.hamcrest.matchers.property.PropertyFinder;
+import net.chwthewke.hamcrest.matchers.property.FindPropertyFunction;
 import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedWithProtectedProperty;
 import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedWithPublicProperty;
 import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;
@@ -15,13 +15,13 @@ import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;
 import org.junit.Before;
 import org.junit.Test;
 
-public class PropertyMethodFinderPublicOnlyTest {
+public class FindPublicPropertyFunctionTest {
 
-    private PropertyFinder methodFinder;
+    private FindPropertyFunction methodFinder;
 
     @Before
     public void setupMethodFinder( ) {
-        methodFinder = PropertyFinder.publicPropertyFinder( );
+        methodFinder = new FindPublicPropertyFunction( );
     }
 
     @Test

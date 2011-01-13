@@ -2,41 +2,11 @@ package net.chwthewke.hamcrest.matchers.property;
 
 import java.lang.reflect.Method;
 
-public abstract class PropertyFinder {
-
-    public static PropertyFinder publicPropertyFinder( ) {
-        return new PublicPropertyFinder( );
+public class PropertyFinder {
+    public Method findProperty( final Class<?> clazz, final String propertyName,
+            final Class<?> propertyType, final boolean allowNonPublic ) {
+        final FindPropertyFunction finderFunction = allowNonPublic ?
+                new FindVisiblePropertyFunction( ) : new FindPublicPropertyFunction( );
+        return finderFunction.findPropertyMethod( clazz, propertyType, propertyName );
     }
-
-    public static PropertyFinder visiblePropertyFinder( ) {
-        return new VisiblePropertyFinder( );
-    }
-
-    protected PropertyFinder( ) {
-    }
-
-    protected abstract Method getPropertyMethod( final Class<?> clazz, final String propertyName );
-
-    public Method findPropertyMethod( final Class<?> clazz, final Class<?> propertyType, final String propertyName ) {
-        final Method property = getPropertyMethod( clazz, propertyName );
-
-        if ( !propertyType.isAssignableFrom( property.getReturnType( ) ) )
-            throw new IllegalArgumentException(
-                String.format(
-                    "The property '%s()' on %s has return type %s which is not assignable to %s.",
-                    propertyName,
-                    clazz.getName( ),
-                    property.getReturnType( ).getName( ),
-                    propertyType.getName( ) ) );
-
-        return property;
-    }
-
-    protected Method raisePropertyNotFound( final NoSuchMethodException e, final Class<?> clazz,
-            final String propertyName, final String qualifier ) {
-        throw new IllegalArgumentException(
-            String.format( "The matched class %s lacks the %s property '%s()'.",
-                clazz.getName( ), qualifier, propertyName ), e );
-    }
-
 }

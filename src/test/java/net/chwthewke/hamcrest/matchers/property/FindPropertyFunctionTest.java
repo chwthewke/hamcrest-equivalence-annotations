@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
-import net.chwthewke.hamcrest.matchers.property.PropertyFinder;
+import net.chwthewke.hamcrest.matchers.property.FindPropertyFunction;
 import net.chwthewke.hamcrest.matchers.use_case_classes.WithNonPropertyMethod;
 import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;
 
@@ -12,13 +12,13 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class PropertyMethodFinderTest {
+public class FindPropertyFunctionTest {
 
-    private PropertyFinder methodFinder;
+    private FindPropertyFunction methodFinder;
 
     @Before
     public void setupMethodFinder( ) {
-        methodFinder = PropertyFinder.publicPropertyFinder( );
+        methodFinder = new FindPublicPropertyFunction( );
     }
 
     @Test

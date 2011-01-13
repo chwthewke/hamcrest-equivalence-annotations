@@ -6,9 +6,9 @@ import static java.lang.reflect.Modifier.isPublic;
 
 import java.lang.reflect.Method;
 
-class VisiblePropertyFinder extends PropertyFinder {
+class FindVisiblePropertyFunction extends FindPropertyFunction {
 
-    protected VisiblePropertyFinder( ) {
+    protected FindVisiblePropertyFunction( ) {
     }
 
     @Override
