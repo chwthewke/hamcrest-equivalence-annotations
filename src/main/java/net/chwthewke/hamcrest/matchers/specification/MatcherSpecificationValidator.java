@@ -7,7 +7,7 @@ import net.chwthewke.hamcrest.annotations.MatcherOf;
 
 public class MatcherSpecificationValidator {
 
-    public void validateSpecificationClass( final Class<?> matcherSpecification ) {
+    public void validateSpecificationInterface( final Class<?> matcherSpecification ) {
 
         checkSpecificationIsAPublicInterface( matcherSpecification );
 

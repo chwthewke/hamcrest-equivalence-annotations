@@ -34,10 +34,10 @@ class CompositeMatcherFactory<T> implements MatcherFactory<T> {
     }
 
     @SuppressWarnings( "unchecked" )
-    static <T> MatcherFactory<T>
-            asSpecifiedBy( final Class<? extends MatcherSpecification<T>> matcherSpecification ) {
+    static <T> MatcherFactory<T> asSpecifiedBy(
+            final Class<? extends MatcherSpecification<T>> matcherSpecification ) {
 
-        specificationValidatorInstance.validateSpecificationClass( matcherSpecification );
+        specificationValidatorInstance.validateSpecificationInterface( matcherSpecification );
 
         return asSpecifiedBy( matcherSpecification,
             (Class<T>) matcherSpecification.getAnnotation( MatcherOf.class ).value( ) );
@@ -53,7 +53,7 @@ class CompositeMatcherFactory<T> implements MatcherFactory<T> {
         this.matchedClass = checkNotNull( matchedClass );
         this.matcherSpecification = checkNotNull( matcherSpecification );
 
-        specificationValidator.validateSpecificationClass( matcherSpecification );
+        specificationValidator.validateSpecificationInterface( matcherSpecification );
 
         initialize( );
     }
@@ -83,8 +83,7 @@ class CompositeMatcherFactory<T> implements MatcherFactory<T> {
     }
 
     private void addExpectedPropertyTemplates( ) {
-        final Method[ ] specificationMethods = matcherSpecification.getMethods( );
-        for ( final Method method : specificationMethods )
+        for ( final Method method : matcherSpecification.getMethods( ) )
             addExpectedPropertyTemplate( method );
     }
 

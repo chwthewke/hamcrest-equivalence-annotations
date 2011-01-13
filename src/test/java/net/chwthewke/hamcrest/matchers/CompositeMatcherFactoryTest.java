@@ -15,72 +15,6 @@ import org.junit.Test;
 public class CompositeMatcherFactoryTest {
 
     @Test
-    public void matchingSpecificationNotAnInterface( ) throws Exception {
-        // Setup
-        // Exercise
-        try
-        {
-            CompositeMatcherFactory.asSpecifiedBy(
-                SpecificationNotAnInterface.class,
-                Matched.class );
-            // Verify
-            fail( );
-        }
-        catch ( final IllegalArgumentException e )
-        {
-            assertThat(
-                e.getMessage( ),
-                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationNotAnInterface must be an interface." ) ) );
-        }
-    }
-
-    @Test
-    public void matchingSpecificationNonPublicInterface( ) throws Exception {
-        // Setup
-
-        // Exercise
-        try
-        {
-            CompositeMatcherFactory.asSpecifiedBy(
-                NonPublicInterface.class,
-                Matched.class );
-            // Verify
-            fail( );
-        }
-        catch ( final IllegalArgumentException e )
-        {
-            assertThat(
-                e.getMessage( ),
-                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$NonPublicInterface must have public visibility." ) ) );
-        }
-    }
-
-    @Test
-    public void matchingSpecificationMissingAnnotation( ) throws Exception {
-        // Setup
-
-        // Exercise
-        try
-        {
-            CompositeMatcherFactory.asSpecifiedBy(
-                SpecificationWithoutAnnotation.class,
-                Matched.class );
-            // Verify
-            fail( );
-        }
-        catch ( final IllegalArgumentException e )
-        {
-            assertThat(
-                e.getMessage( ),
-                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithoutAnnotation must be " +
-                        "annotated with MatcherOf." ) ) );
-        }
-    }
-
-    @Test
     public void matchingSpecificationAnnotationMismatch( ) throws Exception {
         // Setup
 
@@ -100,54 +34,6 @@ public class CompositeMatcherFactoryTest {
                 is( equalTo( "The MatcherOf annotation on net.chwthewke.hamcrest.matchers." +
                         "CompositeMatcherFactoryTest$SpecificationWithAnnotationMismatch must " +
                         "have a value of net.chwthewke.hamcrest.matchers.CompositeMatcherFactoryTest$Matched." ) ) );
-        }
-    }
-
-    @Test
-    public void matchingInterfaceHasVoidMethod( ) throws Exception {
-        // Setup
-        // Exercise
-        try
-        {
-            CompositeMatcherFactory.asSpecifiedBy(
-                SpecificationWithVoidMethod.class,
-                Matched.class );
-            // Verify
-            fail( );
-        }
-        catch ( final IllegalArgumentException e )
-        {
-            assertThat(
-                e.getMessage( ),
-                is( equalTo( "The method public abstract void net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithVoidMethod.run() in specification " +
-                        "net.chwthewke.hamcrest.matchers.CompositeMatcherFactoryTest$SpecificationWithVoidMethod " +
-                        "has return type void." ) ) );
-        }
-    }
-
-    @Test
-    public void matchingInterfaceHasNonPropertyMethod( ) throws Exception {
-        // Setup
-        // Exercise
-        try
-        {
-            CompositeMatcherFactory.asSpecifiedBy(
-                SpecificationWithNonPropertyMethod.class,
-                Matched.class );
-            // Verify
-            fail( );
-        }
-        catch ( final IllegalArgumentException e )
-        {
-            assertThat(
-                e.getMessage( ),
-                is( equalTo( "The method public abstract java.lang.String " +
-                        "net.chwthewke.hamcrest.matchers.CompositeMatcherFactoryTest" +
-                        "$SpecificationWithNonPropertyMethod.method(java.lang.Object) " +
-                        "in specification net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithNonPropertyMethod " +
-                        "has parameters." ) ) );
         }
     }
 
@@ -296,37 +182,10 @@ public class CompositeMatcherFactoryTest {
         private final String value;
     }
 
-    @MatcherOf( Matched.class )
-    public static class SpecificationNotAnInterface {
-    }
-
-    @MatcherOf( Matched.class )
-    static interface NonPublicInterface {
-        @Equality
-        String getValue( );
-    }
-
-    public static interface SpecificationWithoutAnnotation {
-        @Equality
-        String getValue( );
-    }
-
     @MatcherOf( Object.class )
     public static interface SpecificationWithAnnotationMismatch {
         @Equality
         String getValue( );
-    }
-
-    @MatcherOf( Matched.class )
-    public static interface SpecificationWithNonPropertyMethod {
-        @Equality
-        String method( Object input );
-    }
-
-    @MatcherOf( Matched.class )
-    public static interface SpecificationWithVoidMethod {
-        @Equality
-        void run( );
     }
 
     @MatcherOf( Matched.class )

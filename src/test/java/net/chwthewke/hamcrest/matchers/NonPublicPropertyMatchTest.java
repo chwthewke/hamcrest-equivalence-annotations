@@ -8,10 +8,8 @@ import net.chwthewke.hamcrest.annotations.MatcherOf;
 import net.chwthewke.hamcrest.annotations.NotPublic;
 
 import org.hamcrest.Matcher;
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class NonPublicPropertyMatchTest {
     @Test
     public void matchingInterfaceTargetsAnnotatedPrivateProperty( ) throws Exception {
