@@ -4,8 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
-import net.chwthewke.hamcrest.matchers.FindPropertyFunction;
-import net.chwthewke.hamcrest.matchers.FindPublicPropertyFunction;
 import net.chwthewke.hamcrest.matchers.use_case_classes.WithNonPropertyMethod;
 import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;
 
@@ -87,7 +85,7 @@ public class FindPropertyFunctionTest {
     @Ignore
     public void findCovariantMethod( ) throws Exception {
         // Setup
-
+        // TODO write this here test
         // Exercise
 
         // Verify
