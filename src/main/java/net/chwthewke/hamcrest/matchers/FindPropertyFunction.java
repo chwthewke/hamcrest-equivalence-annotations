@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.matchers.property;
+package net.chwthewke.hamcrest.matchers;
 
 import java.lang.reflect.Method;
 

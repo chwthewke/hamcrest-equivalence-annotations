@@ -11,7 +11,7 @@ public interface GasTankMatching {
     @Equality
     String getGas( );
 
-    @ApproximateEquality( 0.000001d )
+    @ApproximateEquality( tolerance = 0.000001d )
     double getVolume( );
 
     @Identity

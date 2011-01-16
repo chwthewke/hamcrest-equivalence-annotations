@@ -1,12 +1,10 @@
 package net.chwthewke.hamcrest.matchers;
 
-import static net.chwthewke.hamcrest.matchers.AnnotationMatchers.asSpecifiedBy;
+import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
-import net.chwthewke.hamcrest.MatcherFactory;
-import net.chwthewke.hamcrest.MatcherSpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.MatcherOf;
 
@@ -135,7 +133,7 @@ public class CompositeMatcherFactoryTest {
     @Test
     public void expectedPropertyThrowsException( ) throws Exception {
         // Setup
-        final MatcherFactory<Matched> factory = asSpecifiedBy( ExpectedPropertyThrows.class );
+        final Equivalence<Matched> factory = asSpecifiedBy( ExpectedPropertyThrows.class );
         // Exercise
         try
         {
@@ -213,7 +211,7 @@ public class CompositeMatcherFactoryTest {
     }
 
     @MatcherOf( Matched.class )
-    public static interface ExpectedPropertyThrows extends MatcherSpecification<Matched> {
+    public static interface ExpectedPropertyThrows extends EquivalenceSpecification<Matched> {
         @Equality
         Object getException( );
     }

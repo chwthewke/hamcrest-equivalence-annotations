@@ -1,10 +1,10 @@
 package net.chwthewke.hamcrest.annotations;
 
-import static net.chwthewke.hamcrest.matchers.AnnotationMatchers.asSpecifiedBy;
+import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import net.chwthewke.hamcrest.MatcherSpecification;
+import net.chwthewke.hamcrest.matchers.EquivalenceSpecification;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -44,7 +44,7 @@ public class BySpecificationTest {
     }
 
     @MatcherOf( OuterMatched.class )
-    public static interface OuterSpecification extends MatcherSpecification<OuterMatched> {
+    public static interface OuterSpecification extends EquivalenceSpecification<OuterMatched> {
         @BySpecification( InnerSpecification.class )
         InnerMatched getOuterValue( );
     }
@@ -62,7 +62,7 @@ public class BySpecificationTest {
     }
 
     @MatcherOf( InnerMatched.class )
-    public static interface InnerSpecification extends MatcherSpecification<InnerMatched> {
+    public static interface InnerSpecification extends EquivalenceSpecification<InnerMatched> {
         @Equality
         String getInnerValue( );
     }

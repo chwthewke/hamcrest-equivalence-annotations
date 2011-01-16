@@ -10,8 +10,6 @@ import net.chwthewke.hamcrest.annotations.ApproximateEquality;
 import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.Identity;
-import net.chwthewke.hamcrest.matchers.property.PropertyFinder;
-import net.chwthewke.hamcrest.matchers.specification.MatcherSpecificationValidator;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -42,7 +40,7 @@ class ExpectedPropertyTemplateFactory<T> {
 
         if ( specificationMethod.isAnnotationPresent( ApproximateEquality.class ) )
             return getApproximateEqualityTemplate( propertyType,
-                specificationMethod.getAnnotation( ApproximateEquality.class ).value( ) );
+                specificationMethod.getAnnotation( ApproximateEquality.class ).tolerance( ) );
 
         return getEqualityTemplate( propertyType );
     }

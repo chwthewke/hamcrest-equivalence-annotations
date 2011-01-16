@@ -8,21 +8,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import net.chwthewke.hamcrest.MatcherFactory;
-import net.chwthewke.hamcrest.MatcherSpecification;
 import net.chwthewke.hamcrest.annotations.MatcherOf;
 import net.chwthewke.hamcrest.annotations.NotPublic;
-import net.chwthewke.hamcrest.matchers.property.PropertyFinder;
-import net.chwthewke.hamcrest.matchers.specification.MatcherSpecificationValidator;
 
 import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 
-class CompositeMatcherFactory<T> implements MatcherFactory<T> {
+class CompositeMatcherFactory<T> implements Equivalence<T> {
 
-    static <T> MatcherFactory<T> asSpecifiedBy(
+    static <T> Equivalence<T> asSpecifiedBy(
             final Class<?> matcherSpecification,
             final Class<T> matchedClass ) {
 
@@ -34,8 +30,8 @@ class CompositeMatcherFactory<T> implements MatcherFactory<T> {
     }
 
     @SuppressWarnings( "unchecked" )
-    static <T> MatcherFactory<T> asSpecifiedBy(
-            final Class<? extends MatcherSpecification<T>> matcherSpecification ) {
+    static <T> Equivalence<T> asSpecifiedBy(
+            final Class<? extends EquivalenceSpecification<T>> matcherSpecification ) {
 
         specificationValidatorInstance.validateSpecificationInterface( matcherSpecification );
 

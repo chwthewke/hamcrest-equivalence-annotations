@@ -1,11 +1,11 @@
-package net.chwthewke.hamcrest.matchers.specification;
+package net.chwthewke.hamcrest.matchers;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import net.chwthewke.hamcrest.annotations.MatcherOf;
 
-public class MatcherSpecificationValidator {
+class MatcherSpecificationValidator {
 
     public void validateSpecificationInterface( final Class<?> matcherSpecification ) {
 

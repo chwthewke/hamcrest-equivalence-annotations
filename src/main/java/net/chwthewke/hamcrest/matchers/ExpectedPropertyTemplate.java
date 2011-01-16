@@ -4,7 +4,7 @@ import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;
 
-class ExpectedPropertyTemplate<T, U> {
+final class ExpectedPropertyTemplate<T, U> {
 
     static <T, U> ExpectedPropertyTemplate<T, U> create(
             final String propertyName,

@@ -1,9 +1,9 @@
 package net.chwthewke.hamcrest.annotations;
 
-import static net.chwthewke.hamcrest.matchers.AnnotationMatchers.asSpecifiedBy;
+import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import net.chwthewke.hamcrest.MatcherSpecification;
+import net.chwthewke.hamcrest.matchers.EquivalenceSpecification;
 
 import org.junit.Test;
 
@@ -53,7 +53,7 @@ public class EqualityMatchersTest {
     }
 
     @MatcherOf( Matched.class )
-    public static interface MatchingSpecification extends MatcherSpecification<Matched> {
+    public static interface MatchingSpecification extends EquivalenceSpecification<Matched> {
         @Equality
         IntHolder getHolder( );
     }

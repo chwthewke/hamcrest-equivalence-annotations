@@ -1,9 +1,9 @@
 package net.chwthewke.hamcrest.annotations;
 
-import static net.chwthewke.hamcrest.matchers.AnnotationMatchers.asSpecifiedBy;
+import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import net.chwthewke.hamcrest.MatcherSpecification;
+import net.chwthewke.hamcrest.matchers.EquivalenceSpecification;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
@@ -56,14 +56,14 @@ public class ApproximateEqualityMatchersTest {
     }
 
     @MatcherOf( Matched.class )
-    public static interface DoubleMatcherSpecification extends MatcherSpecification<Matched> {
-        @ApproximateEquality( 0.000001d )
+    public static interface DoubleMatcherSpecification extends EquivalenceSpecification<Matched> {
+        @ApproximateEquality( tolerance = 0.000001d )
         double getDoubleValue( );
     }
 
     @MatcherOf( Matched.class )
-    public static interface FloatMatcherSpecification extends MatcherSpecification<Matched> {
-        @ApproximateEquality( 0.000001d )
+    public static interface FloatMatcherSpecification extends EquivalenceSpecification<Matched> {
+        @ApproximateEquality( tolerance = 0.000001d )
         float getFloatValue( );
     }
 }

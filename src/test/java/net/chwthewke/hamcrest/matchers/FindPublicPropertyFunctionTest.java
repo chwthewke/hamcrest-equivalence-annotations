@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.matchers.property;
+package net.chwthewke.hamcrest.matchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -7,7 +7,8 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 
-import net.chwthewke.hamcrest.matchers.property.FindPropertyFunction;
+import net.chwthewke.hamcrest.matchers.FindPropertyFunction;
+import net.chwthewke.hamcrest.matchers.FindPublicPropertyFunction;
 import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedWithProtectedProperty;
 import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedWithPublicProperty;
 import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;

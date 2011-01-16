@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.matchers.specification;
+package net.chwthewke.hamcrest.matchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -33,7 +33,7 @@ public class MatcherSpecificationValidatorTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers.specification." +
+                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers." +
                         "MatcherSpecificationValidatorTest$SpecificationNotAnInterface must be an interface." ) ) );
         }
     }
@@ -54,7 +54,7 @@ public class MatcherSpecificationValidatorTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers.specification." +
+                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers." +
                         "MatcherSpecificationValidatorTest$NonPublicInterface must have public visibility." ) ) );
         }
     }
@@ -75,7 +75,7 @@ public class MatcherSpecificationValidatorTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers.specification." +
+                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers." +
                         "MatcherSpecificationValidatorTest$SpecificationWithoutAnnotation must be " +
                         "annotated with MatcherOf." ) ) );
         }
@@ -97,9 +97,9 @@ public class MatcherSpecificationValidatorTest {
             assertThat(
                 e.getMessage( ),
                 is( equalTo( "The method public abstract void net.chwthewke."
-                        + "hamcrest.matchers.specification.MatcherSpecificationValidatorTest"
+                        + "hamcrest.matchers.MatcherSpecificationValidatorTest"
                         + "$SpecificationWithVoidMethod.run() in specification "
-                        + "net.chwthewke.hamcrest.matchers.specification.MatcherSpecificationValidatorTest"
+                        + "net.chwthewke.hamcrest.matchers.MatcherSpecificationValidatorTest"
                         + "$SpecificationWithVoidMethod has return type void." ) ) );
         }
     }
@@ -120,9 +120,9 @@ public class MatcherSpecificationValidatorTest {
             assertThat(
                 e.getMessage( ),
                 is( equalTo( "The method public abstract java.lang.String " +
-                        "net.chwthewke.hamcrest.matchers.specification.MatcherSpecificationValidatorTest" +
+                        "net.chwthewke.hamcrest.matchers.MatcherSpecificationValidatorTest" +
                         "$SpecificationWithNonPropertyMethod.method(java.lang.Object) " +
-                        "in specification net.chwthewke.hamcrest.matchers.specification." +
+                        "in specification net.chwthewke.hamcrest.matchers." +
                         "MatcherSpecificationValidatorTest$SpecificationWithNonPropertyMethod " +
                         "has parameters." ) ) );
         }

@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.matchers.property;
+package net.chwthewke.hamcrest.matchers;
 
 import static java.lang.reflect.Modifier.isPrivate;
 import static java.lang.reflect.Modifier.isProtected;
