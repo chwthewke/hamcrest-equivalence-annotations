@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * Used with an equivalence annotation, {@link NotPublic} declares that the annotated method should be used for equivalence
  * even though it is not public, but merely visible, on the matched type.
  * 
- * @see MatcherOf
+ * @see EquivalenceSpecificationOn
  */
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.METHOD )

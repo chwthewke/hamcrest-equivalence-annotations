@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 import net.chwthewke.hamcrest.annotations.Equality;
-import net.chwthewke.hamcrest.annotations.MatcherOf;
+import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
 
 import org.junit.Test;
 
@@ -51,9 +51,11 @@ public class CompositeMatcherFactoryTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The matched class net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$Matched lacks the public property " +
-                        "'value()'." ) ) );
+                is( equalTo( "Error while binding specification method " +
+                        "[public abstract java.lang.String net.chwthewke.hamcrest.matchers." +
+                        "CompositeMatcherFactoryTest$SpecificationWithMisnamedMethod.value()]: " +
+                        "The matched class net.chwthewke.hamcrest.matchers.CompositeMatcherFactoryTest$Matched" +
+                        " lacks the public property 'value()'." ) ) );
         }
     }
 
@@ -75,9 +77,11 @@ public class CompositeMatcherFactoryTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The matched class net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$Matched lacks the public property " +
-                        "'compute()'." ) ) );
+                is( equalTo( "Error while binding specification method " +
+                        "[public abstract java.lang.String net.chwthewke.hamcrest.matchers." +
+                        "CompositeMatcherFactoryTest$SpecificationWithArgumentsMismatch.compute()]: " +
+                        "The matched class net.chwthewke.hamcrest.matchers.CompositeMatcherFactoryTest$Matched " +
+                        "lacks the public property 'compute()'." ) ) );
         }
     }
 
@@ -99,9 +103,12 @@ public class CompositeMatcherFactoryTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The property 'getValue()' on net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$Matched has return type " +
-                        "java.lang.String which is not assignable to java.lang.Integer." ) ) );
+                is( equalTo( "Error while binding specification method " +
+                        "[public abstract java.lang.Integer net.chwthewke.hamcrest.matchers." +
+                        "CompositeMatcherFactoryTest$SpecificationWithReturnTypeMismatch.getValue()]: " +
+                        "The property 'getValue()' on net.chwthewke.hamcrest.matchers." +
+                        "CompositeMatcherFactoryTest$Matched " +
+                        "has return type java.lang.String which is not assignable to java.lang.Integer." ) ) );
         }
     }
 
@@ -123,9 +130,11 @@ public class CompositeMatcherFactoryTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The matched class net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$Matched lacks the public property " +
-                        "'getId()'." ) ) );
+                is( equalTo( "Error while binding specification method " +
+                        "[public abstract int net.chwthewke.hamcrest.matchers." +
+                        "CompositeMatcherFactoryTest$SpecificationWithPrivateProperty.getId()]: " +
+                        "The matched class net.chwthewke.hamcrest.matchers." +
+                        "CompositeMatcherFactoryTest$Matched lacks the public property 'getId()'." ) ) );
 
         }
     }
@@ -180,37 +189,37 @@ public class CompositeMatcherFactoryTest {
         private final String value;
     }
 
-    @MatcherOf( Object.class )
+    @EquivalenceSpecificationOn( Object.class )
     public static interface SpecificationWithAnnotationMismatch {
         @Equality
         String getValue( );
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface SpecificationWithMisnamedMethod {
         @Equality
         String value( );
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface SpecificationWithArgumentsMismatch {
         @Equality
         String compute( );
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface SpecificationWithReturnTypeMismatch {
         @Equality
         Integer getValue( );
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface SpecificationWithPrivateProperty {
         @Equality
         int getId( );
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface ExpectedPropertyThrows extends EquivalenceSpecification<Matched> {
         @Equality
         Object getException( );

@@ -52,7 +52,7 @@ public class EqualityMatchersTest {
         private final IntHolder holder;
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface MatchingSpecification extends EquivalenceSpecification<Matched> {
         @Equality
         IntHolder getHolder( );

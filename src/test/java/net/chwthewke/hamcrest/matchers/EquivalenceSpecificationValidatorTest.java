@@ -5,17 +5,17 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 import net.chwthewke.hamcrest.annotations.Equality;
-import net.chwthewke.hamcrest.annotations.MatcherOf;
+import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
 import net.chwthewke.hamcrest.matchers.CompositeMatcherFactoryTest.Matched;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class MatcherSpecificationValidatorTest {
+public class EquivalenceSpecificationValidatorTest {
 
     @Before
     public void setupValidator( ) {
-        specificationValidator = new MatcherSpecificationValidator( );
+        specificationValidator = new EquivalenceSpecificationValidator( );
     }
 
     @Test
@@ -128,13 +128,13 @@ public class MatcherSpecificationValidatorTest {
         }
     }
 
-    private MatcherSpecificationValidator specificationValidator;
+    private EquivalenceSpecificationValidator specificationValidator;
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static class SpecificationNotAnInterface {
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     static interface NonPublicInterface {
         @Equality
         String getValue( );
@@ -145,13 +145,13 @@ public class MatcherSpecificationValidatorTest {
         String getValue( );
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface SpecificationWithNonPropertyMethod {
         @Equality
         String method( Object input );
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface SpecificationWithVoidMethod {
         @Equality
         void run( );

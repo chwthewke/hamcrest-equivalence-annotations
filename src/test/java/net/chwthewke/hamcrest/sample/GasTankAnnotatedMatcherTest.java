@@ -13,7 +13,7 @@ import org.junit.Test;
 public class GasTankAnnotatedMatcherTest {
 
     private static Matcher<GasTank> gasTankLike( final GasTank expected ) {
-        return asSpecifiedBy( GasTankMatching.class, GasTank.class ).equivalentTo( expected );
+        return asSpecifiedBy( GasTankEquivalence.class, GasTank.class ).equivalentTo( expected );
     }
 
     @Test

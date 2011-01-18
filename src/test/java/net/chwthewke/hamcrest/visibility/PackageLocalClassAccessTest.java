@@ -4,7 +4,7 @@ import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import net.chwthewke.hamcrest.annotations.Equality;
-import net.chwthewke.hamcrest.annotations.MatcherOf;
+import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class PackageLocalClassAccessTest {
         assertThat( match, is( true ) );
     }
 
-    @MatcherOf( PackageLocal.class )
+    @EquivalenceSpecificationOn( PackageLocal.class )
     public static interface PackageLocalMatchingSpecification {
         @Equality
         String getValue( );

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The {@link MatcherOf} annotation declares that the annotated type (which <strong>must</strong> be a <strong>public</strong> interface) is
+ * The {@link EquivalenceSpecificationOn} annotation declares that the annotated type (which <strong>must</strong> be a <strong>public</strong> interface) is
  * an <em>equivalence specification</em> for the type returned by {@link #value()} (henceforth called <em>matched type</em>).
  * <p>
  * This imposes further restrictions on the interface, namely that each of its methods must:
@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
  */
 @Target( ElementType.TYPE )
 @Retention( RetentionPolicy.RUNTIME )
-public @interface MatcherOf {
+public @interface EquivalenceSpecificationOn {
     /**
      * The matched type.
      */

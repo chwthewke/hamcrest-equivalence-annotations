@@ -4,11 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
+
+import java.lang.reflect.Method;
+
 import net.chwthewke.hamcrest.matchers.use_case_classes.WithNonPropertyMethod;
 import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class FindPropertyFunctionTest {
@@ -82,14 +84,14 @@ public class FindPropertyFunctionTest {
     }
 
     @Test
-    @Ignore
     public void findCovariantMethod( ) throws Exception {
         // Setup
-        // TODO write this here test
+
         // Exercise
+        final Method method = methodFinder.findPropertyMethod( WithPublicProperty.class, Object.class, "getValue" );
 
         // Verify
-        fail( );
+        assertThat( method, is( WithPublicProperty.class.getDeclaredMethod( "getValue" ) ) );
     }
 
 }

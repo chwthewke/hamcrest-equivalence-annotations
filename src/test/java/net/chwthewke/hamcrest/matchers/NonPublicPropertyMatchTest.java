@@ -4,7 +4,7 @@ import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import net.chwthewke.hamcrest.annotations.Equality;
-import net.chwthewke.hamcrest.annotations.MatcherOf;
+import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
 import net.chwthewke.hamcrest.annotations.NotPublic;
 
 import org.hamcrest.Matcher;
@@ -42,7 +42,7 @@ public class NonPublicPropertyMatchTest {
         private final String value;
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface SpecificationWithAnnotatedPrivateProperty {
         @Equality
         @NotPublic

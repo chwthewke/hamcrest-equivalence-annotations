@@ -5,7 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.Identity;
-import net.chwthewke.hamcrest.annotations.MatcherOf;
+import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
@@ -111,19 +111,19 @@ public class DerivedPropertyMatchTest {
         private final String value;
     }
 
-    @MatcherOf( DerivedMatched.class )
+    @EquivalenceSpecificationOn( DerivedMatched.class )
     public static interface SpecificationOnDerivedProperty extends EquivalenceSpecification<DerivedMatched> {
         @Identity
         int getIntValue( );
     }
 
-    @MatcherOf( DerivedMatched.class )
+    @EquivalenceSpecificationOn( DerivedMatched.class )
     public static interface SpecificationOnOverridenProperty extends EquivalenceSpecification<DerivedMatched> {
         @Equality
         String getValue( );
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface SpecificationOnBaseProperty extends EquivalenceSpecification<Matched> {
         @Equality
         String getValue( );

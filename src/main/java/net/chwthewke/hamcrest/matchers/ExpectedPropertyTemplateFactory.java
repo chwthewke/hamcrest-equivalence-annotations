@@ -47,7 +47,7 @@ class ExpectedPropertyTemplateFactory<T> {
 
     ExpectedPropertyTemplateFactory(
             final PropertyFinder propertyFinder,
-            final MatcherSpecificationValidator specificationValidator,
+            final EquivalenceSpecificationValidator specificationValidator,
             final Method property,
             final Method specificationMethod ) {
         this.propertyFinder = propertyFinder;
@@ -182,7 +182,7 @@ class ExpectedPropertyTemplateFactory<T> {
     }
 
     private final PropertyFinder propertyFinder;
-    private final MatcherSpecificationValidator specificationValidator;
+    private final EquivalenceSpecificationValidator specificationValidator;
 
     private final Method property;
     private final Method specificationMethod;

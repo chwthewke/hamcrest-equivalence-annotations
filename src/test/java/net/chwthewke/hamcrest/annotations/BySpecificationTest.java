@@ -43,7 +43,7 @@ public class BySpecificationTest {
             is( equalTo( "getOuterValue() getInnerValue() was \"abcde\"" ) ) );
     }
 
-    @MatcherOf( OuterMatched.class )
+    @EquivalenceSpecificationOn( OuterMatched.class )
     public static interface OuterSpecification extends EquivalenceSpecification<OuterMatched> {
         @BySpecification( InnerSpecification.class )
         InnerMatched getOuterValue( );
@@ -61,7 +61,7 @@ public class BySpecificationTest {
         private final InnerMatched value;
     }
 
-    @MatcherOf( InnerMatched.class )
+    @EquivalenceSpecificationOn( InnerMatched.class )
     public static interface InnerSpecification extends EquivalenceSpecification<InnerMatched> {
         @Equality
         String getInnerValue( );

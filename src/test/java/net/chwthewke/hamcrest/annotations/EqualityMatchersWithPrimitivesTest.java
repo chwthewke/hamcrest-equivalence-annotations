@@ -63,7 +63,7 @@ public class EqualityMatchersWithPrimitivesTest {
         private final int second;
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface MatcherSpecification {
         @Equality
         int getFirst( );

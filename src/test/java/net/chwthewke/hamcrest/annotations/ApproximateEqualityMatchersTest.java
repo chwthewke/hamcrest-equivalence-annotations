@@ -55,13 +55,13 @@ public class ApproximateEqualityMatchersTest {
         private final float floatValue;
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface DoubleMatcherSpecification extends EquivalenceSpecification<Matched> {
         @ApproximateEquality( tolerance = 0.000001d )
         double getDoubleValue( );
     }
 
-    @MatcherOf( Matched.class )
+    @EquivalenceSpecificationOn( Matched.class )
     public static interface FloatMatcherSpecification extends EquivalenceSpecification<Matched> {
         @ApproximateEquality( tolerance = 0.000001d )
         float getFloatValue( );

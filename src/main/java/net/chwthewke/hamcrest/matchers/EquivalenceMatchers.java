@@ -3,7 +3,7 @@ package net.chwthewke.hamcrest.matchers;
 
 /**
  * This class has some factory methods to create {@link Equivalence} instances from <em>equivalence specifications</em> (i.e. classes
- * annotated with {@link net.chwthewke.hamcrest.annotations.MatcherOf}).
+ * annotated with {@link net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn}).
  */
 public final class EquivalenceMatchers {
 
@@ -13,7 +13,7 @@ public final class EquivalenceMatchers {
      * @param <T>
      *            The matched type.
      * @param equivalenceSpecification
-     *            The equivalence specification, which must be annotated with {@link net.chwthewke.hamcrest.annotations.MatcherOf} (with
+     *            The equivalence specification, which must be annotated with {@link net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn} (with
      *            <code>value()</code> equal to <code>matchedType</code>).
      * @param matchedType
      *            The matched type.
@@ -30,7 +30,7 @@ public final class EquivalenceMatchers {
      * @param <T>
      *            The matched type.
      * @param equivalenceSpecification
-     *            The equivalence specification, which must be annotated with {@link net.chwthewke.hamcrest.annotations.MatcherOf} (with
+     *            The equivalence specification, which must be annotated with {@link net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn} (with
      *            <code>value()</code> equal to <code>matchedType</code>).
      * @return an {@link Equivalence} as specified by <code>equivalenceSpecification</code>.
      *         <p>
