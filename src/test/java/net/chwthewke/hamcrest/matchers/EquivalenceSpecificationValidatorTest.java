@@ -33,8 +33,8 @@ public class EquivalenceSpecificationValidatorTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers." +
-                        "MatcherSpecificationValidatorTest$SpecificationNotAnInterface must be an interface." ) ) );
+                is( equalTo( "The 'equivalenceSpecification' net.chwthewke.hamcrest.matchers." +
+                        "EquivalenceSpecificationValidatorTest$SpecificationNotAnInterface must be an interface." ) ) );
         }
     }
 
@@ -54,8 +54,8 @@ public class EquivalenceSpecificationValidatorTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers." +
-                        "MatcherSpecificationValidatorTest$NonPublicInterface must have public visibility." ) ) );
+                is( equalTo( "The 'equivalenceSpecification' net.chwthewke.hamcrest.matchers." +
+                        "EquivalenceSpecificationValidatorTest$NonPublicInterface must have public visibility." ) ) );
         }
     }
 
@@ -75,9 +75,9 @@ public class EquivalenceSpecificationValidatorTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The 'matcherSpecification' net.chwthewke.hamcrest.matchers." +
-                        "MatcherSpecificationValidatorTest$SpecificationWithoutAnnotation must be " +
-                        "annotated with MatcherOf." ) ) );
+                is( equalTo( "The 'equivalenceSpecification' net.chwthewke.hamcrest.matchers." +
+                        "EquivalenceSpecificationValidatorTest$SpecificationWithoutAnnotation must be " +
+                        "annotated with EquivalenceSpecificationOn." ) ) );
         }
     }
 
@@ -97,9 +97,9 @@ public class EquivalenceSpecificationValidatorTest {
             assertThat(
                 e.getMessage( ),
                 is( equalTo( "The method public abstract void net.chwthewke."
-                        + "hamcrest.matchers.MatcherSpecificationValidatorTest"
+                        + "hamcrest.matchers.EquivalenceSpecificationValidatorTest"
                         + "$SpecificationWithVoidMethod.run() in specification "
-                        + "net.chwthewke.hamcrest.matchers.MatcherSpecificationValidatorTest"
+                        + "net.chwthewke.hamcrest.matchers.EquivalenceSpecificationValidatorTest"
                         + "$SpecificationWithVoidMethod has return type void." ) ) );
         }
     }
@@ -120,10 +120,10 @@ public class EquivalenceSpecificationValidatorTest {
             assertThat(
                 e.getMessage( ),
                 is( equalTo( "The method public abstract java.lang.String " +
-                        "net.chwthewke.hamcrest.matchers.MatcherSpecificationValidatorTest" +
+                        "net.chwthewke.hamcrest.matchers.EquivalenceSpecificationValidatorTest" +
                         "$SpecificationWithNonPropertyMethod.method(java.lang.Object) " +
                         "in specification net.chwthewke.hamcrest.matchers." +
-                        "MatcherSpecificationValidatorTest$SpecificationWithNonPropertyMethod " +
+                        "EquivalenceSpecificationValidatorTest$SpecificationWithNonPropertyMethod " +
                         "has parameters." ) ) );
         }
     }

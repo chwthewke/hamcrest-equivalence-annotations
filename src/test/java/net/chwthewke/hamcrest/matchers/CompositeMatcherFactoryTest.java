@@ -29,7 +29,7 @@ public class CompositeMatcherFactoryTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The MatcherOf annotation on net.chwthewke.hamcrest.matchers." +
+                is( equalTo( "The EquivalenceSpecificationOn annotation on net.chwthewke.hamcrest.matchers." +
                         "CompositeMatcherFactoryTest$SpecificationWithAnnotationMismatch must " +
                         "have a value of net.chwthewke.hamcrest.matchers.CompositeMatcherFactoryTest$Matched." ) ) );
         }
