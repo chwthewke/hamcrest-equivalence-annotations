@@ -31,18 +31,18 @@ import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;
 
-final class ExpectedPropertyTemplate<T, U> {
+final class PropertyEquivalence<T, U> {
 
-    static <T, U> ExpectedPropertyTemplate<T, U> create(
+    static <T, U> PropertyEquivalence<T, U> create(
             final String propertyName,
             final Function<T, U> propertyMethod,
             final Function<U, Matcher<? super U>> matcherFactory ) {
-        return new ExpectedPropertyTemplate<T, U>( propertyName, propertyMethod, matcherFactory );
+        return new PropertyEquivalence<T, U>( propertyName, propertyMethod, matcherFactory );
     }
 
-    private ExpectedPropertyTemplate( final String propertyName,
-            final Function<T, U> propertyMethod,
-            final Function<U, Matcher<? super U>> matcherFactory ) {
+    private PropertyEquivalence( final String propertyName,
+                                 final Function<T, U> propertyMethod,
+                                 final Function<U, Matcher<? super U>> matcherFactory ) {
         this.propertyName = propertyName;
         this.propertyMethod = propertyMethod;
         this.matcherFactory = matcherFactory;

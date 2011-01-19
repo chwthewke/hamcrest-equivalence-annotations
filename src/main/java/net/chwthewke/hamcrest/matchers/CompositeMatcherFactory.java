@@ -82,7 +82,7 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
     }
 
     public Matcher<T> equivalentTo( final T expected ) {
-        return new CompositeMatcher<T>( matchedClass, expectedPropertyTemplates, expected );
+        return new CompositeMatcher<T>( matchedClass, propertyEquivalences, expected );
     }
 
     private void initialize( ) {
@@ -94,15 +94,15 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
     }
 
     private void sortExpectedPropertyTemplates( ) {
-        final Comparator<ExpectedPropertyTemplate<T, ?>> comparator =
+        final Comparator<PropertyEquivalence<T, ?>> comparator =
                 Ordering.<String>natural( ).onResultOf(
-                    new Function<ExpectedPropertyTemplate<T, ?>, String>( ) {
-                        public String apply( final ExpectedPropertyTemplate<T, ?> expectedPropertyTemplate ) {
+                    new Function<PropertyEquivalence<T, ?>, String>( ) {
+                        public String apply( final PropertyEquivalence<T, ?> expectedPropertyTemplate ) {
                             return expectedPropertyTemplate.getPropertyName( );
                         }
                     } );
 
-        Collections.sort( expectedPropertyTemplates, comparator );
+        Collections.sort( propertyEquivalences, comparator );
     }
 
     private void addExpectedPropertyTemplates( ) {
@@ -114,18 +114,16 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
 
         final Method property = findMatchingProperty( specificationMethod );
 
-        final ExpectedPropertyTemplate<T, ?> expectedPropertyTemplate =
-                new ExpectedPropertyTemplateFactory<T>( propertyFinder,
+        final PropertyEquivalence<T, ?> propertyEquivalence =
+                new PropertyEquivalenceFactory<T>( propertyFinder,
                         specificationValidator,
                         property,
                         specificationMethod )
                     .getExpectedPropertyTemplate( );
-        expectedPropertyTemplates.add( expectedPropertyTemplate );
+        propertyEquivalences.add( propertyEquivalence );
     }
 
     private Method findMatchingProperty( final Method specificationMethod ) {
-        // TODO wrap errors with specification class/method info.
-
         try
         {
             return propertyFinder.findProperty( matchedClass,
@@ -158,7 +156,7 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
 
     private final Class<T> matchedClass;
     private final Class<?> matcherSpecification;
-    private final List<ExpectedPropertyTemplate<T, ?>> expectedPropertyTemplates = newArrayList( );
+    private final List<PropertyEquivalence<T, ?>> propertyEquivalences = newArrayList( );
 
     private static final PropertyFinder propertyFinderInstance = new PropertyFinder( );
     private static final EquivalenceSpecificationValidator specificationValidatorInstance = new EquivalenceSpecificationValidator( );

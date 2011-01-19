@@ -45,9 +45,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableMap;
 
-class ExpectedPropertyTemplateFactory<T> {
+class PropertyEquivalenceFactory<T> {
 
-    public ExpectedPropertyTemplate<T, ?> getExpectedPropertyTemplate( ) {
+    public PropertyEquivalence<T, ?> getExpectedPropertyTemplate( ) {
         final Class<?> originalPropertyType = property.getReturnType( );
         final Class<?> propertyType = toReference( originalPropertyType );
 
@@ -72,7 +72,7 @@ class ExpectedPropertyTemplateFactory<T> {
         return getEqualityTemplate( propertyType );
     }
 
-    ExpectedPropertyTemplateFactory(
+    PropertyEquivalenceFactory(
             final PropertyFinder propertyFinder,
             final EquivalenceSpecificationValidator specificationValidator,
             final Method property,
@@ -83,7 +83,7 @@ class ExpectedPropertyTemplateFactory<T> {
         this.specificationMethod = specificationMethod;
     }
 
-    private ExpectedPropertyTemplate<T, Double> getApproximateEqualityTemplate( final Class<?> propertyType,
+    private PropertyEquivalence<T, Double> getApproximateEqualityTemplate( final Class<?> propertyType,
             final double tolerance ) {
         checkState( propertyType == Double.class || propertyType == Float.class );
 
@@ -102,13 +102,13 @@ class ExpectedPropertyTemplateFactory<T> {
                     }
                 }, propertyFunction( Number.class ) );
 
-        return ExpectedPropertyTemplate.create(
+        return PropertyEquivalence.create(
                 property.getName(),
                 propertyFunction,
                 closeToMatcherFactory );
     }
 
-    private <U> ExpectedPropertyTemplate<T, U> getIdentityTemplate( final Class<U> propertyType ) {
+    private <U> PropertyEquivalence<T, U> getIdentityTemplate( final Class<U> propertyType ) {
         final Function<U, Matcher<? super U>> sameInstanceMatcherFactory =
                 new Function<U, Matcher<? super U>>( ) {
                     public Matcher<? super U> apply( final U expected ) {
@@ -116,13 +116,13 @@ class ExpectedPropertyTemplateFactory<T> {
                     }
                 };
 
-        return ExpectedPropertyTemplate.create(
+        return PropertyEquivalence.create(
                 property.getName(),
                 propertyFunction( propertyType ),
                 sameInstanceMatcherFactory );
     }
 
-    private <U> ExpectedPropertyTemplate<T, U> getEqualityTemplate( final Class<U> propertyType ) {
+    private <U> PropertyEquivalence<T, U> getEqualityTemplate( final Class<U> propertyType ) {
         final Function<U, Matcher<? super U>> equalToMatcherFactory =
                 new Function<U, Matcher<? super U>>( ) {
                     public Matcher<? super U> apply( final U expected ) {
@@ -130,13 +130,13 @@ class ExpectedPropertyTemplateFactory<T> {
                     }
                 };
 
-        return ExpectedPropertyTemplate.create(
+        return PropertyEquivalence.create(
                 property.getName(),
                 propertyFunction( propertyType ),
                 equalToMatcherFactory );
     }
 
-    private <U> ExpectedPropertyTemplate<T, U> getBySpecificationTemplate( final Class<U> propertyType,
+    private <U> PropertyEquivalence<T, U> getBySpecificationTemplate( final Class<U> propertyType,
             final Class<?> propertySpecification ) {
 
         final CompositeMatcherFactory<U> matcherFactoryForProperty =
@@ -150,7 +150,7 @@ class ExpectedPropertyTemplateFactory<T> {
                         return matcherFactoryForProperty.equivalentTo( expected );
                     }
                 };
-        return ExpectedPropertyTemplate.create(
+        return PropertyEquivalence.create(
                 property.getName(),
                 propertyFunction( propertyType ),
                 matcherBySpecificationFactory );

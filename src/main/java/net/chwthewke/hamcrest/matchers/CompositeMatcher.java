@@ -47,7 +47,7 @@ class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
         String subMatcherLeadin = " with";
 
-        for ( final Entry<ExpectedPropertyTemplate<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
+        for ( final Entry<PropertyEquivalence<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
         {
             description
                 .appendText( subMatcherLeadin )
@@ -63,16 +63,16 @@ class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
     @Override
     protected boolean matchesSafely( final T item, final Description mismatchDescription ) {
 
-        for ( final Entry<ExpectedPropertyTemplate<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
+        for ( final Entry<PropertyEquivalence<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
         {
             final Matcher<?> matcher = entry.getValue( );
-            final ExpectedPropertyTemplate<T, ?> matcherTemplate = entry.getKey( );
+            final PropertyEquivalence<T, ?> propertyEquivalence = entry.getKey( );
 
-            final Object propertyValue = matcherTemplate.extractPropertyValue( item );
+            final Object propertyValue = propertyEquivalence.extractPropertyValue( item );
             if ( !matcher.matches( propertyValue ) )
             {
                 mismatchDescription
-                    .appendText( matcherTemplate.getPropertyName( ) )
+                    .appendText( propertyEquivalence.getPropertyName( ) )
                     .appendText( "() " );
                 matcher.describeMismatch( propertyValue, mismatchDescription );
 
@@ -84,18 +84,18 @@ class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     CompositeMatcher( final Class<T> expectedType,
-            final Collection<ExpectedPropertyTemplate<T, ?>> expectedPropertyTemplates,
+            final Collection<PropertyEquivalence<T, ?>> propertyEquivalences,
             final T expected ) {
 
         super( expectedType );
 
         this.expectedType = checkNotNull( expectedType );
 
-        for ( final ExpectedPropertyTemplate<T, ?> expectedPropertyTemplate : expectedPropertyTemplates )
-            expectedProperties.put( expectedPropertyTemplate, expectedPropertyTemplate.specializeFor( expected ) );
+        for ( final PropertyEquivalence<T, ?> propertyEquivalence : propertyEquivalences )
+            expectedProperties.put( propertyEquivalence, propertyEquivalence.specializeFor( expected ) );
     }
 
     private final Class<T> expectedType;
-    private final Map<ExpectedPropertyTemplate<T, ?>, Matcher<?>> expectedProperties = newLinkedHashMap( );
+    private final Map<PropertyEquivalence<T, ?>, Matcher<?>> expectedProperties = newLinkedHashMap( );
 
 }
