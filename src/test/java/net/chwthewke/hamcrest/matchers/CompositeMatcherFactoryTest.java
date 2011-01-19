@@ -40,7 +40,7 @@ import org.junit.Test;
 public class CompositeMatcherFactoryTest {
 
     @Test
-    public void matchingSpecificationAnnotationMismatch( ) throws Exception {
+    public void equivalenceSpecificationAnnotationMismatch() throws Exception {
         // Setup
 
         // Exercise
@@ -63,7 +63,7 @@ public class CompositeMatcherFactoryTest {
     }
 
     @Test
-    public void matchingInterfaceTargetsMissingMethod( ) throws Exception {
+    public void equivalenceSpecificationTargetsMissingMethod() throws Exception {
         // Setup
         // Exercise
         try
@@ -87,7 +87,7 @@ public class CompositeMatcherFactoryTest {
     }
 
     @Test
-    public void matchingInterfaceTargetsMethodWithArguments( ) throws Exception {
+    public void equivalenceSpecificationTargetsMethodWithArguments() throws Exception {
         // Setup
 
         // Exercise
@@ -113,7 +113,7 @@ public class CompositeMatcherFactoryTest {
     }
 
     @Test
-    public void matchingInterfaceHasIncompatibleReturnType( ) throws Exception {
+    public void equivalenceSpecificationHasIncompatibleReturnType() throws Exception {
         // Setup
 
         // Exercise
@@ -140,7 +140,7 @@ public class CompositeMatcherFactoryTest {
     }
 
     @Test
-    public void matchingInterfaceTargetsPrivateProperty( ) throws Exception {
+    public void equivalenceSpecificationTargetsPrivateProperty() throws Exception {
         // Setup
 
         // Exercise

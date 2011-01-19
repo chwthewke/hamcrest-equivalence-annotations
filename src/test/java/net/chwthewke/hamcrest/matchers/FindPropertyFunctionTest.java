@@ -42,11 +42,11 @@ import org.junit.Test;
 
 public class FindPropertyFunctionTest {
 
-    private FindPropertyFunction methodFinder;
+    private FindPropertyFunction findPropertyFunction;
 
     @Before
     public void setupMethodFinder( ) {
-        methodFinder = new FindPublicPropertyFunction( );
+        findPropertyFunction = new FindPublicPropertyFunction( );
     }
 
     @Test
@@ -56,7 +56,7 @@ public class FindPropertyFunctionTest {
         // Exercise
         try
         {
-            methodFinder.findPropertyMethod( WithPublicProperty.class, String.class, "getValue0" );
+            findPropertyFunction.findPropertyMethod( WithPublicProperty.class, String.class, "getValue0" );
             // Verify
             fail( );
         }
@@ -76,7 +76,7 @@ public class FindPropertyFunctionTest {
         // Exercise
         try
         {
-            methodFinder.findPropertyMethod( WithNonPropertyMethod.class, String.class, "getValue" );
+            findPropertyFunction.findPropertyMethod( WithNonPropertyMethod.class, String.class, "getValue" );
             // Verify
             fail( );
         }
@@ -96,7 +96,7 @@ public class FindPropertyFunctionTest {
         // Exercise
         try
         {
-            methodFinder.findPropertyMethod( WithPublicProperty.class, Integer.class, "getValue" );
+            findPropertyFunction.findPropertyMethod( WithPublicProperty.class, Integer.class, "getValue" );
             // Verify
             fail( );
         }
@@ -115,7 +115,7 @@ public class FindPropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder.findPropertyMethod( WithPublicProperty.class, Object.class, "getValue" );
+        final Method method = findPropertyFunction.findPropertyMethod( WithPublicProperty.class, Object.class, "getValue" );
 
         // Verify
         assertThat( method, is( WithPublicProperty.class.getDeclaredMethod( "getValue" ) ) );

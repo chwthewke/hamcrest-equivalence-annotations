@@ -40,7 +40,7 @@ import org.junit.Test;
 public class DerivedPropertyMatchTest {
 
     @Test
-    public void matcherOfDerivedProperty( ) throws Exception {
+    public void equivalenceOnDerivedProperty() throws Exception {
         // Setup
         final Matcher<DerivedMatched> matcher =
                 asSpecifiedBy( SpecificationOnDerivedProperty.class )
@@ -52,7 +52,7 @@ public class DerivedPropertyMatchTest {
     }
 
     @Test
-    public void mismatchOfDerivedProperty( ) throws Exception {
+    public void nonEquivalenceOnDerivedProperty() throws Exception {
         // Setup
         final Matcher<DerivedMatched> matcher =
                 asSpecifiedBy( SpecificationOnDerivedProperty.class )
@@ -64,7 +64,7 @@ public class DerivedPropertyMatchTest {
     }
 
     @Test
-    public void matcherOfOverridenProperty( ) throws Exception {
+    public void equivalenceOnOverridenProperty() throws Exception {
         // Setup
         final Matcher<DerivedMatched> matcher =
                 asSpecifiedBy( SpecificationOnOverridenProperty.class )
@@ -78,7 +78,7 @@ public class DerivedPropertyMatchTest {
     }
 
     @Test
-    public void matchOnBasePropertyUsesBasePropertyOnOverridenType( ) throws Exception {
+    public void equivalenceOnBasePropertyUsesBasePropertyOnOverridenType() throws Exception {
         // Setup
         final Matcher<Matched> matcher = asSpecifiedBy( SpecificationOnBaseProperty.class )
             .equivalentTo( new Matched( "123" ) );

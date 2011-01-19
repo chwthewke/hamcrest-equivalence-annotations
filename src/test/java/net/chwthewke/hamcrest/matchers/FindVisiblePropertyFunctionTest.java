@@ -34,8 +34,6 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 
-import net.chwthewke.hamcrest.matchers.FindPropertyFunction;
-import net.chwthewke.hamcrest.matchers.FindVisiblePropertyFunction;
 import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedFromPrivateProperty;
 import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedWithPackageLocalProperty;
 import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedWithProtectedProperty;
@@ -51,11 +49,11 @@ import org.junit.Test;
 
 public class FindVisiblePropertyFunctionTest {
 
-    private FindPropertyFunction methodFinder;
+    private FindPropertyFunction findPropertyFunction;
 
     @Before
     public void setupMethodFinder( ) {
-        methodFinder = new FindVisiblePropertyFunction( );
+        findPropertyFunction = new FindVisiblePropertyFunction( );
     }
 
     @Test
@@ -63,7 +61,7 @@ public class FindVisiblePropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( WithPublicProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( WithPublicProperty.class.getMethod( "getValue" ) ) );
@@ -74,7 +72,7 @@ public class FindVisiblePropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( DerivedWithPublicProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( DerivedWithPublicProperty.class.getMethod( "getValue" ) ) );
@@ -85,7 +83,7 @@ public class FindVisiblePropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( DerivedWithPublicProperty.class, int.class, "getIntValue" );
         // Verify
         assertThat( method, is( DerivedWithPublicProperty.class.getMethod( "getIntValue" ) ) );
@@ -97,7 +95,7 @@ public class FindVisiblePropertyFunctionTest {
 
         // Exercise
 
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( DerivedWithProtectedProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( equalTo( DerivedWithProtectedProperty.class.getDeclaredMethod( "getValue" ) ) ) );
@@ -108,7 +106,7 @@ public class FindVisiblePropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( DerivedWithProtectedProperty.class, int.class, "getIntValue" );
         // Verify
         assertThat( method, is( equalTo( WithProtectedProperty.class.getDeclaredMethod( "getIntValue" ) ) ) );
@@ -120,7 +118,7 @@ public class FindVisiblePropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( WithPackageLocalProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( equalTo( WithPackageLocalProperty.class.getDeclaredMethod( "getValue" ) ) ) );
@@ -131,7 +129,7 @@ public class FindVisiblePropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( DerivedWithPackageLocalProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( equalTo( DerivedWithPackageLocalProperty.class.getDeclaredMethod( "getValue" ) ) ) );
@@ -143,7 +141,7 @@ public class FindVisiblePropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( DerivedWithPackageLocalProperty.class, int.class, "getIntValue" );
         // Verify
         assertThat( method, is( equalTo( WithPackageLocalProperty.class.getDeclaredMethod( "getIntValue" ) ) ) );
@@ -157,7 +155,7 @@ public class FindVisiblePropertyFunctionTest {
         try
         {
             // Exercise
-            methodFinder
+            findPropertyFunction
                 .findPropertyMethod( IsolatedDerivedWithPackageLocalProperty.class, String.class, "getValue" );
             // Verify
             fail( );
@@ -175,7 +173,7 @@ public class FindVisiblePropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( WithPrivateProperty.class, long.class, "getValue" );
         // Verify
         assertThat( method, is( equalTo( WithPrivateProperty.class.getDeclaredMethod( "getValue" ) ) ) );
@@ -188,7 +186,7 @@ public class FindVisiblePropertyFunctionTest {
         try
         {
             // Exercise
-            methodFinder
+            findPropertyFunction
                 .findPropertyMethod( DerivedFromPrivateProperty.class, long.class, "getValue" );
             // Verify
             fail( );

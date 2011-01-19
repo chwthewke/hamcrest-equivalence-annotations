@@ -34,8 +34,6 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 
-import net.chwthewke.hamcrest.matchers.FindPropertyFunction;
-import net.chwthewke.hamcrest.matchers.FindPublicPropertyFunction;
 import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedWithProtectedProperty;
 import net.chwthewke.hamcrest.matchers.use_case_classes.DerivedWithPublicProperty;
 import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;
@@ -45,11 +43,11 @@ import org.junit.Test;
 
 public class FindPublicPropertyFunctionTest {
 
-    private FindPropertyFunction methodFinder;
+    private FindPropertyFunction findPropertyFunction;
 
     @Before
     public void setupMethodFinder( ) {
-        methodFinder = new FindPublicPropertyFunction( );
+        findPropertyFunction = new FindPublicPropertyFunction( );
     }
 
     @Test
@@ -57,7 +55,7 @@ public class FindPublicPropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( WithPublicProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( WithPublicProperty.class.getMethod( "getValue" ) ) );
@@ -68,7 +66,7 @@ public class FindPublicPropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( DerivedWithPublicProperty.class, String.class, "getValue" );
         // Verify
         assertThat( method, is( DerivedWithPublicProperty.class.getMethod( "getValue" ) ) );
@@ -79,7 +77,7 @@ public class FindPublicPropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = methodFinder
+        final Method method = findPropertyFunction
             .findPropertyMethod( DerivedWithPublicProperty.class, int.class, "getIntValue" );
         // Verify
         assertThat( method, is( DerivedWithPublicProperty.class.getMethod( "getIntValue" ) ) );
@@ -92,7 +90,7 @@ public class FindPublicPropertyFunctionTest {
         // Exercise
         try
         {
-            methodFinder.findPropertyMethod( DerivedWithProtectedProperty.class, String.class, "getValue" );
+            findPropertyFunction.findPropertyMethod( DerivedWithProtectedProperty.class, String.class, "getValue" );
             // Verify
             fail( );
         }
@@ -112,7 +110,7 @@ public class FindPublicPropertyFunctionTest {
         // Exercise
         try
         {
-            methodFinder.findPropertyMethod( DerivedWithProtectedProperty.class, int.class, "getIntValue" );
+            findPropertyFunction.findPropertyMethod( DerivedWithProtectedProperty.class, int.class, "getIntValue" );
             // Verify
             fail( );
         }
