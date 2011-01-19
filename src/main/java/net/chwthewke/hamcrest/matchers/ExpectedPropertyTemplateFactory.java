@@ -102,10 +102,10 @@ class ExpectedPropertyTemplateFactory<T> {
                     }
                 }, propertyFunction( Number.class ) );
 
-        return ExpectedPropertyTemplate.<T, Double>create(
-            property.getName( ),
-            propertyFunction,
-            closeToMatcherFactory );
+        return ExpectedPropertyTemplate.create(
+                property.getName(),
+                propertyFunction,
+                closeToMatcherFactory );
     }
 
     private <U> ExpectedPropertyTemplate<T, U> getIdentityTemplate( final Class<U> propertyType ) {
@@ -116,10 +116,10 @@ class ExpectedPropertyTemplateFactory<T> {
                     }
                 };
 
-        return ExpectedPropertyTemplate.<T, U>create(
-            property.getName( ),
-            propertyFunction( propertyType ),
-            sameInstanceMatcherFactory );
+        return ExpectedPropertyTemplate.create(
+                property.getName(),
+                propertyFunction( propertyType ),
+                sameInstanceMatcherFactory );
     }
 
     private <U> ExpectedPropertyTemplate<T, U> getEqualityTemplate( final Class<U> propertyType ) {
@@ -130,10 +130,10 @@ class ExpectedPropertyTemplateFactory<T> {
                     }
                 };
 
-        return ExpectedPropertyTemplate.<T, U>create(
-            property.getName( ),
-            propertyFunction( propertyType ),
-            equalToMatcherFactory );
+        return ExpectedPropertyTemplate.create(
+                property.getName(),
+                propertyFunction( propertyType ),
+                equalToMatcherFactory );
     }
 
     private <U> ExpectedPropertyTemplate<T, U> getBySpecificationTemplate( final Class<U> propertyType,
@@ -150,10 +150,10 @@ class ExpectedPropertyTemplateFactory<T> {
                         return matcherFactoryForProperty.equivalentTo( expected );
                     }
                 };
-        return ExpectedPropertyTemplate.<T, U>create(
-                    property.getName( ),
-                    propertyFunction( propertyType ),
-                    matcherBySpecificationFactory );
+        return ExpectedPropertyTemplate.create(
+                property.getName(),
+                propertyFunction( propertyType ),
+                matcherBySpecificationFactory );
     }
 
     private <U> Function<T, U> propertyFunction( final Class<U> propertyType ) {

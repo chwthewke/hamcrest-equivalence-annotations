@@ -65,7 +65,8 @@ import java.lang.annotation.Target;
 @Retention( RetentionPolicy.RUNTIME )
 public @interface EquivalenceSpecificationOn {
     /**
-     * The matched type.
+     * The type this equivalence specification acts upon.
+     * @return The matched type.
      */
     Class<?> value( );
 }

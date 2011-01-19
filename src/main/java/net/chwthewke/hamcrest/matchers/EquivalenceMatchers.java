@@ -48,7 +48,7 @@ public final class EquivalenceMatchers {
      */
     public static <T> Equivalence<T> asSpecifiedBy( final Class<?> equivalenceSpecification,
             final Class<T> matchedType ) {
-        return CompositeMatcherFactory.<T>asSpecifiedBy( equivalenceSpecification, matchedType );
+        return CompositeMatcherFactory.asSpecifiedBy( equivalenceSpecification, matchedType );
     }
 
     /**
@@ -67,7 +67,7 @@ public final class EquivalenceMatchers {
      */
     public static <T> Equivalence<T>
             asSpecifiedBy( final Class<? extends EquivalenceSpecification<T>> equivalenceSpecification ) {
-        return CompositeMatcherFactory.<T>asSpecifiedBy( equivalenceSpecification );
+        return CompositeMatcherFactory.asSpecifiedBy( equivalenceSpecification );
     }
 
     private EquivalenceMatchers( ) {

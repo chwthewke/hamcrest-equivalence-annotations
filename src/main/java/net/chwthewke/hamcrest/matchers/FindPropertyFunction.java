@@ -51,7 +51,7 @@ abstract class FindPropertyFunction {
         return property;
     }
 
-    protected Method raisePropertyNotFound( final NoSuchMethodException e, final Class<?> clazz,
+    Method raisePropertyNotFound( final NoSuchMethodException e, final Class<?> clazz,
             final String propertyName, final String qualifier ) {
         throw new IllegalArgumentException(
             String.format( "The matched class %s lacks the %s property '%s()'.",

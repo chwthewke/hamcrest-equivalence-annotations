@@ -44,10 +44,11 @@ class FindVisiblePropertyFunction extends FindPropertyFunction {
         {
             final Method method = getAnyPropertyMethod( clazz, propertyName );
 
-            if ( !isVisible( method.getDeclaringClass( ), clazz, method.getModifiers( ) ) )
-                return raisePropertyNotFound( null, clazz, propertyName, VISIBLE_QUALIFIER );
+            if ( isVisible( method.getDeclaringClass( ), clazz, method.getModifiers( ) ) )
+                return method;
+            
+            return raisePropertyNotFound( null, clazz, propertyName, VISIBLE_QUALIFIER );
 
-            return method;
         }
         catch ( final NoSuchMethodException e )
         {
