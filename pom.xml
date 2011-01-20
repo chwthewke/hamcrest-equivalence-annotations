@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.chwthewke</groupId>
-    <artifactId>hamcrest-annotations</artifactId>
+    <artifactId>hamcrest-equivalence-annotations</artifactId>
     <version>0.9.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>hamcrest-annotations</name>
+    <name>hamcrest-equivalence-annotations</name>
 
     <issueManagement>
         <system>Redmine</system>
@@ -19,11 +19,6 @@
         <system>Hudson</system>
         <url>https://www.chwthewke.net/hudson/job/hamcrest-annotations/</url>
     </ciManagement>
-
-    <organization>
-        <name>chwthewke.net</name>
-        <url>http://www.chwthewke.net/</url>
-    </organization>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -83,6 +78,16 @@
                             <configuration>
                                 <configLocation>${project.basedir}/src/main/config/checkstyle.xml</configLocation>
                             </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>cobertura-maven-plugin</artifactId>
+                            <version>2.4</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>versions-maven-plugin</artifactId>
+                            <version>1.2</version>
                         </plugin>
                     </reportPlugins>
                 </configuration>
