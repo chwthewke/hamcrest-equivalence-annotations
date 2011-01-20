@@ -11,33 +11,13 @@
     <name>hamcrest-equivalence-annotations</name>
 
     <issueManagement>
-        <system>Redmine</system>
-        <url>https://www.chwthewke.net/redmine/projects/hamcrest-annotations</url>
+        <system>Google Code</system>
+        <url>http://code.google.com/p/hamcrest-equivalence-annotations/issues/list</url>
     </issueManagement>
-
-    <ciManagement>
-        <system>Hudson</system>
-        <url>https://www.chwthewke.net/hudson/job/hamcrest-annotations/</url>
-    </ciManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>chwthewke-net</id>
-            <layout>default</layout>
-            <uniqueVersion>false</uniqueVersion>
-            <url>https://www.chwthewke.net/nexus/content/repositories/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>chwthewke-net</id>
-            <layout>default</layout>
-            <uniqueVersion>true</uniqueVersion>
-            <url>https://www.chwthewke.net/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <build>
         <plugins>
