@@ -1,2 +1,3 @@
 glob:target
 glob:.idea/workspace.xml
+glob:.idea/libraries/Maven*
