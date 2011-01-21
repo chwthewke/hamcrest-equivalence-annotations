@@ -66,7 +66,6 @@ import java.lang.annotation.Target;
 public @interface EquivalenceSpecificationOn {
     /**
      * The type this equivalence specification acts upon.
-     * @return The matched type.
      */
     Class<?> value( );
 }

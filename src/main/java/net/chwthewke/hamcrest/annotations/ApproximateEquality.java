@@ -42,7 +42,6 @@ import java.lang.annotation.Target;
 public @interface ApproximateEquality {
     /**
      * The maximum difference allowed by this equivalence between values of the annotated property.
-     * @return The tolerance.
      */
     double tolerance( );
 }

@@ -41,7 +41,6 @@ import java.lang.annotation.Target;
 public @interface BySpecification {
     /**
      * The specification interface used to specify equivalence on values of the annotated property.
-     * @return The equivalence specification.
      */
     Class<?> value( );
 }
