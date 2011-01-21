@@ -10,10 +10,22 @@
 
     <name>hamcrest-equivalence-annotations</name>
 
+    <licenses>
+        <license>
+            <name>New BSD License</name>
+            <url>http://www.opensource.org/licenses/bsd-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
     <issueManagement>
         <system>Google Code</system>
         <url>http://code.google.com/p/hamcrest-equivalence-annotations/issues/list</url>
     </issueManagement>
+
+    <scm>
+        <connection>scm:hg:https://hamcrest-equivalence-annotations.googlecode.com/hg/</connection>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
