@@ -146,9 +146,6 @@
       <property name="severity" value="info"/>
       <property name="scope" value="public"/>
     </module>
-    <module name="ConstantName">
-      <property name="applyToPrivate" value="false"/>
-    </module>
     <module name="DoubleCheckedLocking"/>
     <module name="NoFinalizer"/>
     <module name="TrailingComment">
