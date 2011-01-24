@@ -47,7 +47,7 @@ import com.google.common.collect.ImmutableMap;
 
 class PropertyEquivalenceFactory<T> {
 
-    public PropertyEquivalence<T, ?> getExpectedPropertyTemplate( ) {
+    public PropertyEquivalence<T, ?> getPropertyEquivalence() {
         final Class<?> originalPropertyType = property.getReturnType( );
         final Class<?> propertyType = toReference( originalPropertyType );
 

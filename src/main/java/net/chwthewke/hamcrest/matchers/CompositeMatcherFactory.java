@@ -119,7 +119,7 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
                         specificationValidator,
                         property,
                         specificationMethod )
-                    .getExpectedPropertyTemplate( );
+                    .getPropertyEquivalence();
         propertyEquivalences.add( propertyEquivalence );
     }
 
