@@ -33,6 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import com.google.common.primitives.Primitives;
 import net.chwthewke.hamcrest.annotations.ApproximateEquality;
 import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
@@ -49,7 +50,7 @@ class PropertyEquivalenceFactory<T> {
 
     public PropertyEquivalence<T, ?> getPropertyEquivalence() {
         final Class<?> originalPropertyType = property.getReturnType( );
-        final Class<?> propertyType = toReference( originalPropertyType );
+        final Class<?> propertyType = Primitives.wrap( originalPropertyType );
 
         if ( specificationMethod.isAnnotationPresent( BySpecification.class ) )
             return getBySpecificationTemplate( propertyType,
@@ -201,29 +202,10 @@ class PropertyEquivalenceFactory<T> {
         }
     }
 
-    @SuppressWarnings( "unchecked" )
-    private static <T> Class<T> toReference( final Class<T> type ) {
-        if ( !type.isPrimitive( ) )
-            return type;
-        return (Class<T>) primitiveToReference.get( type );
-    }
-
     private final PropertyFinder propertyFinder;
     private final EquivalenceSpecificationValidator specificationValidator;
 
     private final Method property;
     private final Method specificationMethod;
-
-    private static final Map<Class<?>, Class<?>> primitiveToReference =
-            ImmutableMap.<Class<?>, Class<?>>builder( )
-                .put( Boolean.TYPE, Boolean.class )
-                .put( Byte.TYPE, Byte.class )
-                .put( Character.TYPE, Character.class )
-                .put( Short.TYPE, Short.class )
-                .put( Integer.TYPE, Integer.class )
-                .put( Long.TYPE, Long.class )
-                .put( Float.TYPE, Float.class )
-                .put( Double.TYPE, Double.class )
-                .build( );
 
 }
