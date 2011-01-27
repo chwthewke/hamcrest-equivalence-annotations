@@ -29,9 +29,9 @@ package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkState;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
 
 import com.google.common.primitives.Primitives;
 import net.chwthewke.hamcrest.annotations.*;
@@ -41,7 +41,6 @@ import org.hamcrest.Matchers;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
-import com.google.common.collect.ImmutableMap;
 
 class PropertyEquivalenceProvider<T> {
 
@@ -139,8 +138,22 @@ class PropertyEquivalenceProvider<T> {
                 equalToMatcherFactory );
     }
 
-    private <U> PropertyEquivalence<T, U> getByEquivalenceTemplate( Class<U> propertyType, Class<? extends Equivalence<?>> value ) {
-        // TODO use reflection to check that 'value' is an equivalence on the correct type (U)
+    private <U> PropertyEquivalence<T, U> getByEquivalenceTemplate( Class<U> propertyType, Class<? extends Equivalence<?>> equivalenceClass ) {
+        Constructor<? extends Equivalence<?>> ctor = null;
+        try {
+            ctor = equivalenceClass.getConstructor( );
+            Equivalence<?> equivalence = ctor.newInstance();
+        } catch ( NoSuchMethodException e ) {
+            throw new RuntimeException( e );
+        } catch ( InvocationTargetException e ) {
+            throw new RuntimeException( e );
+        } catch ( InstantiationException e ) {
+            throw new RuntimeException( e );
+        } catch ( IllegalAccessException e ) {
+            throw new RuntimeException( e );
+        }
+        // TODO use reflection to check that 'equivalenceClass' is an equivalence on the correct type (U)
+
         return null;
     }
 
