@@ -34,10 +34,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import com.google.common.primitives.Primitives;
-import net.chwthewke.hamcrest.annotations.ApproximateEquality;
-import net.chwthewke.hamcrest.annotations.BySpecification;
-import net.chwthewke.hamcrest.annotations.Equality;
-import net.chwthewke.hamcrest.annotations.Identity;
+import net.chwthewke.hamcrest.annotations.*;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -46,9 +43,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableMap;
 
-class PropertyEquivalenceFactory<T> {
+class PropertyEquivalenceProvider<T> {
 
-    public PropertyEquivalence<T, ?> getPropertyEquivalence() {
+    public PropertyEquivalence<T, ?> get() {
         final Class<?> originalPropertyType = property.getReturnType( );
         final Class<?> propertyType = Primitives.wrap( originalPropertyType );
 
@@ -56,6 +53,10 @@ class PropertyEquivalenceFactory<T> {
             return getBySpecificationTemplate( propertyType,
                 specificationMethod.getAnnotation( BySpecification.class ).value( ) );
 
+        if ( specificationMethod.isAnnotationPresent( ByEquivalence.class ))
+            return getByEquivalenceTemplate( propertyType,
+                    specificationMethod.getAnnotation( ByEquivalence.class ).value());
+        
         if ( specificationMethod.isAnnotationPresent( Equality.class ) )
             return getEqualityTemplate( propertyType );
 
@@ -73,7 +74,8 @@ class PropertyEquivalenceFactory<T> {
         return getEqualityTemplate( propertyType );
     }
 
-    PropertyEquivalenceFactory(
+
+    PropertyEquivalenceProvider(
             final PropertyFinder propertyFinder,
             final EquivalenceSpecificationValidator specificationValidator,
             final Method property,
@@ -135,6 +137,11 @@ class PropertyEquivalenceFactory<T> {
                 property.getName(),
                 propertyFunction( propertyType ),
                 equalToMatcherFactory );
+    }
+
+    private <U> PropertyEquivalence<T, U> getByEquivalenceTemplate( Class<U> propertyType, Class<? extends Equivalence<?>> value ) {
+        // TODO use reflection to check that 'value' is an equivalence on the correct type (U)
+        return null;
     }
 
     private <U> PropertyEquivalence<T, U> getBySpecificationTemplate( final Class<U> propertyType,
