@@ -115,11 +115,11 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
         final Method property = findMatchingProperty( specificationMethod );
 
         final PropertyEquivalence<T, ?> propertyEquivalence =
-                new PropertyEquivalenceFactory<T>( propertyFinder,
+                new PropertyEquivalenceProvider<T>( propertyFinder,
                         specificationValidator,
                         property,
                         specificationMethod )
-                    .getPropertyEquivalence();
+                    .get();
         propertyEquivalences.add( propertyEquivalence );
     }
 
