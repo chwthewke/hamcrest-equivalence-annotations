@@ -2,6 +2,8 @@ package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkState;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -19,9 +21,55 @@ final class ByEquivalenceInterpreter<U> implements EquivalenceAnnotationInterpre
         return createInstance( equivalenceClass );
     }
 
-    private <U> Equivalence<U> createInstance( final Class<? extends Equivalence<?>> equivalenceClass ) {
-        // TODO Auto-generated method stub
-        return null;
+    @SuppressWarnings( "unchecked" )
+    private Equivalence<U> createInstance( final Class<? extends Equivalence<?>> equivalenceClass ) {
+
+        final Constructor<? extends Equivalence<?>> ctor = getDefaultConstructor( equivalenceClass );
+
+        try
+        {
+            return (Equivalence<U>) ctor.newInstance( );
+        }
+        catch ( final IllegalArgumentException e )
+        {
+            throw onReflectiveException( equivalenceClass, e );
+        }
+        catch ( final InstantiationException e )
+        {
+            throw onReflectiveException( equivalenceClass, e );
+        }
+        catch ( final IllegalAccessException e )
+        {
+            throw onReflectiveException( equivalenceClass, e );
+        }
+        catch ( final InvocationTargetException e )
+        {
+            throw new RuntimeException(
+                String.format( "Exception while calling the default constructor of %s.", equivalenceClass ),
+                e );
+        }
+    }
+
+    private RuntimeException onReflectiveException( final Class<? extends Equivalence<?>> equivalenceClass,
+            final Exception reflectiveException ) {
+
+        final String message = String.format(
+            "Unexpected reflective exception while calling the default constructor of %s.",
+            equivalenceClass );
+
+        return new RuntimeException( message, reflectiveException );
+    }
+
+    private <X> Constructor<X> getDefaultConstructor( final Class<X> clazz ) {
+        try
+        {
+            return clazz.getConstructor( );
+        }
+        catch ( final NoSuchMethodException e )
+        {
+            throw new IllegalArgumentException(
+                formatMisuse( "%s must have a public no-arg constructor.", clazz ) );
+        }
     }
 
     private void checkEquivalenceType(
