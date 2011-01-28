@@ -22,4 +22,3 @@ public @interface ByEquivalence {
      */
     Class<? extends Equivalence<?>> value( );
 }
-
