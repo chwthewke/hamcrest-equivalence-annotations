@@ -16,6 +16,10 @@ final class ByEquivalenceInterpreter<U> implements EquivalenceAnnotationInterpre
 
         checkEquivalenceType( specificationMethod, equivalenceClass, propertyType );
 
+        return createInstance( equivalenceClass );
+    }
+
+    private <U> Equivalence<U> createInstance( final Class<? extends Equivalence<?>> equivalenceClass ) {
         // TODO Auto-generated method stub
         return null;
     }
