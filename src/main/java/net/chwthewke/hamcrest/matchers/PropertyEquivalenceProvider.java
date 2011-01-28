@@ -32,30 +32,36 @@ import static com.google.common.base.Preconditions.checkState;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
-import com.google.common.primitives.Primitives;
-import net.chwthewke.hamcrest.annotations.*;
+import net.chwthewke.hamcrest.annotations.ApproximateEquality;
+import net.chwthewke.hamcrest.annotations.ByEquivalence;
+import net.chwthewke.hamcrest.annotations.BySpecification;
+import net.chwthewke.hamcrest.annotations.Equality;
+import net.chwthewke.hamcrest.annotations.Identity;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
+import com.google.common.primitives.Primitives;
 
+@Deprecated
 class PropertyEquivalenceProvider<T> {
 
-    public PropertyEquivalence<T, ?> get() {
+    public PropertyEquivalence<T, ?> get( ) {
         final Class<?> originalPropertyType = property.getReturnType( );
         final Class<?> propertyType = Primitives.wrap( originalPropertyType );
 
         if ( specificationMethod.isAnnotationPresent( BySpecification.class ) )
             return getBySpecificationTemplate( propertyType,
-                specificationMethod.getAnnotation( BySpecification.class ).value( ) );
+                    specificationMethod.getAnnotation( BySpecification.class ).value( ) );
 
-        if ( specificationMethod.isAnnotationPresent( ByEquivalence.class ))
+        if ( specificationMethod.isAnnotationPresent( ByEquivalence.class ) )
             return getByEquivalenceTemplate( propertyType,
-                    specificationMethod.getAnnotation( ByEquivalence.class ).value());
-        
+                    specificationMethod.getAnnotation( ByEquivalence.class ).value( ) );
+
         if ( specificationMethod.isAnnotationPresent( Equality.class ) )
             return getEqualityTemplate( propertyType );
 
@@ -68,11 +74,10 @@ class PropertyEquivalenceProvider<T> {
 
         if ( specificationMethod.isAnnotationPresent( ApproximateEquality.class ) )
             return getApproximateEqualityTemplate( propertyType,
-                specificationMethod.getAnnotation( ApproximateEquality.class ).tolerance( ) );
+                    specificationMethod.getAnnotation( ApproximateEquality.class ).tolerance( ) );
 
         return getEqualityTemplate( propertyType );
     }
-
 
     PropertyEquivalenceProvider(
             final PropertyFinder propertyFinder,
@@ -86,7 +91,7 @@ class PropertyEquivalenceProvider<T> {
     }
 
     private PropertyEquivalence<T, Double> getApproximateEqualityTemplate( final Class<?> propertyType,
-            final double tolerance ) {
+                                                                           final double tolerance ) {
         checkState( propertyType == Double.class || propertyType == Float.class );
 
         final Function<Double, Matcher<? super Double>> closeToMatcherFactory =
@@ -105,7 +110,7 @@ class PropertyEquivalenceProvider<T> {
                 }, propertyFunction( Number.class ) );
 
         return PropertyEquivalence.create(
-                property.getName(),
+                property.getName( ),
                 propertyFunction,
                 closeToMatcherFactory );
     }
@@ -119,7 +124,7 @@ class PropertyEquivalenceProvider<T> {
                 };
 
         return PropertyEquivalence.create(
-                property.getName(),
+                property.getName( ),
                 propertyFunction( propertyType ),
                 sameInstanceMatcherFactory );
     }
@@ -133,23 +138,34 @@ class PropertyEquivalenceProvider<T> {
                 };
 
         return PropertyEquivalence.create(
-                property.getName(),
+                property.getName( ),
                 propertyFunction( propertyType ),
                 equalToMatcherFactory );
     }
 
-    private <U> PropertyEquivalence<T, U> getByEquivalenceTemplate( Class<U> propertyType, Class<? extends Equivalence<?>> equivalenceClass ) {
-        Constructor<? extends Equivalence<?>> ctor = null;
-        try {
-            ctor = equivalenceClass.getConstructor( );
-            Equivalence<?> equivalence = ctor.newInstance();
-        } catch ( NoSuchMethodException e ) {
+    private <U> PropertyEquivalence<T, U> getByEquivalenceTemplate( final Class<U> propertyType,
+            final Class<? extends Equivalence<?>> equivalenceClass ) {
+        try
+        {
+            checkEquivalenceType( equivalenceClass, propertyType );
+
+            final Constructor<? extends Equivalence<?>> ctor = equivalenceClass.getConstructor( );
+            final Equivalence<?> equivalence = ctor.newInstance( );
+        }
+        catch ( final NoSuchMethodException e )
+        {
             throw new RuntimeException( e );
-        } catch ( InvocationTargetException e ) {
+        }
+        catch ( final InvocationTargetException e )
+        {
             throw new RuntimeException( e );
-        } catch ( InstantiationException e ) {
+        }
+        catch ( final InstantiationException e )
+        {
             throw new RuntimeException( e );
-        } catch ( IllegalAccessException e ) {
+        }
+        catch ( final IllegalAccessException e )
+        {
             throw new RuntimeException( e );
         }
         // TODO use reflection to check that 'equivalenceClass' is an equivalence on the correct type (U)
@@ -157,12 +173,74 @@ class PropertyEquivalenceProvider<T> {
         return null;
     }
 
+//    private Equivalence<?> createInstance( final Class<? extends Equivalence<?>> clazz ) {
+//        final Constructor ctor;
+//        try
+//        {
+//            ctor = clazz.getConstructor( );
+//        }
+//        catch ( final NoSuchMethodException e )
+//        {
+//            throw new IllegalArgumentException(
+//                String.format( "Bad use of @%s: value %s must have a public no-args constructor",
+//                    ByEquivalence.class.getSimpleName( ), clazz ) );
+//        }
+//        try
+//        {
+//            final Equivalence<?> instance = (Equivalence<?>) ctor.newInstance( );
+//        }
+//        catch ( final InstantiationException e )
+//        {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace( );
+//        }
+//        catch ( final IllegalAccessException e )
+//        {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace( );
+//        }
+//        catch ( final InvocationTargetException e )
+//        {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace( );
+//        }
+//    }
+
+    private void checkEquivalenceType(
+            final Class<? extends Equivalence<?>> equivalenceClass,
+            final Class<?> propertyType ) {
+
+        if ( Modifier.isAbstract( equivalenceClass.getModifiers( ) ) )
+            throw new IllegalArgumentException( "" );
+        // TODO
+
+        try
+        {
+            final Class<?> equivalenceType = EQUIVALENCE_TYPE_FINDER.findExpectedType( equivalenceClass );
+            if ( !equivalenceType.isAssignableFrom( propertyType ) )
+                throw new IllegalArgumentException(
+                        String.format(
+                            "Bad use of @%s: value %s seems to implement %s<%s>, whereas property %s has type %s",
+                            ByEquivalence.class.getSimpleName( ), equivalenceClass.getName( ),
+                            Equivalence.class.getSimpleName( ), equivalenceType.getName( ),
+                            property.getName( ), propertyType ) );
+        }
+        catch ( final IllegalArgumentException e )
+        {
+            throw new IllegalArgumentException(
+                    String.format( "%s is not a valid implementation of %s: %s",
+                        equivalenceClass.getName( ), Equivalence.class.getSimpleName( ), e.getMessage( ) ) );
+        }
+
+    }
+
     private <U> PropertyEquivalence<T, U> getBySpecificationTemplate( final Class<U> propertyType,
-            final Class<?> propertySpecification ) {
+                                                                      final Class<?> propertySpecification ) {
 
         final CompositeMatcherFactory<U> matcherFactoryForProperty =
                 new CompositeMatcherFactory<U>( propertyFinder,
                         specificationValidator,
+                        new EquivalenceAnnotationReader( new EquivalenceAnnotationInterpreters( ) ),
                         propertyType, propertySpecification );
 
         final Function<U, Matcher<? super U>> matcherBySpecificationFactory =
@@ -172,7 +250,7 @@ class PropertyEquivalenceProvider<T> {
                     }
                 };
         return PropertyEquivalence.create(
-                property.getName(),
+                property.getName( ),
                 propertyFunction( propertyType ),
                 matcherBySpecificationFactory );
     }
@@ -199,9 +277,10 @@ class PropertyEquivalenceProvider<T> {
             catch ( final ClassCastException e )
             {
                 throw new RuntimeException(
-                    String.format( "Cannot cast result of property '%s()' on instance of %s to %s, actual type is %s.",
-                        property.getName( ), item.getClass( ).getName( ),
-                        propertyType.getName( ), rawProperty.getClass( ).getName( ) ),
+                        String.format(
+                            "Cannot cast result of property '%s()' on instance of %s to %s, actual type is %s.",
+                                property.getName( ), item.getClass( ).getName( ),
+                                propertyType.getName( ), rawProperty.getClass( ).getName( ) ),
                         e );
             }
         }
@@ -212,8 +291,8 @@ class PropertyEquivalenceProvider<T> {
         catch ( final InvocationTargetException e )
         {
             throw new RuntimeException(
-                String.format( "Exception while reading property %s on instance of %s.",
-                    property.getName( ), item.getClass( ).getName( ) ),
+                    String.format( "Exception while reading property %s on instance of %s.",
+                            property.getName( ), item.getClass( ).getName( ) ),
                     e );
         }
         finally
@@ -228,4 +307,5 @@ class PropertyEquivalenceProvider<T> {
     private final Method property;
     private final Method specificationMethod;
 
+    private static final ReflectiveTypeFinder EQUIVALENCE_TYPE_FINDER = new ReflectiveTypeFinder( "equivalentTo", 1, 0 );
 }
