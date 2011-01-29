@@ -21,7 +21,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Primitives;
 
-public class EquivalenceAnnotationReader {
+class EquivalenceAnnotationReader {
 
     public EquivalenceAnnotationReader( final EquivalenceAnnotationInterpreters interpreters ) {
         this.interpreters = interpreters;
