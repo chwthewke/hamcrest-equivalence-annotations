@@ -85,7 +85,7 @@ class EquivalenceAnnotationReader {
             final Class<U> propertyType ) {
 
         final EquivalenceAnnotationInterpreter<U> equivalenceAnnotationInterpreter =
-                interpreters.selectAnnotationInterpreter( equivalenceAnnotationType, specificationMethod );
+                interpreters.selectAnnotationInterpreter( equivalenceAnnotationType, specificationMethod, propertyType );
 
         return createPropertyEquivalence( specificationMethod,
             propertyType,
