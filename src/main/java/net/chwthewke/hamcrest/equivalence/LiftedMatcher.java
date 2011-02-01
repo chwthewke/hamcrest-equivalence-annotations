@@ -1,12 +1,10 @@
-package net.chwthewke.hamcrest.matchers;
+package net.chwthewke.hamcrest.equivalence;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 import com.google.common.base.Function;
-
-//TODO could make public
 
 class LiftedMatcher<T, U> extends TypeSafeDiagnosingMatcher<T> {
 

@@ -20,7 +20,7 @@ public class CompositeMatcherFactoryTest {
         // Exercise
         try
         {
-            CompositeMatcherFactory.asSpecifiedBy(
+            CompositeEquivalence.asSpecifiedBy(
                 SpecificationWithAnnotationMismatch.class,
                 Matched.class );
             // Verify
@@ -42,7 +42,7 @@ public class CompositeMatcherFactoryTest {
         // Exercise
         try
         {
-            CompositeMatcherFactory.asSpecifiedBy(
+            CompositeEquivalence.asSpecifiedBy(
                 SpecificationWithMisnamedMethod.class,
                 Matched.class );
             // Verify
