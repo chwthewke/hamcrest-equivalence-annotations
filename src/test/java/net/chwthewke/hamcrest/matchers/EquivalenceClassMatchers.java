@@ -2,6 +2,8 @@ package net.chwthewke.hamcrest.matchers;
 
 import java.util.Collection;
 
+import net.chwthewke.hamcrest.equivalence.Equivalence;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
