@@ -17,14 +17,14 @@ import org.hamcrest.Matcher;
 import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 
-class CompositeMatcherFactory<T> implements Equivalence<T> {
+class CompositeEquivalence<T> implements Equivalence<T> {
 
     // extract static methods to caller, restore dependency sanity
     static <T> Equivalence<T> asSpecifiedBy(
             final Class<?> matcherSpecification,
             final Class<T> matchedClass ) {
 
-        return new CompositeMatcherFactory<T>(
+        return new CompositeEquivalence<T>(
                 propertyFinderInstance,
                 specificationValidatorInstance,
                 matchedClass,
@@ -41,7 +41,7 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
             (Class<T>) matcherSpecification.getAnnotation( EquivalenceSpecificationOn.class ).value( ) );
     }
 
-    CompositeMatcherFactory(
+    CompositeEquivalence(
             final PropertyFinder propertyFinder,
             final EquivalenceSpecificationValidator specificationValidator,
             final Class<T> matchedClass,
@@ -64,21 +64,6 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
 
         addPropertyEquivalences( );
 
-        sortPropertyEquivalences( );
-    }
-
-    private void sortPropertyEquivalences( ) {
-        // TODO sort before computing
-
-//        final Comparator<LiftedEquivalence<T, ?>> comparator =
-//                Ordering.<String>natural( ).onResultOf(
-//                    new Function<LiftedEquivalence<T, ?>, String>( ) {
-//                        public String apply( final LiftedEquivalence<T, ?> expectedPropertyTemplate ) {
-//                            return expectedPropertyTemplate.getPropertyName( );
-//                        }
-//                    } );
-//
-//        Collections.sort( propertyEquivalences, comparator );
     }
 
     private void addPropertyEquivalences( ) {
