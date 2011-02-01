@@ -20,7 +20,7 @@ class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
 
         String subMatcherLeadin = " with";
 
-        for ( final Entry<PropertyEquivalence<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
+        for ( final Entry<LiftedEquivalence<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
         {
             description
                 .appendText( subMatcherLeadin )
@@ -36,10 +36,10 @@ class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
     @Override
     protected boolean matchesSafely( final T item, final Description mismatchDescription ) {
 
-        for ( final Entry<PropertyEquivalence<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
+        for ( final Entry<LiftedEquivalence<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
         {
             final Matcher<?> matcher = entry.getValue( );
-            final PropertyEquivalence<T, ?> propertyEquivalence = entry.getKey( );
+            final LiftedEquivalence<T, ?> propertyEquivalence = entry.getKey( );
 
             final Object propertyValue = propertyEquivalence.extractPropertyValue( item );
             if ( !matcher.matches( propertyValue ) )
@@ -57,18 +57,18 @@ class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     CompositeMatcher( final Class<T> expectedType,
-            final Collection<PropertyEquivalence<T, ?>> propertyEquivalences,
+            final Collection<LiftedEquivalence<T, ?>> propertyEquivalences,
             final T expected ) {
 
         super( expectedType );
 
         this.expectedType = checkNotNull( expectedType );
 
-        for ( final PropertyEquivalence<T, ?> propertyEquivalence : propertyEquivalences )
+        for ( final LiftedEquivalence<T, ?> propertyEquivalence : propertyEquivalences )
             expectedProperties.put( propertyEquivalence, propertyEquivalence.specializeFor( expected ) );
     }
 
     private final Class<T> expectedType;
-    private final Map<PropertyEquivalence<T, ?>, Matcher<?>> expectedProperties = newLinkedHashMap( );
+    private final Map<LiftedEquivalence<T, ?>, Matcher<?>> expectedProperties = newLinkedHashMap( );
 
 }

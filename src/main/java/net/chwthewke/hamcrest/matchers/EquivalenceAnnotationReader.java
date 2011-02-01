@@ -27,7 +27,7 @@ class EquivalenceAnnotationReader {
         this.interpreters = interpreters;
     }
 
-    public <T> PropertyEquivalence<T, ?> createPropertyEquivalence( final Method specificationMethod,
+    public <T> LiftedEquivalence<T, ?> createPropertyEquivalence( final Method specificationMethod,
             final Method property ) {
 
         final Class<? extends Annotation> equivalenceAnnotationType = getEquivalenceAnnotationType( specificationMethod );
@@ -59,7 +59,7 @@ class EquivalenceAnnotationReader {
                 specificationMethod, newArrayList( annotationsOnSpecification ) ) );
     }
 
-    private <T> PropertyEquivalence<T, Double> createApproximateEquality( final Method specificationMethod,
+    private <T> LiftedEquivalence<T, Double> createApproximateEquality( final Method specificationMethod,
             final Method property, final Class<?> propertyType ) {
         if ( !Number.class.isAssignableFrom( propertyType ) )
             throw new IllegalArgumentException(
@@ -79,7 +79,7 @@ class EquivalenceAnnotationReader {
             equivalenceAnnotationInterpreter );
     }
 
-    private <T, U> PropertyEquivalence<T, U> createPropertyEquivalence( final Method specificationMethod,
+    private <T, U> LiftedEquivalence<T, U> createPropertyEquivalence( final Method specificationMethod,
             final Class<? extends Annotation> equivalenceAnnotationType,
             final Method property,
             final Class<U> propertyType ) {
@@ -93,13 +93,13 @@ class EquivalenceAnnotationReader {
             equivalenceAnnotationInterpreter );
     }
 
-    private <T, U> PropertyEquivalence<T, U> createPropertyEquivalence( final Method specificationMethod,
+    private <T, U> LiftedEquivalence<T, U> createPropertyEquivalence( final Method specificationMethod,
             final Class<U> propertyType, final Function<T, U> propertyFunction,
             final EquivalenceAnnotationInterpreter<U> equivalenceAnnotationInterpreter ) {
         final String propertyName = specificationMethod.getName( );
         final Equivalence<U> equivalenceOnProperty =
                 equivalenceAnnotationInterpreter.interpretAnnotation( specificationMethod, propertyType );
-        return PropertyEquivalence.<T, U>create( propertyName, propertyFunction, equivalenceOnProperty );
+        return LiftedEquivalence.<T, U>create( propertyName, propertyFunction, equivalenceOnProperty );
     }
 
     private <T, U> Function<T, U> canonicalPropertyFunction( final Method property, final Class<U> propertyType ) {
