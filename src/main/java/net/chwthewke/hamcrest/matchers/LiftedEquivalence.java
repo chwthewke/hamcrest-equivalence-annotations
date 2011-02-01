@@ -6,16 +6,16 @@ import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;
 
-final class PropertyEquivalence<T, U> {
+final class LiftedEquivalence<T, U> implements Equivalence<T> {
 
-    static <T, U> PropertyEquivalence<T, U> create(
+    static <T, U> LiftedEquivalence<T, U> create(
             final String propertyName,
             final Function<T, U> propertyMethod,
             final Equivalence<? super U> equivalence ) {
-        return new PropertyEquivalence<T, U>( propertyName, propertyMethod, equivalence );
+        return new LiftedEquivalence<T, U>( propertyName, propertyMethod, equivalence );
     }
 
-    private PropertyEquivalence( final String propertyName,
+    private LiftedEquivalence( final String propertyName,
                                  final Function<T, U> propertyMethod,
                                  final Equivalence<? super U> equivalence ) {
         this.propertyName = propertyName;
@@ -27,12 +27,19 @@ final class PropertyEquivalence<T, U> {
         return propertyName;
     }
 
+    @Deprecated
     public U extractPropertyValue( final T item ) {
         return propertyMethod.apply( item );
     }
 
+    @Deprecated
     public Matcher<? super U> specializeFor( final T expected ) {
         return equivalence.equivalentTo( propertyMethod.apply( expected ) );
+    }
+
+    public Matcher<T> equivalentTo( final T expected ) {
+        return new LiftedMatcher<T, U>( propertyName, propertyMethod,
+                equivalence.equivalentTo( propertyMethod.apply( expected ) ) );
     }
 
     private final String propertyName;

@@ -71,10 +71,10 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
     }
 
     private void sortPropertyEquivalences( ) {
-        final Comparator<PropertyEquivalence<T, ?>> comparator =
+        final Comparator<LiftedEquivalence<T, ?>> comparator =
                 Ordering.<String>natural( ).onResultOf(
-                    new Function<PropertyEquivalence<T, ?>, String>( ) {
-                        public String apply( final PropertyEquivalence<T, ?> expectedPropertyTemplate ) {
+                    new Function<LiftedEquivalence<T, ?>, String>( ) {
+                        public String apply( final LiftedEquivalence<T, ?> expectedPropertyTemplate ) {
                             return expectedPropertyTemplate.getPropertyName( );
                         }
                     } );
@@ -91,7 +91,7 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
 
         final Method property = findMatchingProperty( specificationMethod );
 
-        final PropertyEquivalence<T, ?> propertyEquivalence =
+        final LiftedEquivalence<T, ?> propertyEquivalence =
                 equivalenceAnnotationReader.createPropertyEquivalence( specificationMethod, property );
 
         propertyEquivalences.add( propertyEquivalence );
@@ -130,7 +130,7 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
 
     private final Class<T> matchedClass;
     private final Class<?> matcherSpecification;
-    private final List<PropertyEquivalence<T, ?>> propertyEquivalences = newArrayList( );
+    private final List<LiftedEquivalence<T, ?>> propertyEquivalences = newArrayList( );
 
     private static final PropertyFinder propertyFinderInstance = new PropertyFinder( );
     private static final EquivalenceSpecificationValidator specificationValidatorInstance = new EquivalenceSpecificationValidator( );
