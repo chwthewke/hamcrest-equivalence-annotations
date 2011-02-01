@@ -14,8 +14,10 @@ class EquivalenceAnnotationInterpreters {
         return new ApproximateEqualityInterpreter( );
     }
 
+    // TODO pass a Class<U> argument ?
     public <U> EquivalenceAnnotationInterpreter<U> selectAnnotationInterpreter(
-            final Class<? extends Annotation> equivalenceAnnotationType, final Method specificationMethod ) {
+            final Class<? extends Annotation> equivalenceAnnotationType, final Method specificationMethod,
+            @SuppressWarnings( "unused" ) final Class<U> propertyType ) {
 
         if ( equivalenceAnnotationType == Equality.class )
         {

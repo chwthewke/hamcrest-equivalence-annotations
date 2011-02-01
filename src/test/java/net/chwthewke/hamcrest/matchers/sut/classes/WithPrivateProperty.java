@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.matchers.use_case_classes;
+package net.chwthewke.hamcrest.matchers.sut.classes;
 
 public class WithPrivateProperty {
 

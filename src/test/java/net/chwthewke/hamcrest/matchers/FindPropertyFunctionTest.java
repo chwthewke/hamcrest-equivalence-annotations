@@ -7,8 +7,8 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 
-import net.chwthewke.hamcrest.matchers.use_case_classes.WithNonPropertyMethod;
-import net.chwthewke.hamcrest.matchers.use_case_classes.WithPublicProperty;
+import net.chwthewke.hamcrest.matchers.sut.classes.WithNonPropertyMethod;
+import net.chwthewke.hamcrest.matchers.sut.classes.WithPublicProperty;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class FindPropertyFunctionTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.use_case_classes." +
+                is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.sut.classes." +
                         "WithPublicProperty lacks the public property 'getValue0()'." ) ) );
         }
     }
@@ -57,7 +57,7 @@ public class FindPropertyFunctionTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.use_case_classes." +
+                is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.sut.classes." +
                         "WithNonPropertyMethod lacks the public property 'getValue()'." ) ) );
         }
     }
@@ -77,7 +77,7 @@ public class FindPropertyFunctionTest {
         {
             assertThat(
                 e.getMessage( ),
-                is( equalTo( "The property 'getValue()' on net.chwthewke.hamcrest.matchers.use_case_classes." +
+                is( equalTo( "The property 'getValue()' on net.chwthewke.hamcrest.matchers.sut.classes." +
                         "WithPublicProperty has return type java.lang.String which is not " +
                         "assignable to java.lang.Integer." ) ) );
         }
@@ -88,7 +88,8 @@ public class FindPropertyFunctionTest {
         // Setup
 
         // Exercise
-        final Method method = findPropertyFunction.findPropertyMethod( WithPublicProperty.class, Object.class, "getValue" );
+        final Method method = findPropertyFunction.findPropertyMethod(
+            WithPublicProperty.class, Object.class, "getValue" );
 
         // Verify
         assertThat( method, is( WithPublicProperty.class.getDeclaredMethod( "getValue" ) ) );

@@ -1,17 +1,17 @@
-package net.chwthewke.hamcrest.matchers.use_case_classes;
+package net.chwthewke.hamcrest.matchers.sut.classes;
 
-public class WithPublicProperty {
+public class WithPackageLocalProperty {
 
-    public WithPublicProperty( final String value ) {
+    public WithPackageLocalProperty( final String value ) {
         super( );
         this.value = value;
     }
 
-    public String getValue( ) {
+    String getValue( ) {
         return value;
     }
 
-    public int getIntValue( ) {
+    int getIntValue( ) {
         try
         {
             return Integer.parseInt( value );
