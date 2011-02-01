@@ -1,11 +1,11 @@
 package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Maps.newLinkedHashMap;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
+
+import net.chwthewke.hamcrest.equivalence.Equivalence;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -18,17 +18,14 @@ class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
             .appendText( "a " )
             .appendText( expectedType.getSimpleName( ) );
 
-        String subMatcherLeadin = " with";
+        String subMatcherLeadin = " with ";
 
-        for ( final Entry<LiftedEquivalence<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
+        for ( final Matcher<?> property : expectedProperties )
         {
             description
                 .appendText( subMatcherLeadin )
-                .appendText( " " )
-                .appendText( entry.getKey( ).getPropertyName( ) )
-                .appendText( "()=" )
-                .appendDescriptionOf( entry.getValue( ) );
-            subMatcherLeadin = ",";
+                .appendDescriptionOf( property );
+            subMatcherLeadin = ", ";
         }
 
     }
@@ -36,19 +33,11 @@ class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
     @Override
     protected boolean matchesSafely( final T item, final Description mismatchDescription ) {
 
-        for ( final Entry<LiftedEquivalence<T, ?>, Matcher<?>> entry : expectedProperties.entrySet( ) )
+        for ( final Matcher<?> property : expectedProperties )
         {
-            final Matcher<?> matcher = entry.getValue( );
-            final LiftedEquivalence<T, ?> propertyEquivalence = entry.getKey( );
-
-            final Object propertyValue = propertyEquivalence.extractPropertyValue( item );
-            if ( !matcher.matches( propertyValue ) )
+            if ( !property.matches( item ) )
             {
-                mismatchDescription
-                    .appendText( propertyEquivalence.getPropertyName( ) )
-                    .appendText( "() " );
-                matcher.describeMismatch( propertyValue, mismatchDescription );
-
+                property.describeMismatch( item, mismatchDescription );
                 return false;
             }
         }
@@ -57,18 +46,20 @@ class CompositeMatcher<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     CompositeMatcher( final Class<T> expectedType,
-            final Collection<LiftedEquivalence<T, ?>> propertyEquivalences,
+            final Collection<Equivalence<T>> propertyEquivalences,
             final T expected ) {
 
         super( expectedType );
 
         this.expectedType = checkNotNull( expectedType );
 
-        for ( final LiftedEquivalence<T, ?> propertyEquivalence : propertyEquivalences )
-            expectedProperties.put( propertyEquivalence, propertyEquivalence.specializeFor( expected ) );
+        for ( final Equivalence<T> equivalence : propertyEquivalences )
+        {
+            expectedProperties.add( equivalence.equivalentTo( expected ) );
+        }
     }
 
     private final Class<T> expectedType;
-    private final Map<LiftedEquivalence<T, ?>, Matcher<?>> expectedProperties = newLinkedHashMap( );
+    private final Collection<Matcher<? super T>> expectedProperties = newArrayList( );
 
 }

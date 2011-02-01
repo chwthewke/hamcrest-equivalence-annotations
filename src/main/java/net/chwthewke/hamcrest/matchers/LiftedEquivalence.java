@@ -1,10 +1,13 @@
 package net.chwthewke.hamcrest.matchers;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
 import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;
+
+// TODO could make public
 
 final class LiftedEquivalence<T, U> implements Equivalence<T> {
 
@@ -18,8 +21,8 @@ final class LiftedEquivalence<T, U> implements Equivalence<T> {
     private LiftedEquivalence( final String propertyName,
                                  final Function<T, U> propertyMethod,
                                  final Equivalence<? super U> equivalence ) {
-        this.propertyName = propertyName;
-        this.propertyMethod = propertyMethod;
+        this.propertyName = checkNotNull( propertyName );
+        this.propertyMethod = checkNotNull( propertyMethod );
         this.equivalence = equivalence;
     }
 
@@ -27,11 +30,23 @@ final class LiftedEquivalence<T, U> implements Equivalence<T> {
         return propertyName;
     }
 
+    /**
+     * @param item
+     *            -
+     * @return -
+     * @deprecated to be encapsulated.
+     */
     @Deprecated
     public U extractPropertyValue( final T item ) {
         return propertyMethod.apply( item );
     }
 
+    /**
+     * @param item
+     *            -
+     * @return -
+     * @deprecated to be encapsulated.
+     */
     @Deprecated
     public Matcher<? super U> specializeFor( final T expected ) {
         return equivalence.equivalentTo( propertyMethod.apply( expected ) );

@@ -6,6 +6,8 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 import com.google.common.base.Function;
 
+//TODO could make public
+
 class LiftedMatcher<T, U> extends TypeSafeDiagnosingMatcher<T> {
 
     public LiftedMatcher( final String projectionName, final Function<T, U> projection,

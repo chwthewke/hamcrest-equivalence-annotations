@@ -2,10 +2,10 @@ package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
+import static net.chwthewke.hamcrest.matchers.EquivalenceAnnotationProcessor.annotationProcessorFor;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
@@ -27,7 +27,6 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
         return new CompositeMatcherFactory<T>(
                 propertyFinderInstance,
                 specificationValidatorInstance,
-                equivalenceAnnotationReaderInstance,
                 matchedClass,
                 matcherSpecification );
     }
@@ -45,11 +44,9 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
     CompositeMatcherFactory(
             final PropertyFinder propertyFinder,
             final EquivalenceSpecificationValidator specificationValidator,
-            final EquivalenceAnnotationReader equivalenceAnnotationReader,
             final Class<T> matchedClass,
             final Class<?> matcherSpecification ) {
         this.propertyFinder = propertyFinder;
-        this.equivalenceAnnotationReader = equivalenceAnnotationReader;
         this.matchedClass = checkNotNull( matchedClass );
         this.matcherSpecification = checkNotNull( matcherSpecification );
 
@@ -65,34 +62,52 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
     private void initialize( ) {
         checkSpecificationTargetClass( );
 
-        addPropertyEquivalences();
+        addPropertyEquivalences( );
 
-        sortPropertyEquivalences();
+        sortPropertyEquivalences( );
     }
 
     private void sortPropertyEquivalences( ) {
-        final Comparator<LiftedEquivalence<T, ?>> comparator =
-                Ordering.<String>natural( ).onResultOf(
-                    new Function<LiftedEquivalence<T, ?>, String>( ) {
-                        public String apply( final LiftedEquivalence<T, ?> expectedPropertyTemplate ) {
-                            return expectedPropertyTemplate.getPropertyName( );
-                        }
-                    } );
+        // TODO sort before computing
 
-        Collections.sort( propertyEquivalences, comparator );
+//        final Comparator<LiftedEquivalence<T, ?>> comparator =
+//                Ordering.<String>natural( ).onResultOf(
+//                    new Function<LiftedEquivalence<T, ?>, String>( ) {
+//                        public String apply( final LiftedEquivalence<T, ?> expectedPropertyTemplate ) {
+//                            return expectedPropertyTemplate.getPropertyName( );
+//                        }
+//                    } );
+//
+//        Collections.sort( propertyEquivalences, comparator );
     }
 
     private void addPropertyEquivalences( ) {
-        for ( final Method method : matcherSpecification.getMethods( ) )
+        for ( final Method method : getSortedSpecificationMethods( ) )
             addPropertyEquivalence( method );
+    }
+
+    private Iterable<Method> getSortedSpecificationMethods( ) {
+
+        final List<Method> methods = newArrayList( matcherSpecification.getMethods( ) );
+
+        Collections.sort( methods, Ordering.<String>natural( ).onResultOf( new Function<Method, String>( ) {
+            public String apply( final Method method ) {
+                return method.getName( );
+            }
+        } ) );
+
+        return methods;
     }
 
     private void addPropertyEquivalence( final Method specificationMethod ) {
 
         final Method property = findMatchingProperty( specificationMethod );
 
-        final LiftedEquivalence<T, ?> propertyEquivalence =
-                equivalenceAnnotationReader.createPropertyEquivalence( specificationMethod, property );
+        final EquivalenceAnnotationProcessor<T, ?> processor =
+                annotationProcessorFor( matchedClass, specificationMethod, property );
+
+        final Equivalence<T> propertyEquivalence =
+                processor.processEquivalenceSpecification( );
 
         propertyEquivalences.add( propertyEquivalence );
     }
@@ -126,15 +141,12 @@ class CompositeMatcherFactory<T> implements Equivalence<T> {
     }
 
     private final PropertyFinder propertyFinder;
-    private final EquivalenceAnnotationReader equivalenceAnnotationReader;
 
     private final Class<T> matchedClass;
     private final Class<?> matcherSpecification;
-    private final List<LiftedEquivalence<T, ?>> propertyEquivalences = newArrayList( );
+    private final List<Equivalence<T>> propertyEquivalences = newArrayList( );
 
     private static final PropertyFinder propertyFinderInstance = new PropertyFinder( );
     private static final EquivalenceSpecificationValidator specificationValidatorInstance = new EquivalenceSpecificationValidator( );
-    private static final EquivalenceAnnotationReader equivalenceAnnotationReaderInstance =
-            new EquivalenceAnnotationReader( new EquivalenceAnnotationInterpreters( ) );
 
 }
