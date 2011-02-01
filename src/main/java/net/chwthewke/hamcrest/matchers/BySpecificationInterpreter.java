@@ -18,7 +18,6 @@ final class BySpecificationInterpreter<U> implements
         return new CompositeMatcherFactory<U>(
                     new PropertyFinder( ),
                     new EquivalenceSpecificationValidator( ),
-                    new EquivalenceAnnotationReader( new EquivalenceAnnotationInterpreters( ) ),
                     propertyType,
                     annotation.value( ) );
     }

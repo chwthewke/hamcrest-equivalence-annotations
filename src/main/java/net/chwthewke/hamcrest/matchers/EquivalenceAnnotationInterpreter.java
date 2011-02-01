@@ -4,7 +4,13 @@ import java.lang.reflect.Method;
 
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
-
+/**
+ * @author Chewie
+ * @param <T>
+ *            matched type
+ * @deprecated TBR
+ */
+@Deprecated
 interface EquivalenceAnnotationInterpreter<T> {
 
     Equivalence<T> interpretAnnotation( Method specificationMethod, Class<T> propertyType );
