@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkState;
 import java.lang.reflect.Method;
 
 import net.chwthewke.hamcrest.annotations.BySpecification;
+import net.chwthewke.hamcrest.equivalence.Equivalence;
 
 final class BySpecificationInterpreter<U> implements
         EquivalenceAnnotationInterpreter<U> {

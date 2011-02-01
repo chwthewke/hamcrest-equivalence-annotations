@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import net.chwthewke.hamcrest.annotations.ByEquivalence;
+import net.chwthewke.hamcrest.equivalence.Equivalence;
 
 final class ByEquivalenceInterpreter<U> implements EquivalenceAnnotationInterpreter<U> {
     public Equivalence<U> interpretAnnotation( final Method specificationMethod, final Class<U> propertyType ) {

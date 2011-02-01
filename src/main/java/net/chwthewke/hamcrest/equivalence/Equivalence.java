@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.matchers;
+package net.chwthewke.hamcrest.equivalence;
 
 import org.hamcrest.Matcher;
 

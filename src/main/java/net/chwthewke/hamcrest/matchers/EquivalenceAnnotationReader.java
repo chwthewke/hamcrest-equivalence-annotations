@@ -3,7 +3,6 @@ package net.chwthewke.hamcrest.matchers;
 import static com.google.common.collect.Lists.newArrayList;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
@@ -12,6 +11,7 @@ import net.chwthewke.hamcrest.annotations.ByEquivalence;
 import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.Identity;
+import net.chwthewke.hamcrest.equivalence.Equivalence;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -103,49 +103,7 @@ public class EquivalenceAnnotationReader {
     }
 
     private <T, U> Function<T, U> canonicalPropertyFunction( final Method property, final Class<U> propertyType ) {
-        return new Function<T, U>( ) {
-            public U apply( final T item ) {
-                return extractProperty( property, propertyType, item );
-            }
-        };
-    }
-
-    private <T, U> U extractProperty( final Method property, final Class<U> propertyType, final T item ) {
-
-        final boolean wasAccessible = property.isAccessible( );
-        try
-        {
-            property.setAccessible( true );
-            final Object rawProperty = property.invoke( item );
-            try
-            {
-                return propertyType.cast( rawProperty );
-            }
-            catch ( final ClassCastException e )
-            {
-                throw new RuntimeException(
-                        String.format(
-                            "Cannot cast result of property '%s()' on instance of %s to %s, actual type is %s.",
-                                property.getName( ), item.getClass( ).getName( ),
-                                propertyType.getName( ), rawProperty.getClass( ).getName( ) ),
-                        e );
-            }
-        }
-        catch ( final IllegalAccessException e )
-        {
-            throw new IllegalStateException( "Unpredicted illegal access", e );
-        }
-        catch ( final InvocationTargetException e )
-        {
-            throw new RuntimeException(
-                    String.format( "Exception while reading property %s on instance of %s.",
-                            property.getName( ), item.getClass( ).getName( ) ),
-                    e );
-        }
-        finally
-        {
-            property.setAccessible( wasAccessible );
-        }
+        return new ReadPropertyFunction<T, U>( property, propertyType );
     }
 
     private final EquivalenceAnnotationInterpreters interpreters;

@@ -2,6 +2,8 @@ package net.chwthewke.hamcrest.matchers;
 
 import java.lang.reflect.Method;
 
+import net.chwthewke.hamcrest.equivalence.Equivalence;
+
 
 public interface EquivalenceAnnotationInterpreter<T> {
 

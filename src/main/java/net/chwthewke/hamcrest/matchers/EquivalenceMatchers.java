@@ -1,5 +1,7 @@
 package net.chwthewke.hamcrest.matchers;
 
+import net.chwthewke.hamcrest.equivalence.Equivalence;
+
 
 /**
  * This class has some factory methods to create {@link Equivalence} instances from <em>equivalence specifications</em> (i.e. classes

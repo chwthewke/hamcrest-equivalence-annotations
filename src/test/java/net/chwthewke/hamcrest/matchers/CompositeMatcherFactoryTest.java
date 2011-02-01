@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
+import net.chwthewke.hamcrest.equivalence.Equivalence;
 
 import org.junit.Test;
 

@@ -1,5 +1,7 @@
 package net.chwthewke.hamcrest.matchers;
 
+import net.chwthewke.hamcrest.equivalence.Equivalence;
+
 import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;

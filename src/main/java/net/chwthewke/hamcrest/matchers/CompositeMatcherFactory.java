@@ -10,6 +10,7 @@ import java.util.List;
 
 import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
 import net.chwthewke.hamcrest.annotations.NotPublic;
+import net.chwthewke.hamcrest.equivalence.Equivalence;
 
 import org.hamcrest.Matcher;
 
