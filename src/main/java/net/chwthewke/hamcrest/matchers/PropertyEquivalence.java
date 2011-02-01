@@ -12,37 +12,15 @@ final class PropertyEquivalence<T, U> {
             final String propertyName,
             final Function<T, U> propertyMethod,
             final Equivalence<? super U> equivalence ) {
-        return new PropertyEquivalence<T, U>( propertyName, propertyMethod,
-                new Function<U, Matcher<? super U>>( ) {
-                    public Matcher<? super U> apply( final U input ) {
-                        return equivalence.equivalentTo( input );
-                    }
-                } );
-    }
-
-    /**
-     * @deprecated Use other factory method
-     * @param <T>
-     * @param <U>
-     * @param propertyName
-     * @param propertyMethod
-     * @param matcherFactory
-     * @return
-     */
-    @Deprecated
-    static <T, U> PropertyEquivalence<T, U> create(
-            final String propertyName,
-            final Function<T, U> propertyMethod,
-            final Function<U, Matcher<? super U>> matcherFactory ) {
-        return new PropertyEquivalence<T, U>( propertyName, propertyMethod, matcherFactory );
+        return new PropertyEquivalence<T, U>( propertyName, propertyMethod, equivalence );
     }
 
     private PropertyEquivalence( final String propertyName,
                                  final Function<T, U> propertyMethod,
-                                 final Function<U, Matcher<? super U>> matcherFactory ) {
+                                 final Equivalence<? super U> equivalence ) {
         this.propertyName = propertyName;
         this.propertyMethod = propertyMethod;
-        this.matcherFactory = matcherFactory;
+        this.equivalence = equivalence;
     }
 
     public String getPropertyName( ) {
@@ -54,11 +32,11 @@ final class PropertyEquivalence<T, U> {
     }
 
     public Matcher<? super U> specializeFor( final T expected ) {
-        return matcherFactory.apply( propertyMethod.apply( expected ) );
+        return equivalence.equivalentTo( propertyMethod.apply( expected ) );
     }
 
     private final String propertyName;
     private final Function<T, U> propertyMethod;
-    private final Function<U, Matcher<? super U>> matcherFactory;
+    private final Equivalence<? super U> equivalence;
 
 }

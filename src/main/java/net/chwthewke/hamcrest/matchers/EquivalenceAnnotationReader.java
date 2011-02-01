@@ -21,7 +21,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Primitives;
 
-public class EquivalenceAnnotationReader {
+class EquivalenceAnnotationReader {
 
     public EquivalenceAnnotationReader( final EquivalenceAnnotationInterpreters interpreters ) {
         this.interpreters = interpreters;
@@ -85,7 +85,7 @@ public class EquivalenceAnnotationReader {
             final Class<U> propertyType ) {
 
         final EquivalenceAnnotationInterpreter<U> equivalenceAnnotationInterpreter =
-                interpreters.selectAnnotationInterpreter( equivalenceAnnotationType, specificationMethod );
+                interpreters.selectAnnotationInterpreter( equivalenceAnnotationType, specificationMethod, propertyType );
 
         return createPropertyEquivalence( specificationMethod,
             propertyType,

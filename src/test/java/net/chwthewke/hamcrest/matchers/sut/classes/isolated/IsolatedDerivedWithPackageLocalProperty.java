@@ -1,6 +1,6 @@
-package net.chwthewke.hamcrest.matchers.use_case_classes.isolated;
+package net.chwthewke.hamcrest.matchers.sut.classes.isolated;
 
-import net.chwthewke.hamcrest.matchers.use_case_classes.WithPackageLocalProperty;
+import net.chwthewke.hamcrest.matchers.sut.classes.WithPackageLocalProperty;
 
 public class IsolatedDerivedWithPackageLocalProperty extends WithPackageLocalProperty {
 
