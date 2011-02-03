@@ -2,8 +2,6 @@ package net.chwthewke.hamcrest.equivalence;
 
 import java.util.Collection;
 
-import net.chwthewke.hamcrest.equivalence.Equivalence;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
@@ -12,6 +10,7 @@ import com.google.common.collect.Lists;
 
 public class EquivalenceClassMatchers {
 
+    // TODO use a simple boolean to add "separates"
     public static <T> Matcher<Equivalence<T>> equates( final T first, final T second, final T... others ) {
         return new EquatesMatcher<T>( Lists.asList( first, second, others ) );
     }
