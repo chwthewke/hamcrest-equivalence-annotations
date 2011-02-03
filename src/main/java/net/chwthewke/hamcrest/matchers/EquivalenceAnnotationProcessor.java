@@ -3,7 +3,6 @@ package net.chwthewke.hamcrest.matchers;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.primitives.Primitives.wrap;
-import static net.chwthewke.hamcrest.matchers.LiftOperator.liftWith;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -14,6 +13,7 @@ import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.Identity;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
+import net.chwthewke.hamcrest.equivalence.LiftedEquivalence;
 
 final class EquivalenceAnnotationProcessor<T, V> {
 
@@ -57,17 +57,14 @@ final class EquivalenceAnnotationProcessor<T, V> {
                 "The equivalence specification property %s bears %s, so it must have a type assignable to java.lang.Number.",
                 specification, ApproximateEquality.class.getSimpleName( ) ) );
 
-        final LiftOperator<T, Number> liftOperator =
-                liftWith( new ReadPropertyFunction<T, Number>( target, Number.class ) );
-
         final double tolerance = getSpecificationAnnotation( ApproximateEquality.class ).tolerance( );
 
-        return liftOperator.liftEquivalence(
-            specification.getName( ), equivalenceFactory.getApproximateEquality( tolerance ) );
+        return LiftedEquivalence.create( specification.getName( ),
+            new ReadPropertyFunction<T, Number>( target, Number.class ),
+            equivalenceFactory.getApproximateEquality( tolerance ) );
     }
 
     private Equivalence<T> computeGenericEquivalence( ) {
-        final LiftOperator<T, V> liftOperator = liftWith( new ReadPropertyFunction<T, V>( target, propertyType ) );
 
         final Equivalence<V> propertyEquivalence;
 
@@ -97,7 +94,9 @@ final class EquivalenceAnnotationProcessor<T, V> {
                 getSpecificationAnnotation( annotationType ), annotationType.getSimpleName( ) ) );
         }
 
-        return liftOperator.liftEquivalence( specification.getName( ), propertyEquivalence );
+        return LiftedEquivalence.create( specification.getName( ),
+            new ReadPropertyFunction<T, V>( target, propertyType ),
+            propertyEquivalence );
     }
 
     private <A extends Annotation> A getSpecificationAnnotation( final Class<A> annotationClass ) {
