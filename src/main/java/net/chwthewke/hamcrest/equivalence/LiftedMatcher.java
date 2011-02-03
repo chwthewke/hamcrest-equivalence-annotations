@@ -5,6 +5,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 import com.google.common.base.Function;
+import com.google.common.base.Strings;
 
 class LiftedMatcher<T, U> extends TypeSafeDiagnosingMatcher<T> {
 
@@ -18,7 +19,7 @@ class LiftedMatcher<T, U> extends TypeSafeDiagnosingMatcher<T> {
     public void describeTo( final Description description ) {
         description
             .appendText( projectionName )
-            .appendText( "()=" )
+            .appendText( ifNamed( "()=" ) )
             .appendDescriptionOf( matcher );
     }
 
@@ -29,11 +30,15 @@ class LiftedMatcher<T, U> extends TypeSafeDiagnosingMatcher<T> {
         {
             mismatchDescription
                 .appendText( projectionName )
-                .appendText( "() " );
+                .appendText( ifNamed( "() " ) );
             matcher.describeMismatch( projectionValue, mismatchDescription );
             return false;
         }
         return true;
+    }
+
+    private String ifNamed( final String text ) {
+        return Strings.isNullOrEmpty( projectionName ) ? "" : text;
     }
 
     private final String projectionName;

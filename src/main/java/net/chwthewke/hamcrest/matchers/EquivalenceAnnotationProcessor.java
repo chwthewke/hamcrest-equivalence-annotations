@@ -1,6 +1,5 @@
 package net.chwthewke.hamcrest.matchers;
 
-import static com.google.common.base.Functions.compose;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.primitives.Primitives.wrap;
@@ -15,8 +14,6 @@ import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.Identity;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
-
-import com.google.common.base.Function;
 
 final class EquivalenceAnnotationProcessor<T, V> {
 
@@ -60,12 +57,13 @@ final class EquivalenceAnnotationProcessor<T, V> {
                 "The equivalence specification property %s bears %s, so it must have a type assignable to java.lang.Number.",
                 specification, ApproximateEquality.class.getSimpleName( ) ) );
 
-        final LiftOperator<T, Double> liftOperator =
-                liftWith( compose( toDouble, new ReadPropertyFunction<T, Number>( target, Number.class ) ) );
+        final LiftOperator<T, Number> liftOperator =
+                liftWith( new ReadPropertyFunction<T, Number>( target, Number.class ) );
 
         final double tolerance = getSpecificationAnnotation( ApproximateEquality.class ).tolerance( );
 
-        return liftOperator.liftEquivalence( specification.getName( ), equivalenceFactory.getApproximateEquality( tolerance ) );
+        return liftOperator.liftEquivalence(
+            specification.getName( ), equivalenceFactory.getApproximateEquality( tolerance ) );
     }
 
     private Equivalence<T> computeGenericEquivalence( ) {
@@ -116,12 +114,5 @@ final class EquivalenceAnnotationProcessor<T, V> {
     private final EquivalenceActivator equivalenceActivator = new EquivalenceActivator( );
     private final AnnotationTypeReader annotationTypeReader = new AnnotationTypeReader( );
     private final EquivalenceFactory equivalenceFactory = new EquivalenceFactory( );
-
-    private static final Function<Number, Double> toDouble =
-            new Function<Number, Double>( ) {
-                public Double apply( final Number input ) {
-                    return input == null ? null : input.doubleValue( );
-                }
-            };
 
 }
