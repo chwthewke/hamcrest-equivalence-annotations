@@ -23,7 +23,7 @@ public final class ApproximateEqualityEquivalence implements Equivalence<Number>
     private static final Function<Number, Double> DOUBLE_VALUE =
             new Function<Number, Double>( ) {
                 public Double apply( final Number input ) {
-                    return input == null ? null : input.doubleValue( );
+                    return input.doubleValue( );
                 }
             };
 }

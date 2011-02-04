@@ -7,15 +7,15 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 
-import net.chwthewke.hamcrest.matchers.sut.classes.DerivedFromPrivateProperty;
-import net.chwthewke.hamcrest.matchers.sut.classes.DerivedWithPackageLocalProperty;
-import net.chwthewke.hamcrest.matchers.sut.classes.DerivedWithProtectedProperty;
-import net.chwthewke.hamcrest.matchers.sut.classes.DerivedWithPublicProperty;
-import net.chwthewke.hamcrest.matchers.sut.classes.WithPackageLocalProperty;
-import net.chwthewke.hamcrest.matchers.sut.classes.WithPrivateProperty;
-import net.chwthewke.hamcrest.matchers.sut.classes.WithProtectedProperty;
-import net.chwthewke.hamcrest.matchers.sut.classes.WithPublicProperty;
-import net.chwthewke.hamcrest.matchers.sut.classes.isolated.IsolatedDerivedWithPackageLocalProperty;
+import net.chwthewke.hamcrest.sut.classes.DerivedFromPrivateProperty;
+import net.chwthewke.hamcrest.sut.classes.DerivedWithPackageLocalProperty;
+import net.chwthewke.hamcrest.sut.classes.DerivedWithProtectedProperty;
+import net.chwthewke.hamcrest.sut.classes.DerivedWithPublicProperty;
+import net.chwthewke.hamcrest.sut.classes.WithPackageLocalProperty;
+import net.chwthewke.hamcrest.sut.classes.WithPrivateProperty;
+import net.chwthewke.hamcrest.sut.classes.WithProtectedProperty;
+import net.chwthewke.hamcrest.sut.classes.WithPublicProperty;
+import net.chwthewke.hamcrest.sut.classes.isolated.IsolatedDerivedWithPackageLocalProperty;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -136,7 +136,7 @@ public class FindVisiblePropertyFunctionTest {
         catch ( final IllegalArgumentException e )
         {
             assertThat(
-                e.getMessage( ), is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.sut.classes." +
+                e.getMessage( ), is( equalTo( "The matched class net.chwthewke.hamcrest.sut.classes." +
                         "isolated.IsolatedDerivedWithPackageLocalProperty lacks the visible property 'getValue()'." ) ) );
         }
     }
@@ -167,7 +167,7 @@ public class FindVisiblePropertyFunctionTest {
         catch ( final IllegalArgumentException e )
         {
             assertThat(
-                e.getMessage( ), is( equalTo( "The matched class net.chwthewke.hamcrest.matchers.sut.classes." +
+                e.getMessage( ), is( equalTo( "The matched class net.chwthewke.hamcrest.sut.classes." +
                         "DerivedFromPrivateProperty lacks the visible property 'getValue()'." ) ) );
         }
     }
