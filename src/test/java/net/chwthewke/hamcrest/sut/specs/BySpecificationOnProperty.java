@@ -1,9 +1,9 @@
-package net.chwthewke.hamcrest.matchers.sut.specs;
+package net.chwthewke.hamcrest.sut.specs;
 
 import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
-import net.chwthewke.hamcrest.matchers.sut.classes.WithPropertyWithDefinedEquivalence;
-import net.chwthewke.hamcrest.matchers.sut.classes.WithPublicProperty;
+import net.chwthewke.hamcrest.sut.classes.WithPropertyWithDefinedEquivalence;
+import net.chwthewke.hamcrest.sut.classes.WithPublicProperty;
 
 @EquivalenceSpecificationOn( WithPropertyWithDefinedEquivalence.class )
 public interface BySpecificationOnProperty {

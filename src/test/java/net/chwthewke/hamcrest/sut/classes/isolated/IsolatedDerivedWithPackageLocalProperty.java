@@ -1,6 +1,6 @@
-package net.chwthewke.hamcrest.matchers.sut.classes.isolated;
+package net.chwthewke.hamcrest.sut.classes.isolated;
 
-import net.chwthewke.hamcrest.matchers.sut.classes.WithPackageLocalProperty;
+import net.chwthewke.hamcrest.sut.classes.WithPackageLocalProperty;
 
 public class IsolatedDerivedWithPackageLocalProperty extends WithPackageLocalProperty {
 

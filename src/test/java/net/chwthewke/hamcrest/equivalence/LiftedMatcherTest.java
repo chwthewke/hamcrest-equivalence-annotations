@@ -3,7 +3,7 @@ package net.chwthewke.hamcrest.equivalence;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import net.chwthewke.hamcrest.matchers.sut.classes.WithPublicProperty;
+import net.chwthewke.hamcrest.sut.classes.WithPublicProperty;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

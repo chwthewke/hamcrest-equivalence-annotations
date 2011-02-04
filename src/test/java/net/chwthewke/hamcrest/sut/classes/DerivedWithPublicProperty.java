@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.matchers.sut.classes;
+package net.chwthewke.hamcrest.sut.classes;
 
 public class DerivedWithPublicProperty extends WithPublicProperty {
 

@@ -10,7 +10,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
 
-public class GasTankAnnotatedMatcherTest {
+public class GasTankEquivalenceTest {
 
     private static Matcher<GasTank> gasTankLike( final GasTank expected ) {
         return asSpecifiedBy( GasTankEquivalence.class, GasTank.class ).equivalentTo( expected );

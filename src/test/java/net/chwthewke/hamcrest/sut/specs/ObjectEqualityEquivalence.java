@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.matchers.sut.specs;
+package net.chwthewke.hamcrest.sut.specs;
 
 import static org.hamcrest.Matchers.equalTo;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
