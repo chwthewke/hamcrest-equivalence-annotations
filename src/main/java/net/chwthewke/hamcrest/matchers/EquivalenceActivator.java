@@ -88,7 +88,8 @@ class EquivalenceActivator {
     }
 
     private String formatMisuse( final String format, final Object... arguments ) {
-        return String.format( "Bad use of @%s: %s", ByEquivalence.class, String.format( format, arguments ) );
+        return String.format( "Bad use of @%s: %s",
+            ByEquivalence.class.getSimpleName( ), String.format( format, arguments ) );
     }
 
     private <X> Constructor<X> getDefaultConstructor( final Class<X> clazz ) {
