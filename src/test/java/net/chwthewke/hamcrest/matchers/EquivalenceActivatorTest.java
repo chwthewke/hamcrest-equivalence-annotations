@@ -52,7 +52,9 @@ public class EquivalenceActivatorTest {
         }
         catch ( final IllegalArgumentException e )
         {
-            assertThat( e.getMessage( ), is( equalTo( "" ) ) );
+            assertThat( e.getMessage( ), is( equalTo( "Bad use of @ByEquivalence: " +
+                    "value class net.chwthewke.hamcrest.sut.equivalences.AbstractSimpleEquivalence " +
+                    "cannot be an abstract class." ) ) );
         }
     }
 }
