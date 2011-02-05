@@ -71,7 +71,7 @@ final class EquivalenceAnnotationProcessor<T, V> {
         if ( annotationType == ByEquivalence.class )
         {
             final ByEquivalence specificationAnnotation = getSpecificationAnnotation( ByEquivalence.class );
-            propertyEquivalence = equivalenceActivator
+            propertyEquivalence = equivalenceFactory
                 .createEquivalenceInstance( specificationAnnotation, specification, propertyType );
         }
         else if ( annotationType == BySpecification.class )
@@ -110,7 +110,6 @@ final class EquivalenceAnnotationProcessor<T, V> {
     private final Class<V> propertyType;
     private Class<? extends Annotation> annotationType;
 
-    private final EquivalenceActivator equivalenceActivator = new EquivalenceActivator( );
     private final AnnotationTypeReader annotationTypeReader = new AnnotationTypeReader( );
     private final EquivalenceFactory equivalenceFactory = new EquivalenceFactory( );
 

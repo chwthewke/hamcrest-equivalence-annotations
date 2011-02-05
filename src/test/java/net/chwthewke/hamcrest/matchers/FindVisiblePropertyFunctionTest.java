@@ -172,4 +172,23 @@ public class FindVisiblePropertyFunctionTest {
         }
     }
 
+    @Test
+    public void dontFindMissingMethod( ) throws Exception {
+        // Setup
+
+        // Exercise
+        try
+        {
+            findPropertyFunction.findPropertyMethod( Float.class, Object.class, "getFrob" );
+            // Verify
+            fail( );
+        }
+        catch ( final IllegalArgumentException e )
+        {
+            assertThat(
+                e.getMessage( ), is( equalTo( "The matched class java.lang." +
+                        "Float lacks the visible property 'getFrob()'." ) ) );
+        }
+    }
+
 }
