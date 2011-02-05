@@ -8,13 +8,6 @@ import com.google.common.base.Function;
 
 public final class LiftedEquivalence<T, U> implements Equivalence<T> {
 
-    public static <T, U> LiftedEquivalence<T, U> create(
-            final String propertyName,
-            final Function<T, U> propertyMethod,
-            final Equivalence<? super U> equivalence ) {
-        return new LiftedEquivalence<T, U>( propertyName, propertyMethod, equivalence );
-    }
-
     private LiftedEquivalence( final String propertyName,
                                  final Function<T, U> propertyMethod,
                                  final Equivalence<? super U> equivalence ) {
@@ -26,6 +19,13 @@ public final class LiftedEquivalence<T, U> implements Equivalence<T> {
     public Matcher<T> equivalentTo( final T expected ) {
         return new LiftedMatcher<T, U>( propertyName, propertyMethod,
                 equivalence.equivalentTo( propertyMethod.apply( expected ) ) );
+    }
+
+    public static <T, U> LiftedEquivalence<T, U> create(
+            final String propertyName,
+            final Function<T, U> propertyMethod,
+            final Equivalence<? super U> equivalence ) {
+        return new LiftedEquivalence<T, U>( propertyName, propertyMethod, equivalence );
     }
 
     private final String propertyName;
