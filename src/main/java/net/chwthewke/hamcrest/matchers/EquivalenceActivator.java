@@ -8,6 +8,8 @@ import java.lang.reflect.Modifier;
 import net.chwthewke.hamcrest.annotations.ByEquivalence;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
+import org.hamcrest.internal.ReflectiveTypeFinder;
+
 class EquivalenceActivator {
 
     public <V> Equivalence<V> createEquivalenceInstance( final ByEquivalence specificationAnnotation,
@@ -28,23 +30,14 @@ class EquivalenceActivator {
             throw new IllegalArgumentException(
                 formatMisuse( "value %s must be a public class.", equivalenceClass ) );
 
-        try
-        {
-            final Class<?> equivalenceType = equivalenceTypeFinder.findExpectedType( equivalenceClass );
-            if ( !equivalenceType.isAssignableFrom( propertyType ) )
-                throw new IllegalArgumentException(
+        final Class<?> equivalenceType = equivalenceTypeFinder.findExpectedType( equivalenceClass );
+        if ( !equivalenceType.isAssignableFrom( propertyType ) )
+            throw new IllegalArgumentException(
                         formatMisuse(
                             "value %s seems to implement %s<%s>, whereas property %s has type %s",
-                            ByEquivalence.class.getSimpleName( ), equivalenceClass.getName( ),
+                            equivalenceClass.getName( ),
                             Equivalence.class.getSimpleName( ), equivalenceType.getName( ),
                             specificationMethod.getName( ), propertyType ) );
-        }
-        catch ( final IllegalArgumentException e )
-        {
-            throw new IllegalArgumentException(
-                    formatMisuse( "%s is not a valid implementation of %s: %s",
-                        equivalenceClass.getName( ), Equivalence.class.getSimpleName( ), e.getMessage( ) ) );
-        }
 
     }
 
@@ -72,8 +65,8 @@ class EquivalenceActivator {
         catch ( final InvocationTargetException e )
         {
             throw new RuntimeException(
-                String.format( "Exception while calling the default constructor of %s.", equivalenceClass ),
-                e );
+                String.format( "%s while calling the default constructor of %s.",
+                    e.getTargetException( ).getClass( ).getSimpleName( ), equivalenceClass ), e );
         }
     }
 
@@ -81,7 +74,7 @@ class EquivalenceActivator {
             final Exception reflectiveException ) {
 
         final String message = String.format(
-            "Unexpected reflective exception while calling the default constructor of %s.",
+            "Unexpected reflective exception while invoking the default constructor of %s.",
             equivalenceClass );
 
         return new RuntimeException( message, reflectiveException );
