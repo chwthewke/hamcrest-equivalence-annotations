@@ -13,16 +13,30 @@ import net.chwthewke.hamcrest.sut.specs.ComplexSpecification;
 
 import org.hamcrest.Description;
 import org.hamcrest.StringDescription;
+import org.junit.Before;
 import org.junit.Test;
 
 public class CompositeEquivalenceTest {
+
+    private PropertyFinder propertyFinder;
+    private EquivalenceSpecificationValidator specificationValidator;
+
+    @Before
+    public void initializeUtilities( ) {
+        propertyFinder = new PropertyFinder( );
+        specificationValidator = new EquivalenceSpecificationValidator( );
+    }
 
     @Test
     public void equivalenceFromComplexSpecification( ) throws Exception {
         // Setup
         // Exercise
         final Equivalence<WithPublicProperty> equivalence =
-                CompositeEquivalence.asSpecifiedBy( ComplexSpecification.class, WithPublicProperty.class );
+                new CompositeEquivalence<WithPublicProperty>(
+                    propertyFinder,
+                    specificationValidator,
+                    WithPublicProperty.class,
+                    ComplexSpecification.class );
 
         // Verify
         final Description description = new StringDescription( );
@@ -40,9 +54,11 @@ public class CompositeEquivalenceTest {
         // Exercise
         try
         {
-            CompositeEquivalence.asSpecifiedBy(
-                SpecificationWithAnnotationMismatch.class,
-                Matched.class );
+            new CompositeEquivalence<Matched>(
+                propertyFinder,
+                specificationValidator,
+                Matched.class,
+                SpecificationWithAnnotationMismatch.class );
             // Verify
             fail( );
         }
@@ -62,9 +78,11 @@ public class CompositeEquivalenceTest {
         // Exercise
         try
         {
-            CompositeEquivalence.asSpecifiedBy(
-                SpecificationWithMisnamedMethod.class,
-                Matched.class );
+            new CompositeEquivalence<Matched>(
+                propertyFinder,
+                specificationValidator,
+                Matched.class,
+                SpecificationWithMisnamedMethod.class );
             // Verify
             fail( );
         }
