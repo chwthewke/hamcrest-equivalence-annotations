@@ -19,13 +19,13 @@ class FindVisiblePropertyFunction extends FindPropertyFunction {
 
             if ( isVisible( method.getDeclaringClass( ), clazz, method.getModifiers( ) ) )
                 return method;
-            
-            return raisePropertyNotFound( null, clazz, propertyName, VISIBLE_QUALIFIER );
+
+            throw propertyNotFoundException( null, clazz, propertyName, VISIBLE_QUALIFIER );
 
         }
         catch ( final NoSuchMethodException e )
         {
-            return raisePropertyNotFound( e, clazz, propertyName, VISIBLE_QUALIFIER );
+            throw propertyNotFoundException( e, clazz, propertyName, VISIBLE_QUALIFIER );
         }
     }
 

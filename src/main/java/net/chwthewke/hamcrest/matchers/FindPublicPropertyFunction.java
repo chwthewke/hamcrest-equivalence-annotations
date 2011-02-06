@@ -15,7 +15,7 @@ class FindPublicPropertyFunction extends FindPropertyFunction {
         }
         catch ( final NoSuchMethodException e )
         {
-            return raisePropertyNotFound( e, clazz, propertyName, PUBLIC_QUALIFIER );
+            throw propertyNotFoundException( e, clazz, propertyName, PUBLIC_QUALIFIER );
         }
     }
 
