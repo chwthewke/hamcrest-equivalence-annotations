@@ -8,13 +8,33 @@ import static org.junit.Assert.fail;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
+import net.chwthewke.hamcrest.sut.classes.WithPublicProperty;
+import net.chwthewke.hamcrest.sut.specs.ComplexSpecification;
 
+import org.hamcrest.Description;
+import org.hamcrest.StringDescription;
 import org.junit.Test;
 
-public class CompositeMatcherFactoryTest {
+public class CompositeEquivalenceTest {
 
     @Test
-    public void equivalenceSpecificationAnnotationMismatch() throws Exception {
+    public void equivalenceFromComplexSpecification( ) throws Exception {
+        // Setup
+        // Exercise
+        final Equivalence<WithPublicProperty> equivalence =
+                CompositeEquivalence.asSpecifiedBy( ComplexSpecification.class, WithPublicProperty.class );
+
+        // Verify
+        final Description description = new StringDescription( );
+        equivalence.equivalentTo( new WithPublicProperty( "123" ) ).describeTo( description );
+        assertThat(
+            description.toString( ),
+            is( equalTo( "a WithPublicProperty with getIntValue()=<123>, getValue()=\"123\"" ) ) );
+
+    }
+
+    @Test
+    public void equivalenceSpecificationAnnotationMismatch( ) throws Exception {
         // Setup
 
         // Exercise
@@ -31,13 +51,13 @@ public class CompositeMatcherFactoryTest {
             assertThat(
                 e.getMessage( ),
                 is( equalTo( "The EquivalenceSpecificationOn annotation on net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithAnnotationMismatch must " +
-                        "have a value of net.chwthewke.hamcrest.matchers.CompositeMatcherFactoryTest$Matched." ) ) );
+                        "CompositeEquivalenceTest$SpecificationWithAnnotationMismatch must " +
+                        "have a value of net.chwthewke.hamcrest.matchers.CompositeEquivalenceTest$Matched." ) ) );
         }
     }
 
     @Test
-    public void equivalenceSpecificationTargetsMissingMethod() throws Exception {
+    public void equivalenceSpecificationTargetsMissingMethod( ) throws Exception {
         // Setup
         // Exercise
         try
@@ -54,14 +74,14 @@ public class CompositeMatcherFactoryTest {
                 e.getMessage( ),
                 is( equalTo( "Error while binding specification method " +
                         "[public abstract java.lang.String net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithMisnamedMethod.value()]: " +
-                        "The matched class net.chwthewke.hamcrest.matchers.CompositeMatcherFactoryTest$Matched" +
+                        "CompositeEquivalenceTest$SpecificationWithMisnamedMethod.value()]: " +
+                        "The matched class net.chwthewke.hamcrest.matchers.CompositeEquivalenceTest$Matched" +
                         " lacks the public property 'value()'." ) ) );
         }
     }
 
     @Test
-    public void equivalenceSpecificationTargetsMethodWithArguments() throws Exception {
+    public void equivalenceSpecificationTargetsMethodWithArguments( ) throws Exception {
         // Setup
 
         // Exercise
@@ -80,14 +100,14 @@ public class CompositeMatcherFactoryTest {
                 e.getMessage( ),
                 is( equalTo( "Error while binding specification method " +
                         "[public abstract java.lang.String net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithArgumentsMismatch.compute()]: " +
-                        "The matched class net.chwthewke.hamcrest.matchers.CompositeMatcherFactoryTest$Matched " +
+                        "CompositeEquivalenceTest$SpecificationWithArgumentsMismatch.compute()]: " +
+                        "The matched class net.chwthewke.hamcrest.matchers.CompositeEquivalenceTest$Matched " +
                         "lacks the public property 'compute()'." ) ) );
         }
     }
 
     @Test
-    public void equivalenceSpecificationHasIncompatibleReturnType() throws Exception {
+    public void equivalenceSpecificationHasIncompatibleReturnType( ) throws Exception {
         // Setup
 
         // Exercise
@@ -106,15 +126,15 @@ public class CompositeMatcherFactoryTest {
                 e.getMessage( ),
                 is( equalTo( "Error while binding specification method " +
                         "[public abstract java.lang.Integer net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithReturnTypeMismatch.getValue()]: " +
+                        "CompositeEquivalenceTest$SpecificationWithReturnTypeMismatch.getValue()]: " +
                         "The property 'getValue()' on net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$Matched " +
+                        "CompositeEquivalenceTest$Matched " +
                         "has return type java.lang.String which is not assignable to java.lang.Integer." ) ) );
         }
     }
 
     @Test
-    public void equivalenceSpecificationTargetsPrivateProperty() throws Exception {
+    public void equivalenceSpecificationTargetsPrivateProperty( ) throws Exception {
         // Setup
 
         // Exercise
@@ -133,9 +153,9 @@ public class CompositeMatcherFactoryTest {
                 e.getMessage( ),
                 is( equalTo( "Error while binding specification method " +
                         "[public abstract int net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$SpecificationWithPrivateProperty.getId()]: " +
+                        "CompositeEquivalenceTest$SpecificationWithPrivateProperty.getId()]: " +
                         "The matched class net.chwthewke.hamcrest.matchers." +
-                        "CompositeMatcherFactoryTest$Matched lacks the public property 'getId()'." ) ) );
+                        "CompositeEquivalenceTest$Matched lacks the public property 'getId()'." ) ) );
 
         }
     }
@@ -156,7 +176,7 @@ public class CompositeMatcherFactoryTest {
             assertThat(
                 e.getMessage( ),
                 is( equalTo( "Exception while reading property getException on instance of " +
-                        "net.chwthewke.hamcrest.matchers.CompositeMatcherFactoryTest$Matched." ) ) );
+                        "net.chwthewke.hamcrest.matchers.CompositeEquivalenceTest$Matched." ) ) );
         }
 
     }

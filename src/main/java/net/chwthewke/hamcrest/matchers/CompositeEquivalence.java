@@ -19,7 +19,7 @@ import com.google.common.collect.Ordering;
 
 class CompositeEquivalence<T> implements Equivalence<T> {
 
-    // extract static methods to caller, restore dependency sanity
+    // TODO extract static methods to caller, restore dependency sanity
     static <T> Equivalence<T> asSpecifiedBy(
             final Class<?> matcherSpecification,
             final Class<T> matchedClass ) {
@@ -75,6 +75,7 @@ class CompositeEquivalence<T> implements Equivalence<T> {
 
         final List<Method> methods = newArrayList( matcherSpecification.getMethods( ) );
 
+        // TODO coverage
         Collections.sort( methods, Ordering.<String>natural( ).onResultOf( new Function<Method, String>( ) {
             public String apply( final Method method ) {
                 return method.getName( );
