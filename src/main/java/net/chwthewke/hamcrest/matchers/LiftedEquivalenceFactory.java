@@ -11,7 +11,7 @@ class LiftedEquivalenceFactory {
             final String propertyName,
             final Function<T, U> propertyMethod,
             final Equivalence<? super U> equivalence ) {
-        return LiftedEquivalence.create( propertyName, propertyMethod, equivalence );
+        return new LiftedEquivalence<T, U>( propertyName, propertyMethod, equivalence );
     }
 
 }

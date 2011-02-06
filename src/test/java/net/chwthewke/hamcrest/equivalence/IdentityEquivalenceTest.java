@@ -1,8 +1,8 @@
 package net.chwthewke.hamcrest.equivalence;
 
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.equates;
+import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.separates;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
 
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class IdentityEquivalenceTest {
         final IdentityEquivalence<V> equivalence = new IdentityEquivalence<V>( );
         // Exercise
         // Verify
-        assertThat( equivalence, not( equates( v1, v2 ) ) );
+        assertThat( equivalence, separates( v1, v2 ) );
     }
 
     private static class V {

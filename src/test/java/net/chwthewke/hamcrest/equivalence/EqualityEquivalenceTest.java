@@ -2,8 +2,8 @@ package net.chwthewke.hamcrest.equivalence;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.equates;
+import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.separates;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
 
 import java.util.Collection;
 
@@ -44,6 +44,6 @@ public class EqualityEquivalenceTest {
         // Exercise
 
         // Verify
-        assertThat( equivalence, not( equates( "a", "b" ) ) );
+        assertThat( equivalence, separates( "a", "b" ) );
     }
 }
