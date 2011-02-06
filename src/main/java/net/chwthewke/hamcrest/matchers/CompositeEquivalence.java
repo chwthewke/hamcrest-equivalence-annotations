@@ -19,28 +19,6 @@ import com.google.common.collect.Ordering;
 
 class CompositeEquivalence<T> implements Equivalence<T> {
 
-    // TODO extract static methods to caller, restore dependency sanity
-    static <T> Equivalence<T> asSpecifiedBy(
-            final Class<?> matcherSpecification,
-            final Class<T> matchedClass ) {
-
-        return new CompositeEquivalence<T>(
-                propertyFinderInstance,
-                specificationValidatorInstance,
-                matchedClass,
-                matcherSpecification );
-    }
-
-    @SuppressWarnings( "unchecked" )
-    static <T> Equivalence<T> asSpecifiedBy(
-            final Class<? extends EquivalenceSpecification<T>> matcherSpecification ) {
-
-        specificationValidatorInstance.validateSpecificationInterface( matcherSpecification );
-
-        return asSpecifiedBy( matcherSpecification,
-            (Class<T>) matcherSpecification.getAnnotation( EquivalenceSpecificationOn.class ).value( ) );
-    }
-
     CompositeEquivalence(
             final PropertyFinder propertyFinder,
             final EquivalenceSpecificationValidator specificationValidator,
@@ -131,8 +109,5 @@ class CompositeEquivalence<T> implements Equivalence<T> {
     private final Class<T> matchedClass;
     private final Class<?> matcherSpecification;
     private final List<Equivalence<T>> propertyEquivalences = newArrayList( );
-
-    private static final PropertyFinder propertyFinderInstance = new PropertyFinder( );
-    private static final EquivalenceSpecificationValidator specificationValidatorInstance = new EquivalenceSpecificationValidator( );
 
 }
