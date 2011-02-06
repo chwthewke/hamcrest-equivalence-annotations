@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.sample;
+package net.chwthewke.hamcrest.gas;
 
 public class GasTank {
 

@@ -1,4 +1,4 @@
-package net.chwthewke.hamcrest.sample;
+package net.chwthewke.hamcrest.gas;
 
 import net.chwthewke.hamcrest.annotations.ApproximateEquality;
 import net.chwthewke.hamcrest.annotations.Equality;

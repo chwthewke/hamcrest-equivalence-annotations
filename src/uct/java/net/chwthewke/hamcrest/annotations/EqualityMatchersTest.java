@@ -3,11 +3,13 @@ package net.chwthewke.hamcrest.annotations;
 import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import net.chwthewke.hamcrest.annotations.Equality;
+import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
 import net.chwthewke.hamcrest.matchers.EquivalenceSpecification;
 
 import org.junit.Test;
 
-public class IdentityMatchersTest {
+public class EqualityMatchersTest {
 
     @Test
     public void identicalReferencesMatch( ) throws Exception {
@@ -24,7 +26,7 @@ public class IdentityMatchersTest {
     }
 
     @Test
-    public void equalButNotIdenticalReferencesDoNotMatch( ) throws Exception {
+    public void equalButNotIdenticalReferencesAlsoMatch( ) throws Exception {
         // Setup
         final Matched first = new Matched( new IntHolder( 12 ) );
         final Matched second = new Matched( new IntHolder( 12 ) );
@@ -36,7 +38,7 @@ public class IdentityMatchersTest {
             .equivalentTo( first )
             .matches( second );
         // Verify
-        assertThat( match, is( false ) );
+        assertThat( match, is( true ) );
     }
 
     public static class Matched {
@@ -54,7 +56,7 @@ public class IdentityMatchersTest {
 
     @EquivalenceSpecificationOn( Matched.class )
     public static interface MatchingSpecification extends EquivalenceSpecification<Matched> {
-        @Identity
+        @Equality
         IntHolder getHolder( );
     }
 

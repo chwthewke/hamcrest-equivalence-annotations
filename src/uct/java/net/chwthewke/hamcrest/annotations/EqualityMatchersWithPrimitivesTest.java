@@ -7,6 +7,10 @@ import static org.hamcrest.Matchers.is;
 
 import java.lang.reflect.Method;
 
+import net.chwthewke.hamcrest.annotations.Equality;
+import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
+import net.chwthewke.hamcrest.annotations.Identity;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
