@@ -1,42 +1,17 @@
 package net.chwthewke.hamcrest.equivalence;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 import java.util.Collection;
+import java.util.List;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.internal.ReflectiveTypeFinder;
 
 import com.google.common.collect.Lists;
 
 public class EquivalenceClassMatchers {
-
-    public static <T> Matcher<Equivalence<?>> equivalenceOf( final Class<?> matchedType ) {
-        return new EquivalenceTypeParameterMatcher( matchedType );
-    }
-
-    private static class EquivalenceTypeParameterMatcher extends TypeSafeMatcher<Equivalence<?>> {
-
-        EquivalenceTypeParameterMatcher( final Class<?> type ) {
-            this.type = type;
-        }
-
-        public void describeTo( final Description description ) {
-            description
-                .appendText( "an instance implementing Equivalence<" )
-                .appendText( type.getSimpleName( ) )
-                .appendText( ">" );
-        }
-
-        @Override
-        protected boolean matchesSafely( final Equivalence<?> item ) {
-            return typeFinder.findExpectedType( item.getClass( ) ) == type;
-        }
-
-        private final Class<?> type;
-        private static final ReflectiveTypeFinder typeFinder = new ReflectiveTypeFinder( "equivalentTo", 1, 0 );
-    }
 
     public static <T> Matcher<Equivalence<T>> equates( final T first, final T second, final T... others ) {
         return new EquatesMatcher<T>( true, Lists.asList( first, second, others ) );
@@ -58,9 +33,15 @@ public class EquivalenceClassMatchers {
         @Override
         protected boolean matchesSafely( final Equivalence<T> item, final Description mismatchDescription ) {
             boolean match = true;
-            for ( final T leftItem : expectedlyEquivalents )
-                for ( final T rightItem : expectedlyEquivalents )
+
+            final int size = expectedlyEquivalents.size( );
+            for ( int i = 0; i < size; ++i )
+                for ( int j = 0; j < i; ++j )
                 {
+
+                    final T leftItem = expectedlyEquivalents.get( j );
+                    final T rightItem = expectedlyEquivalents.get( i );
+
                     if ( !testForEquivalence ^ item.equivalentTo( leftItem ).matches( rightItem ) )
                         continue;
 
@@ -78,11 +59,11 @@ public class EquivalenceClassMatchers {
 
         EquatesMatcher( final boolean testForEquivalence, final Collection<T> expectedlyEquivalents ) {
             this.testForEquivalence = testForEquivalence;
-            this.expectedlyEquivalents = expectedlyEquivalents;
+            this.expectedlyEquivalents = newArrayList( expectedlyEquivalents );
         }
 
         private final boolean testForEquivalence;
-        private final Collection<T> expectedlyEquivalents;
+        private final List<T> expectedlyEquivalents;
 
     }
 }

@@ -3,6 +3,7 @@ package net.chwthewke.hamcrest.matchers;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 
 final class ReadPropertyFunction<T, U> implements Function<T, U> {
@@ -51,6 +52,11 @@ final class ReadPropertyFunction<T, U> implements Function<T, U> {
                             propertyType.getName( ), rawProperty.getClass( ).getName( ) ),
                     e );
         }
+    }
+
+    @VisibleForTesting
+    Method getProperty( ) {
+        return property;
     }
 
     private final Method property;

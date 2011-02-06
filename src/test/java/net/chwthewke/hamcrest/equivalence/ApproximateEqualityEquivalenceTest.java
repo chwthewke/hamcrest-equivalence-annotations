@@ -1,7 +1,6 @@
 package net.chwthewke.hamcrest.equivalence;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
 
 import org.junit.Test;
 
@@ -22,7 +21,7 @@ public class ApproximateEqualityEquivalenceTest {
         // Exercise
         // Verify
         assertThat( equivalence,
-            not( EquivalenceClassMatchers.<Number>equates( 15d, 14.999998d ) ) );
+            EquivalenceClassMatchers.<Number>separates( 15d, 14.999998d ) );
     }
 
     @Test( expected = IllegalArgumentException.class )
