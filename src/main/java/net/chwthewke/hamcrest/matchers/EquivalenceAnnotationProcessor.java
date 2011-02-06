@@ -22,13 +22,19 @@ final class EquivalenceAnnotationProcessor<T> {
                     @SuppressWarnings( "unused" ) final Class<T> sourceType,
                     final Method specification,
                     final Method target ) {
-        return new EquivalenceAnnotationProcessor<T>( new LiftedEquivalenceFactory( ), specification, target );
+        return new EquivalenceAnnotationProcessor<T>(
+                new LiftedEquivalenceFactory( ), new EquivalenceFactory( ), new AnnotationTypeReader( ),
+                specification, target );
     }
 
     @VisibleForTesting
     EquivalenceAnnotationProcessor( final LiftedEquivalenceFactory liftedEquivalenceFactory,
+            final EquivalenceFactory equivalenceFactory,
+            final AnnotationTypeReader annotationTypeReader,
             final Method specification, final Method target ) {
         this.liftedEquivalenceFactory = liftedEquivalenceFactory;
+        this.equivalenceFactory = equivalenceFactory;
+        this.annotationTypeReader = annotationTypeReader;
         this.specification = specification;
         this.target = target;
     }
@@ -109,7 +115,7 @@ final class EquivalenceAnnotationProcessor<T> {
     private Class<? extends Annotation> annotationType;
 
     private final LiftedEquivalenceFactory liftedEquivalenceFactory;
-    private final AnnotationTypeReader annotationTypeReader = new AnnotationTypeReader( );
-    private final EquivalenceFactory equivalenceFactory = new EquivalenceFactory( );
+    private final AnnotationTypeReader annotationTypeReader;
+    private final EquivalenceFactory equivalenceFactory;
 
 }
