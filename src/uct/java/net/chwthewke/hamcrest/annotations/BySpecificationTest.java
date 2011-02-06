@@ -4,6 +4,9 @@ import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import net.chwthewke.hamcrest.annotations.BySpecification;
+import net.chwthewke.hamcrest.annotations.Equality;
+import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
 import net.chwthewke.hamcrest.matchers.EquivalenceSpecification;
 
 import org.hamcrest.Description;

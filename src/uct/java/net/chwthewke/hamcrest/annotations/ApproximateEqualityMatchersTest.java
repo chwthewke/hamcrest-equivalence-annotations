@@ -3,6 +3,8 @@ package net.chwthewke.hamcrest.annotations;
 import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import net.chwthewke.hamcrest.annotations.ApproximateEquality;
+import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
 import net.chwthewke.hamcrest.matchers.EquivalenceSpecification;
 
 import org.hamcrest.Matcher;
