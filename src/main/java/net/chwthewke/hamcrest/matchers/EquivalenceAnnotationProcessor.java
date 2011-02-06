@@ -15,25 +15,16 @@ import net.chwthewke.hamcrest.annotations.Identity;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 import net.chwthewke.hamcrest.equivalence.LiftedEquivalence;
 
-final class EquivalenceAnnotationProcessor<T, V> {
+final class EquivalenceAnnotationProcessor<T> {
 
-    public static <T> EquivalenceAnnotationProcessor<T, ?> annotationProcessorFor(
-                    final Class<T> sourceType,
-                    final Method specification,
-                    final Method target ) {
-        return annotationProcessorFor( sourceType, wrap( specification.getReturnType( ) ), specification, target );
-    }
-
-    private static <T, V> EquivalenceAnnotationProcessor<T, V> annotationProcessorFor(
+    public static <T> EquivalenceAnnotationProcessor<T> annotationProcessorFor(
                     @SuppressWarnings( "unused" ) final Class<T> sourceType,
-                    final Class<V> propertyType,
                     final Method specification,
                     final Method target ) {
-        return new EquivalenceAnnotationProcessor<T, V>( propertyType, specification, target );
+        return new EquivalenceAnnotationProcessor<T>( specification, target );
     }
 
-    private EquivalenceAnnotationProcessor( final Class<V> propertyType, final Method specification, final Method target ) {
-        this.propertyType = propertyType;
+    private EquivalenceAnnotationProcessor( final Method specification, final Method target ) {
         this.specification = specification;
         this.target = target;
     }
@@ -47,12 +38,12 @@ final class EquivalenceAnnotationProcessor<T, V> {
             return computeApproximateEqualityEquivalence( );
         }
 
-        return computeGenericEquivalence( );
+        return computeGenericEquivalence( propertyType( ) );
     }
 
     private Equivalence<T> computeApproximateEqualityEquivalence( ) {
         checkArgument(
-            Number.class.isAssignableFrom( propertyType ),
+            Number.class.isAssignableFrom( propertyType( ) ),
             String.format(
                 "The equivalence specification property %s bears %s, so it must have a type assignable to java.lang.Number.",
                 specification, ApproximateEquality.class.getSimpleName( ) ) );
@@ -64,7 +55,7 @@ final class EquivalenceAnnotationProcessor<T, V> {
             equivalenceFactory.getApproximateEquality( tolerance ) );
     }
 
-    private Equivalence<T> computeGenericEquivalence( ) {
+    private <V> Equivalence<T> computeGenericEquivalence( final Class<V> type ) {
 
         final Equivalence<V> propertyEquivalence;
 
@@ -72,13 +63,13 @@ final class EquivalenceAnnotationProcessor<T, V> {
         {
             final ByEquivalence specificationAnnotation = getSpecificationAnnotation( ByEquivalence.class );
             propertyEquivalence = equivalenceFactory
-                .createEquivalenceInstance( specificationAnnotation, specification, propertyType );
+                .createEquivalenceInstance( specificationAnnotation, specification, type );
         }
         else if ( annotationType == BySpecification.class )
         {
             final Class<?> subSpecification = getSpecificationAnnotation( BySpecification.class ).value( );
             propertyEquivalence =
-                    equivalenceFactory.getEquivalenceFromSpecification( propertyType, subSpecification );
+                    equivalenceFactory.getEquivalenceFromSpecification( type, subSpecification );
         }
         else if ( annotationType == Identity.class && !specification.getReturnType( ).isPrimitive( ) )
         {
@@ -95,7 +86,7 @@ final class EquivalenceAnnotationProcessor<T, V> {
         }
 
         return LiftedEquivalence.create( specification.getName( ),
-            new ReadPropertyFunction<T, V>( target, propertyType ),
+            new ReadPropertyFunction<T, V>( target, type ),
             propertyEquivalence );
     }
 
@@ -104,10 +95,13 @@ final class EquivalenceAnnotationProcessor<T, V> {
         return specification.getAnnotation( annotationClass );
     }
 
+    private Class<?> propertyType( ) {
+        return wrap( specification.getReturnType( ) );
+    }
+
     private final Method specification;
     private final Method target;
 
-    private final Class<V> propertyType;
     private Class<? extends Annotation> annotationType;
 
     private final AnnotationTypeReader annotationTypeReader = new AnnotationTypeReader( );
