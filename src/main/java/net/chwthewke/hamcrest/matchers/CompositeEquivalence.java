@@ -88,7 +88,7 @@ class CompositeEquivalence<T> implements Equivalence<T> {
 
         final Method property = findMatchingProperty( specificationMethod );
 
-        final EquivalenceAnnotationProcessor<T, ?> processor =
+        final EquivalenceAnnotationProcessor<T> processor =
                 annotationProcessorFor( matchedClass, specificationMethod, property );
 
         final Equivalence<T> propertyEquivalence =
