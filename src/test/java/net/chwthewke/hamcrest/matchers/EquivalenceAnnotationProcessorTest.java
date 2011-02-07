@@ -64,7 +64,7 @@ public class EquivalenceAnnotationProcessorTest {
     @Before
     public void setupDependencies( ) {
         initMocks( this );
-        when( liftedEquivalenceFactory.create( anyString( ), any( Function.class ), any( Equivalence.class ) ) )
+        when( liftedEquivalenceFactory.create( anyString( ), any( Equivalence.class ), any( Function.class ) ) )
             .thenReturn( token );
 
         equivalenceFactory = new EquivalenceFactory( );
@@ -85,7 +85,7 @@ public class EquivalenceAnnotationProcessorTest {
         final Equivalence<WithPublicProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
         // Verify
         verify( liftedEquivalenceFactory )
-            .create( eq( "getValue" ), functionOf( target ), any( EqualityEquivalence.class ) );
+            .create( eq( "getValue" ), any( EqualityEquivalence.class ), functionOf( target ) );
 
         assertThat( equivalence, is( sameInstance( (Equivalence<WithPublicProperty>) token ) ) );
     }
@@ -104,7 +104,7 @@ public class EquivalenceAnnotationProcessorTest {
         final Equivalence<WithObjectProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
         // Verify
         verify( liftedEquivalenceFactory )
-            .create( eq( "getValue" ), functionOf( target ), any( IdentityEquivalence.class ) );
+            .create( eq( "getValue" ), any( IdentityEquivalence.class ), functionOf( target ) );
 
         assertThat( equivalence, is( sameInstance( (Equivalence<WithObjectProperty>) token ) ) );
     }
@@ -123,7 +123,7 @@ public class EquivalenceAnnotationProcessorTest {
         final Equivalence<WithPublicProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
         // Verify
         verify( liftedEquivalenceFactory )
-            .create( eq( "getIntValue" ), functionOf( target ), any( EqualityEquivalence.class ) );
+            .create( eq( "getIntValue" ), any( EqualityEquivalence.class ), functionOf( target ) );
 
         assertThat( equivalence, is( sameInstance( (Equivalence<WithPublicProperty>) token ) ) );
     }
@@ -143,8 +143,8 @@ public class EquivalenceAnnotationProcessorTest {
         // Verify
         verify( liftedEquivalenceFactory )
             .create( eq( "getValue" ),
-                EquivalenceAnnotationProcessorTest.<WithDoubleProperty, Double>functionOf( target ),
-                (Equivalence<Number>) equivalenceCaptor.capture( ) );
+                (Equivalence<Number>) equivalenceCaptor.capture( ),
+                EquivalenceAnnotationProcessorTest.<WithDoubleProperty, Double>functionOf( target ) );
 
         final Equivalence<Number> capturedEquivalence = (Equivalence<Number>) equivalenceCaptor.getValue( );
         assertThat( capturedEquivalence, is( instanceOf( ApproximateEqualityEquivalence.class ) ) );
@@ -170,8 +170,8 @@ public class EquivalenceAnnotationProcessorTest {
         verify( liftedEquivalenceFactory )
             .create(
                 eq( "getValue" ),
-                EquivalenceAnnotationProcessorTest.<WithPropertyWithDefinedEquivalence, WithPublicProperty>functionOf( target ),
-                (Equivalence<WithPublicProperty>) equivalenceCaptor.capture( ) );
+                (Equivalence<WithPublicProperty>) equivalenceCaptor.capture( ),
+                EquivalenceAnnotationProcessorTest.<WithPropertyWithDefinedEquivalence, WithPublicProperty>functionOf( target ) );
 
         final Equivalence<WithPublicProperty> capturedEquivalence = (Equivalence<WithPublicProperty>) equivalenceCaptor.getValue( );
         assertThat( capturedEquivalence, is( instanceOf( CompositeEquivalence.class ) ) );
@@ -197,7 +197,7 @@ public class EquivalenceAnnotationProcessorTest {
         final Equivalence<WithObjectProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
         // Verify
         verify( liftedEquivalenceFactory )
-            .create( eq( "getValue" ), functionOf( target ), any( ObjectEqualityEquivalence.class ) );
+            .create( eq( "getValue" ), any( ObjectEqualityEquivalence.class ), functionOf( target ) );
 
         assertThat( equivalence, is( sameInstance( (Equivalence<WithObjectProperty>) token ) ) );
     }

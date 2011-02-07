@@ -61,8 +61,8 @@ final class EquivalenceAnnotationProcessor<T> {
         final double tolerance = getSpecificationAnnotation( ApproximateEquality.class ).tolerance( );
 
         return liftedEquivalenceFactory.create( specification.getName( ),
-            new ReadPropertyFunction<T, Number>( target, Number.class ),
-            equivalenceFactory.getApproximateEquality( tolerance ) );
+            equivalenceFactory.getApproximateEquality( tolerance ),
+            new ReadPropertyFunction<T, Number>( target, Number.class ) );
     }
 
     private <V> Equivalence<T> computeGenericEquivalence( final Class<V> type ) {
@@ -96,8 +96,8 @@ final class EquivalenceAnnotationProcessor<T> {
         }
 
         return liftedEquivalenceFactory.create( specification.getName( ),
-            new ReadPropertyFunction<T, V>( target, type ),
-            propertyEquivalence );
+            propertyEquivalence,
+            new ReadPropertyFunction<T, V>( target, type ) );
     }
 
     private <A extends Annotation> A getSpecificationAnnotation( final Class<A> annotationClass ) {

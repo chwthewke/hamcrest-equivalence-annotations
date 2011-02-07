@@ -8,7 +8,8 @@ import java.lang.annotation.Target;
 /**
  * The {@link Identity} annotation specifies equivalence as reference equality (<code>==</code>).
  * <p>
- * Note: values of primitive types are boxed, then compared with {@link Object#equals(Object)}.
+ * It is interpreted into an instance of {@link net.chwthewke.hamcrest.equivalence.IdentityEquivalence}, except when used with a primitive
+ * type; then {@link net.chwthewke.hamcrest.equivalence.EqualityEquivalence} is used on boxed values.
  */
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.METHOD )
