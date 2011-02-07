@@ -12,12 +12,11 @@ import org.hamcrest.Matcher;
 /**
  * The {@link EqualityEquivalence} class defines equivalence as equality on {@link String}s
  * starting with strict equality that can be relaxed by a number of options defined by the nested
- * enum {@link Option}.
+ * enum {@link TextEquivalenceOption}.
  */
-public class TextEquivalence implements Equivalence<String> {
-
-    public TextEquivalence( final Option... options ) {
-        this.options = newEnumSet( newArrayList( options ), Option.class );
+class TextEquivalenceCore implements Equivalence<String> {
+    TextEquivalenceCore( final TextEquivalenceOption... options ) {
+        this.options = newEnumSet( newArrayList( options ), TextEquivalenceOption.class );
     }
 
     /**
@@ -28,21 +27,10 @@ public class TextEquivalence implements Equivalence<String> {
      * @return A {@link Matcher} that matches objects equivalent to <code>expected</code>.
      */
     public Matcher<String> equivalentTo( final String expected ) {
-        return options.contains( Option.IGNORE_CASE ) ?
+        return options.contains( TextEquivalenceOption.IGNORE_CASE ) ?
                 equalToIgnoringCase( expected ) :
                 equalTo( expected );
     }
 
-    private final Set<Option> options;
-
-    /**
-     * The options for TextEquivalence. These options can be combined, however some distinct
-     * combinations may be equivalent.
-     */
-    public enum Option {
-        IGNORE_CASE,
-        IGNORE_LEADING_WHITESPACE,
-        IGNORE_TRAILING_WHITESPACE,
-        IGNORE_WHITESPACE
-    }
+    private final Set<TextEquivalenceOption> options;
 }
