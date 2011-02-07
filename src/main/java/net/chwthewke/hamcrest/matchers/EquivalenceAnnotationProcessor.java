@@ -91,8 +91,8 @@ final class EquivalenceAnnotationProcessor<T> {
         }
         else
         {
-            throw new IllegalStateException( String.format( "Cannot process annotation %s of type %s.",
-                getSpecificationAnnotation( annotationType ), annotationType.getSimpleName( ) ) );
+            throw new IllegalStateException( String.format( "Cannot process annotation of type %s.",
+                annotationType.getSimpleName( ) ) );
         }
 
         return liftedEquivalenceFactory.create( specification.getName( ),

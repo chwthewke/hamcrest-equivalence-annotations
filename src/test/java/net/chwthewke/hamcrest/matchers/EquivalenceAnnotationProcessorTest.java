@@ -3,13 +3,17 @@ package net.chwthewke.hamcrest.matchers;
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.equates;
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.separates;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -196,6 +200,31 @@ public class EquivalenceAnnotationProcessorTest {
             .create( eq( "getValue" ), functionOf( target ), any( ObjectEqualityEquivalence.class ) );
 
         assertThat( equivalence, is( sameInstance( (Equivalence<WithObjectProperty>) token ) ) );
+    }
+
+    @Test
+    public void failsWithUnknownAnnotationType( ) throws Exception {
+        // Setup
+        final AnnotationTypeReader mockAnnotationTypeReader = mock( AnnotationTypeReader.class );
+        final Method specification = EqualityOnString.class.getMethod( "getValue" );
+        final Method target = WithPublicProperty.class.getMethod( "getValue" );
+        final EquivalenceAnnotationProcessor<WithPublicProperty> annotationProcessor =
+                new EquivalenceAnnotationProcessor<WithPublicProperty>(
+                    liftedEquivalenceFactory, equivalenceFactory, mockAnnotationTypeReader,
+                        specification, target );
+
+        doReturn( Override.class ).when( mockAnnotationTypeReader ).getEquivalenceAnnotationType( specification );
+        // Exercise
+        try
+        {
+            annotationProcessor.processEquivalenceSpecification( );
+            // Verify
+            fail( );
+        }
+        catch ( final IllegalStateException e )
+        {
+            assertThat( e.getMessage( ), is( equalTo( "Cannot process annotation of type Override." ) ) );
+        }
     }
 
     private static <T, V> Function<T, V> functionOf( final Method target ) {
