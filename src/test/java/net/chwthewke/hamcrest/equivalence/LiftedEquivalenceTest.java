@@ -16,7 +16,7 @@ public class LiftedEquivalenceTest {
     @Test
     public void equivalenceSucceedsOnProjectedValue( ) throws Exception {
         final Equivalence<WithPublicProperty> liftedEquivalence =
-                new LiftedEquivalence<WithPublicProperty, Integer>( "getIntValue", GET_INT_VALUE, new ApproximateEqualityEquivalence( 5d ) );
+                new LiftedEquivalence<WithPublicProperty, Integer>( "getIntValue", new ApproximateEqualityEquivalence( 5d ), GET_INT_VALUE );
         // Exercise
         // Verify
         assertThat( liftedEquivalence.equivalentTo( new WithPublicProperty( "123" ) )
@@ -26,7 +26,7 @@ public class LiftedEquivalenceTest {
     @Test
     public void equivalenceDescribesWithProjection( ) throws Exception {
         final Equivalence<WithPublicProperty> liftedEquivalence =
-                new LiftedEquivalence<WithPublicProperty, Integer>( "getIntValue", GET_INT_VALUE, new ApproximateEqualityEquivalence( 5d ) );
+                new LiftedEquivalence<WithPublicProperty, Integer>( "getIntValue", new ApproximateEqualityEquivalence( 5d ), GET_INT_VALUE );
         final Description description = new StringDescription( );
         // Exercise
         liftedEquivalence.equivalentTo( new WithPublicProperty( "123" ) )
@@ -38,7 +38,7 @@ public class LiftedEquivalenceTest {
     @Test
     public void equivalenceFailsOnProjectedValue( ) throws Exception {
         final Equivalence<WithPublicProperty> liftedEquivalence =
-                new LiftedEquivalence<WithPublicProperty, Integer>( "getIntValue", GET_INT_VALUE, new ApproximateEqualityEquivalence( 5d ) );
+                new LiftedEquivalence<WithPublicProperty, Integer>( "getIntValue", new ApproximateEqualityEquivalence( 5d ), GET_INT_VALUE );
         final Matcher<WithPublicProperty> equivalentTo = liftedEquivalence.equivalentTo( new WithPublicProperty( "123" ) );
         final Description description = new StringDescription( );
         final WithPublicProperty actual = new WithPublicProperty( "129" );

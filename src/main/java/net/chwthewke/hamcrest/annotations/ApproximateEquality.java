@@ -8,7 +8,9 @@ import java.lang.annotation.Target;
 /**
  * The {@link ApproximateEquality} annotation specifies equivalence as differing by less than its {@link #tolerance()} property.
  * <p>
- * Applies to properties of type {@link Float}, {@link Double} and their respective primitive variants.
+ * Applies to properties that return any subclass of {@link Number}, or their primitive equivalent.
+ * <p>
+ * It is interpreted into an instance of {@link net.chwthewke.hamcrest.equivalence.ApproximateEqualityEquivalence}.
  */
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.METHOD )

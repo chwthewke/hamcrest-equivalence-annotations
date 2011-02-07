@@ -8,7 +8,7 @@ import net.chwthewke.hamcrest.equivalence.EqualityEquivalence;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 import net.chwthewke.hamcrest.equivalence.IdentityEquivalence;
 
-public class EquivalenceFactory {
+class EquivalenceFactory {
 
     public Equivalence<Number> getApproximateEquality( final double tolerance ) {
         return new ApproximateEqualityEquivalence( tolerance );

@@ -9,9 +9,9 @@ class LiftedEquivalenceFactory {
 
     public <T, U> LiftedEquivalence<T, U> create(
             final String propertyName,
-            final Function<T, U> propertyMethod,
-            final Equivalence<? super U> equivalence ) {
-        return new LiftedEquivalence<T, U>( propertyName, propertyMethod, equivalence );
+            final Equivalence<? super U> equivalence,
+            final Function<T, U> propertyMethod ) {
+        return new LiftedEquivalence<T, U>( propertyName, equivalence, propertyMethod );
     }
 
 }
