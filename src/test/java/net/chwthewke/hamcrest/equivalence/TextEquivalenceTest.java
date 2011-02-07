@@ -21,4 +21,16 @@ public class TextEquivalenceTest {
         assertThat( textEquivalence, separates( "abc", "ABC", "a b c" ) );
     }
 
+    @Test
+    public void textEquivalenceIgnoringCase( ) throws Exception {
+        // Setup
+        textEquivalence = new TextEquivalence( TextEquivalence.Option.IGNORE_CASE );
+        // Exercise
+
+        // Verify
+        assertThat( textEquivalence, equates( "abc", "ABC", "AbC" ) );
+        assertThat( textEquivalence, equates( "é", "É" ) );
+        assertThat( textEquivalence, separates( "abc", "AB C", "a b c" ) );
+    }
+
 }
