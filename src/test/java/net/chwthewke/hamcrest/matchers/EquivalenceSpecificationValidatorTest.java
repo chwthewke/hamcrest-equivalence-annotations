@@ -19,7 +19,7 @@ public class EquivalenceSpecificationValidatorTest {
     }
 
     @Test
-    public void matchingSpecificationNotAnInterface( ) throws Exception {
+    public void equivalenceSpecificationNotAnInterface( ) throws Exception {
         // Setup
         // Exercise
         try
@@ -39,7 +39,7 @@ public class EquivalenceSpecificationValidatorTest {
     }
 
     @Test
-    public void matchingSpecificationNonPublicInterface( ) throws Exception {
+    public void equivalenceSpecificationNonPublicInterface( ) throws Exception {
         // Setup
 
         // Exercise
@@ -60,7 +60,7 @@ public class EquivalenceSpecificationValidatorTest {
     }
 
     @Test
-    public void matchingSpecificationMissingAnnotation( ) throws Exception {
+    public void equivalenceSpecificationMissingAnnotation( ) throws Exception {
         // Setup
 
         // Exercise
@@ -82,7 +82,27 @@ public class EquivalenceSpecificationValidatorTest {
     }
 
     @Test
-    public void matchingInterfaceHasVoidMethod( ) throws Exception {
+    public void equivalenceSpecificationIsEmpty( ) throws Exception {
+        // Setup
+
+        // Exercise
+        try
+        {
+            specificationValidator.validateSpecificationInterface( EmptySpecification.class );
+            // Verify
+            fail( );
+        }
+        catch ( final IllegalArgumentException e )
+        {
+            assertThat( e.getMessage( ), is( equalTo( "The 'equivalenceSpecification' " +
+                    "net.chwthewke.hamcrest.matchers." +
+                    "EquivalenceSpecificationValidatorTest$EmptySpecification " +
+                    "must have at least one method." ) ) );
+        }
+    }
+
+    @Test
+    public void equivalenceInterfaceHasVoidMethod( ) throws Exception {
         // Setup
         // Exercise
         try
@@ -105,7 +125,7 @@ public class EquivalenceSpecificationValidatorTest {
     }
 
     @Test
-    public void matchingInterfaceHasNonPropertyMethod( ) throws Exception {
+    public void equivalenceInterfaceHasNonPropertyMethod( ) throws Exception {
         // Setup
         // Exercise
         try
@@ -132,6 +152,10 @@ public class EquivalenceSpecificationValidatorTest {
 
     @EquivalenceSpecificationOn( Matched.class )
     public static class SpecificationNotAnInterface {
+    }
+
+    @EquivalenceSpecificationOn( Matched.class )
+    public static interface EmptySpecification {
     }
 
     @EquivalenceSpecificationOn( Matched.class )
