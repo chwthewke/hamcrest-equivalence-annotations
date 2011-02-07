@@ -1,6 +1,11 @@
 package net.chwthewke.hamcrest.equivalence;
 
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newEnumSet;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
+
+import java.util.Set;
 
 import org.hamcrest.Matcher;
 
@@ -11,6 +16,10 @@ import org.hamcrest.Matcher;
  */
 public class TextEquivalence implements Equivalence<String> {
 
+    public TextEquivalence( final Option... options ) {
+        this.options = newEnumSet( newArrayList( options ), Option.class );
+    }
+
     /**
      * Partial evaluation.
      * 
@@ -19,8 +28,12 @@ public class TextEquivalence implements Equivalence<String> {
      * @return A {@link Matcher} that matches objects equivalent to <code>expected</code>.
      */
     public Matcher<String> equivalentTo( final String expected ) {
-        return equalTo( expected );
+        return options.contains( Option.IGNORE_CASE ) ?
+                equalToIgnoringCase( expected ) :
+                equalTo( expected );
     }
+
+    private final Set<Option> options;
 
     /**
      * The options for TextEquivalence. These options can be combined, however some distinct
