@@ -13,6 +13,8 @@ class EquivalenceSpecificationValidator {
 
         checkMatcherOfAnnotation( equivalenceSpecification );
 
+        checkSpecificationIsNotEmpty( equivalenceSpecification );
+
         for ( final Method method : equivalenceSpecification.getMethods( ) )
             checkValidSpecificationProperty( method );
     }
@@ -37,6 +39,13 @@ class EquivalenceSpecificationValidator {
                     equivalenceSpecification.getName( ),
                     EquivalenceSpecificationOn.class.getSimpleName( ) ) );
         }
+    }
+
+    private void checkSpecificationIsNotEmpty( final Class<?> equivalenceSpecification ) {
+        if ( equivalenceSpecification.getMethods( ).length == 0 )
+            throw new IllegalArgumentException(
+                String.format( "The 'equivalenceSpecification' %s must have at least one method.",
+                    equivalenceSpecification.getName( ) ) );
     }
 
     private void checkValidSpecificationProperty( final Method method ) {
