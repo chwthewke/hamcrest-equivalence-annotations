@@ -14,7 +14,7 @@ public class TextEquivalenceTest {
     @Test
     public void exactEquivalenceEquatesEqualStringsOnly( ) throws Exception {
         // Setup
-        textEquivalence = new TextEquivalence( );
+        textEquivalence = TextEquivalence.textEquivalenceWith( );
         // Exercise
 
         // Verify
@@ -25,7 +25,7 @@ public class TextEquivalenceTest {
     @Test
     public void textEquivalenceIgnoringCase( ) throws Exception {
         // Setup
-        textEquivalence = new TextEquivalence( TextEquivalence.Option.IGNORE_CASE );
+        textEquivalence = TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
         // Exercise
 
         // Verify
@@ -38,7 +38,7 @@ public class TextEquivalenceTest {
     @Ignore( "WIP" )
     public void textEquivalenceIgnoringLeadingWhitespace( ) throws Exception {
         // Setup
-        textEquivalence = new TextEquivalence( TextEquivalence.Option.IGNORE_LEADING_WHITESPACE );
+        textEquivalence = TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_LEADING_WHITESPACE );
         // Exercise
 
         // Verify
