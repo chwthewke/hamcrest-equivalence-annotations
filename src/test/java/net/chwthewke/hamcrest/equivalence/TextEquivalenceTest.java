@@ -4,6 +4,7 @@ import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.equate
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.separates;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TextEquivalenceTest {
@@ -31,6 +32,18 @@ public class TextEquivalenceTest {
         assertThat( textEquivalence, equates( "abc", "ABC", "AbC" ) );
         assertThat( textEquivalence, equates( "é", "É" ) );
         assertThat( textEquivalence, separates( "abc", "AB C", "a b c" ) );
+    }
+
+    @Test
+    @Ignore( "WIP" )
+    public void textEquivalenceIgnoringLeadingWhitespace( ) throws Exception {
+        // Setup
+        textEquivalence = new TextEquivalence( TextEquivalence.Option.IGNORE_LEADING_WHITESPACE );
+        // Exercise
+
+        // Verify
+        assertThat( textEquivalence, equates( "abc", "  abc", "\tabc" ) );
+        assertThat( textEquivalence, separates( "abc", " abc ", "a b c" ) );
     }
 
 }
