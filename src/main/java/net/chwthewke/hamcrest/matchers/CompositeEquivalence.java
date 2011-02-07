@@ -53,7 +53,6 @@ class CompositeEquivalence<T> implements Equivalence<T> {
 
         final List<Method> methods = newArrayList( matcherSpecification.getMethods( ) );
 
-        // TODO coverage
         Collections.sort( methods, Ordering.<String>natural( ).onResultOf( new Function<Method, String>( ) {
             public String apply( final Method method ) {
                 return method.getName( );
