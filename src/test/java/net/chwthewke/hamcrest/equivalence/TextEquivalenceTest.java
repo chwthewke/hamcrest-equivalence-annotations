@@ -2,9 +2,10 @@ package net.chwthewke.hamcrest.equivalence;
 
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.equates;
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.separates;
+import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_CASE;
+import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_LEADING_WHITESPACE;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TextEquivalenceTest {
@@ -25,7 +26,7 @@ public class TextEquivalenceTest {
     @Test
     public void textEquivalenceIgnoringCase( ) throws Exception {
         // Setup
-        textEquivalence = TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
+        textEquivalence = TextEquivalence.textEquivalenceWith( IGNORE_CASE );
         // Exercise
 
         // Verify
@@ -34,11 +35,13 @@ public class TextEquivalenceTest {
         assertThat( textEquivalence, separates( "abc", "AB C", "a b c" ) );
     }
 
+    // TODO also test matcher descriptions
+    // TODO Hey ! Utility to get matcher description / mismatch description ?!
+
     @Test
-    @Ignore( "WIP" )
     public void textEquivalenceIgnoringLeadingWhitespace( ) throws Exception {
         // Setup
-        textEquivalence = TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_LEADING_WHITESPACE );
+        textEquivalence = TextEquivalence.textEquivalenceWith( IGNORE_LEADING_WHITESPACE );
         // Exercise
 
         // Verify
