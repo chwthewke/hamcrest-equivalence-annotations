@@ -1,13 +1,13 @@
 package net.chwthewke.hamcrest.gas;
 
+import static net.chwthewke.hamcrest.MatcherUtils.describe;
 import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import net.chwthewke.hamcrest.MatcherUtils;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 import org.junit.Test;
 
 public class GasTankEquivalenceTest {
@@ -21,14 +21,13 @@ public class GasTankEquivalenceTest {
         // Setup
         final GasTank expected = new GasTank( "Argon", 1.5d, GasTank.Hazard.LOW );
         final Matcher<GasTank> matcher = gasTankLike( expected );
-        final Description description = new StringDescription( );
         // Exercise
-        matcher.describeTo( description );
+        final String description = describe( matcher );
         // Verify
         final String expectedDescription = "a GasTank with getGas()=\"Argon\", "
                 + "getHazardLevel()=sameInstance(<l>), "
                 + "getVolume()=a numeric value within <1.0E-6> of <1.5>";
-        assertThat( description.toString( ), is( equalTo( expectedDescription ) ) );
+        assertThat( description, is( equalTo( expectedDescription ) ) );
     }
 
     @Test
@@ -49,13 +48,12 @@ public class GasTankEquivalenceTest {
         final GasTank expected = new GasTank( "Hydrogen", 10d, GasTank.Hazard.HIGH );
         final GasTank actual = new GasTank( "Oxygen", 10.0000008d, GasTank.Hazard.HIGH );
         final Matcher<GasTank> matcher = gasTankLike( expected );
-        final Description mismatchDescription = new StringDescription( );
         // Exercise
         final boolean match = matcher.matches( actual );
-        matcher.describeMismatch( actual, mismatchDescription );
+        final String mismatchDescription = MatcherUtils.describeMismatch( matcher, actual );
         // Verify
         assertThat( match, is( false ) );
-        assertThat( mismatchDescription.toString( ), is( equalTo( "getGas() was \"Oxygen\"" ) ) );
+        assertThat( mismatchDescription, is( equalTo( "getGas() was \"Oxygen\"" ) ) );
     }
 
     @Test
@@ -64,14 +62,13 @@ public class GasTankEquivalenceTest {
         final GasTank expected = new GasTank( "Hydrogen", 10d, GasTank.Hazard.HIGH );
         final GasTank actual = new GasTank( "Hydrogen", 11d, GasTank.Hazard.HIGH );
         final Matcher<GasTank> matcher = gasTankLike( expected );
-        final Description mismatchDescription = new StringDescription( );
         // Exercise
         final boolean match = matcher.matches( actual );
-        matcher.describeMismatch( actual, mismatchDescription );
+        final String mismatchDescription = MatcherUtils.describeMismatch( matcher, actual );
         // Verify
         assertThat( match, is( false ) );
         final String expectedMismatchDescription = "getVolume() <11.0> differed by <0.999999>";
-        assertThat( mismatchDescription.toString( ), is( equalTo( expectedMismatchDescription ) ) );
+        assertThat( mismatchDescription, is( equalTo( expectedMismatchDescription ) ) );
     }
 
     @Test
@@ -83,13 +80,12 @@ public class GasTankEquivalenceTest {
         assertThat( actual.getHazardLevel( ), is( equalTo( expected.getHazardLevel( ) ) ) );
 
         final Matcher<GasTank> matcher = gasTankLike( expected );
-        final Description mismatchDescription = new StringDescription( );
         // Exercise
         final boolean match = matcher.matches( actual );
-        matcher.describeMismatch( actual, mismatchDescription );
+        final String mismatchDescription = MatcherUtils.describeMismatch( matcher, actual );
         // Verify
         assertThat( match, is( false ) );
         final String expectedMismatchDescription = "getHazardLevel() was <h>";
-        assertThat( mismatchDescription.toString( ), is( equalTo( expectedMismatchDescription ) ) );
+        assertThat( mismatchDescription, is( equalTo( expectedMismatchDescription ) ) );
     }
 }

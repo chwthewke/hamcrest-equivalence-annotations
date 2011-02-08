@@ -1,5 +1,6 @@
 package net.chwthewke.hamcrest.matchers;
 
+import static net.chwthewke.hamcrest.MatcherUtils.describe;
 import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -11,8 +12,6 @@ import net.chwthewke.hamcrest.equivalence.Equivalence;
 import net.chwthewke.hamcrest.sut.classes.WithPublicProperty;
 import net.chwthewke.hamcrest.sut.specs.ComplexSpecification;
 
-import org.hamcrest.Description;
-import org.hamcrest.StringDescription;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,10 +38,10 @@ public class CompositeEquivalenceTest {
                     ComplexSpecification.class );
 
         // Verify
-        final Description description = new StringDescription( );
-        equivalence.equivalentTo( new WithPublicProperty( "123" ) ).describeTo( description );
+        final String description = describe(
+                equivalence.equivalentTo( new WithPublicProperty( "123" ) ) );
         assertThat(
-            description.toString( ),
+            description,
             is( equalTo( "a WithPublicProperty with getIntValue()=<123>, getValue()=\"123\"" ) ) );
 
     }

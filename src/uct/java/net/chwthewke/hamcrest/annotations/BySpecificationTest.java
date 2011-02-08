@@ -1,17 +1,13 @@
 package net.chwthewke.hamcrest.annotations;
 
+import static net.chwthewke.hamcrest.MatcherUtils.describeMismatch;
 import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import net.chwthewke.hamcrest.annotations.BySpecification;
-import net.chwthewke.hamcrest.annotations.Equality;
-import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
 import net.chwthewke.hamcrest.matchers.EquivalenceSpecification;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 import org.junit.Test;
 
 public class BySpecificationTest {
@@ -40,9 +36,7 @@ public class BySpecificationTest {
         final boolean match = matcher.matches( actual );
         // Verify
         assertThat( match, is( false ) );
-        final Description mismatchDescription = new StringDescription( );
-        matcher.describeMismatch( actual, mismatchDescription );
-        assertThat( mismatchDescription.toString( ),
+        assertThat( describeMismatch( matcher, actual ),
             is( equalTo( "getOuterValue() getInnerValue() was \"abcde\"" ) ) );
     }
 
