@@ -1,5 +1,6 @@
 package net.chwthewke.hamcrest.annotations;
 
+import static net.chwthewke.hamcrest.MatcherUtils.describe;
 import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -7,13 +8,7 @@ import static org.hamcrest.Matchers.is;
 
 import java.lang.reflect.Method;
 
-import net.chwthewke.hamcrest.annotations.Equality;
-import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
-import net.chwthewke.hamcrest.annotations.Identity;
-
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 import org.junit.Test;
 
 public class EqualityMatchersWithPrimitivesTest {
@@ -26,9 +21,7 @@ public class EqualityMatchersWithPrimitivesTest {
                 asSpecifiedBy( MatcherSpecification.class, Matched.class )
                     .equivalentTo( new Matched( 1, 4 ) );
         // Verify
-        final Description description = new StringDescription( );
-        matcher.describeTo( description );
-        assertThat( description.toString( ), is( equalTo( "a Matched with getFirst()=<1>, getSecond()=<4>" ) ) );
+        assertThat( describe( matcher ), is( equalTo( "a Matched with getFirst()=<1>, getSecond()=<4>" ) ) );
     }
 
     @Test
