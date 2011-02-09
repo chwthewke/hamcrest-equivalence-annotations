@@ -19,6 +19,23 @@ import com.google.common.collect.Sets;
  */
 public final class TextEquivalence {
 
+    /**
+     * Creates an {@link Equivalence} acting on {@link String}s, that is by default like {@link EqualityEquivalence},
+     * but can be relaxed by a number of options among the following:
+     * <ul>
+     * <li>{@link TextEquivalenceOption#IGNORE_CASE IGNORE_CASE} makes the equivalence ignore case.</li>
+     * <li>{@link TextEquivalenceOption#IGNORE_LEADING_WHITESPACE IGNORE_LEADING_WHITESPACE} makes the equivalence ignore leading
+     * whitespace, effectively left-trimming all arguments.</li>
+     * <li>{@link TextEquivalenceOption#IGNORE_TRAILING_WHITESPACE IGNORE_TRAILING_WHITESPACE} makes the equivalence ignore trailing
+     * whitespace, effectively right-trimming all arguments.</li>
+     * <li>{@link TextEquivalenceOption#IGNORE_WHITESPACE IGNORE_WHITESPACE} makes the equivalence ignore all whitespace.</li>
+     * </ul>
+     * These options can be combined, however some combinations may be redundant.
+     * 
+     * @param options
+     *            The options used to relax the equivalence.
+     * @return The {@link Equivalence} on {@link String}s with the specified options.
+     */
     public static Equivalence<String> textEquivalenceWith( final TextEquivalenceOption... options ) {
         final Set<TextEquivalenceOption> optionSet = newHashSet( options );
         final Equivalence<String> coreEquivalence = new TextEquivalenceCore( intersection( coreOptions, optionSet ) );
