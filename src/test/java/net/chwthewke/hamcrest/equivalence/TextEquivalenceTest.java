@@ -5,6 +5,8 @@ import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.equate
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.separates;
 import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_CASE;
 import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_LEADING_WHITESPACE;
+import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_TRAILING_WHITESPACE;
+import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_WHITESPACE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -69,6 +71,100 @@ public class TextEquivalenceTest {
         // Verify
         assertThat( textEquivalence, equates( "abc", "  abc", "\tabc" ) );
         assertThat( textEquivalence, separates( "abc", " abc ", "a b c" ) );
+    }
+
+    @Test
+    public void describeTextEquivalenceIgnoringLeadingWhitespace( ) throws Exception {
+        // Setup
+        textEquivalence = TextEquivalence.textEquivalenceWith( IGNORE_LEADING_WHITESPACE );
+        // Exercise
+        final String description = describe( textEquivalence.equivalentTo( "  abc" ) );
+        // Verify
+        assertThat( description, is( equalTo( "left-trimmed()=\"abc\"" ) ) );
+    }
+
+    @Test
+    public void textEquivalenceIgnoringTrailingWhitespace( ) throws Exception {
+        // Setup
+        textEquivalence = TextEquivalence.textEquivalenceWith( IGNORE_TRAILING_WHITESPACE );
+        // Exercise
+
+        // Verify
+        assertThat( textEquivalence, equates( "abc", "abc ", "abc\t" ) );
+        assertThat( textEquivalence, separates( "abc", " abc", "a b c" ) );
+    }
+
+    @Test
+    public void describeTextEquivalenceIgnoringTrailingWhitespace( ) throws Exception {
+        // Setup
+        textEquivalence = TextEquivalence.textEquivalenceWith( IGNORE_TRAILING_WHITESPACE );
+        // Exercise
+        final String description = describe( textEquivalence.equivalentTo( "abc  " ) );
+        // Verify
+        assertThat( description, is( equalTo( "right-trimmed()=\"abc\"" ) ) );
+    }
+
+    @Test
+    public void textEquivalenceIgnoringExtremalWhitespace( ) throws Exception {
+        // Setup
+        textEquivalence = TextEquivalence.textEquivalenceWith( IGNORE_LEADING_WHITESPACE, IGNORE_TRAILING_WHITESPACE );
+        // Exercise
+
+        // Verify
+        assertThat( textEquivalence, equates( "abc", " abc ", "   abc\t" ) );
+        assertThat( textEquivalence, separates( "abc", " ab c", "a b c" ) );
+    }
+
+    @Test
+    public void describeTextEquivalenceIgnoringExtremalWhitespace( ) throws Exception {
+        // Setup
+        textEquivalence = TextEquivalence.textEquivalenceWith( IGNORE_LEADING_WHITESPACE, IGNORE_TRAILING_WHITESPACE );
+        // Exercise
+        final String description = describe( textEquivalence.equivalentTo( "  abc  " ) );
+        // Verify
+        assertThat( description, is( equalTo( "trimmed()=\"abc\"" ) ) );
+    }
+
+    @Test
+    public void textEquivalenceIgnoringAllWhitespace( ) throws Exception {
+        // Setup
+        textEquivalence = TextEquivalence.textEquivalenceWith( IGNORE_WHITESPACE );
+        // Exercise
+
+        // Verify
+        assertThat( textEquivalence, equates( "abc", "a bc ", "  abc\t" ) );
+        assertThat( textEquivalence, separates( "abc", " aBc", "A b c" ) );
+    }
+
+    @Test
+    public void describeTextEquivalenceIgnoringAllWhitespace( ) throws Exception {
+        // Setup
+        textEquivalence = TextEquivalence.textEquivalenceWith( IGNORE_WHITESPACE );
+        // Exercise
+        final String description = describe( textEquivalence.equivalentTo( "a b c" ) );
+        // Verify
+        assertThat( description, is( equalTo( "ignoring whitespace()=\"abc\"" ) ) );
+    }
+
+    @Test
+    public void textEquivalenceIgnoringAllWhitespaceAndCase( ) throws Exception {
+        // Setup
+        textEquivalence = TextEquivalence.textEquivalenceWith( IGNORE_WHITESPACE, IGNORE_CASE );
+        // Exercise
+
+        // Verify
+        assertThat( textEquivalence, equates( "abc", "a Bc ", "  Abc\t" ) );
+        assertThat( textEquivalence, separates( "abc", " <Bc", "A b d" ) );
+    }
+
+    @Test
+    public void describeTextEquivalenceIgnoringAllWhitespaceAndCase( ) throws Exception {
+        // Setup
+        textEquivalence = TextEquivalence.textEquivalenceWith( IGNORE_WHITESPACE, IGNORE_CASE );
+        // Exercise
+        final String description = describe( textEquivalence.equivalentTo( "A b c" ) );
+        // Verify
+        assertThat( description, is( equalTo( "ignoring whitespace()=equalToIgnoringCase(\"Abc\")" ) ) );
     }
 
 }
