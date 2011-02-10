@@ -12,6 +12,7 @@ import net.chwthewke.hamcrest.annotations.ByEquivalence;
 import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.Identity;
+import net.chwthewke.hamcrest.annotations.Text;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -19,12 +20,12 @@ import com.google.common.annotations.VisibleForTesting;
 final class EquivalenceAnnotationProcessor<T> {
 
     public static <T> EquivalenceAnnotationProcessor<T> annotationProcessorFor(
-                    @SuppressWarnings( "unused" ) final Class<T> sourceType,
-                    final Method specification,
-                    final Method target ) {
+            @SuppressWarnings( "unused" ) final Class<T> sourceType,
+            final Method specification,
+            final Method target ) {
         return new EquivalenceAnnotationProcessor<T>(
-                new LiftedEquivalenceFactory( ), new EquivalenceFactory( ), new AnnotationTypeReader( ),
-                specification, target );
+            new LiftedEquivalenceFactory( ), new EquivalenceFactory( ), new AnnotationTypeReader( ),
+            specification, target );
     }
 
     @VisibleForTesting
@@ -44,25 +45,39 @@ final class EquivalenceAnnotationProcessor<T> {
         annotationType = annotationTypeReader.getEquivalenceAnnotationType( specification );
 
         if ( annotationType == ApproximateEquality.class )
-        {
             return computeApproximateEqualityEquivalence( );
-        }
+
+        if ( annotationType == Text.class )
+            return computeTextEquivalence( );
 
         return computeGenericEquivalence( propertyType( ) );
     }
 
-    private Equivalence<T> computeApproximateEqualityEquivalence( ) {
-        checkArgument(
-            Number.class.isAssignableFrom( propertyType( ) ),
-            String.format(
-                "The equivalence specification property %s bears %s, so it must have a type assignable to java.lang.Number.",
-                specification, ApproximateEquality.class.getSimpleName( ) ) );
+    private Equivalence<T> computeTextEquivalence( ) {
+        final Equivalence<String> equivalence = equivalenceFactory
+            .getTextEquivalence( getSpecificationAnnotation( Text.class ).options( ) );
 
-        final double tolerance = getSpecificationAnnotation( ApproximateEquality.class ).tolerance( );
+        return computeTypedEquivalence( String.class, equivalence );
+    }
+
+    private Equivalence<T> computeApproximateEqualityEquivalence( ) {
+        final Equivalence<Number> equivalence = equivalenceFactory
+            .getApproximateEquality( getSpecificationAnnotation( ApproximateEquality.class ).tolerance( ) );
+
+        return computeTypedEquivalence( Number.class, equivalence );
+    }
+
+    private <U> Equivalence<T> computeTypedEquivalence( final Class<U> requiredPropertyType,
+            final Equivalence<U> propertyEquivalence ) {
+        checkArgument(
+            requiredPropertyType.isAssignableFrom( propertyType( ) ),
+            String.format(
+                "The equivalence specification property %s bears %s, so it must have a type assignable to %s.",
+                specification, annotationType.getSimpleName( ), requiredPropertyType.getName( ) ) );
 
         return liftedEquivalenceFactory.create( specification.getName( ),
-            equivalenceFactory.getApproximateEquality( tolerance ),
-            new ReadPropertyFunction<T, Number>( target, Number.class ) );
+            propertyEquivalence,
+            new ReadPropertyFunction<T, U>( target, requiredPropertyType ) );
     }
 
     private <V> Equivalence<T> computeGenericEquivalence( final Class<V> type ) {

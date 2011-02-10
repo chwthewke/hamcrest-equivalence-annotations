@@ -7,6 +7,8 @@ import net.chwthewke.hamcrest.equivalence.ApproximateEqualityEquivalence;
 import net.chwthewke.hamcrest.equivalence.EqualityEquivalence;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 import net.chwthewke.hamcrest.equivalence.IdentityEquivalence;
+import net.chwthewke.hamcrest.equivalence.TextEquivalence;
+import net.chwthewke.hamcrest.equivalence.TextEquivalenceOption;
 
 class EquivalenceFactory {
 
@@ -16,6 +18,10 @@ class EquivalenceFactory {
 
     public <T> Equivalence<T> getEquality( ) {
         return new EqualityEquivalence<T>( );
+    }
+
+    public Equivalence<String> getTextEquivalence( final TextEquivalenceOption[ ] options ) {
+        return TextEquivalence.textEquivalenceWith( options );
     }
 
     public <T> Equivalence<T> getIdentity( ) {

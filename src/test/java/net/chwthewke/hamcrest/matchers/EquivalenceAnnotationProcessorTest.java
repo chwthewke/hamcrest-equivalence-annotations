@@ -36,6 +36,7 @@ import net.chwthewke.hamcrest.sut.specs.EqualityOnString;
 import net.chwthewke.hamcrest.sut.specs.IdentityOnObject;
 import net.chwthewke.hamcrest.sut.specs.IdentityOnPrimitive;
 import net.chwthewke.hamcrest.sut.specs.ObjectEqualityEquivalence;
+import net.chwthewke.hamcrest.sut.specs.TextIgnoringCaseOnString;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -80,7 +81,7 @@ public class EquivalenceAnnotationProcessorTest {
         final EquivalenceAnnotationProcessor<WithPublicProperty> annotationProcessor =
                 new EquivalenceAnnotationProcessor<WithPublicProperty>(
                     liftedEquivalenceFactory, equivalenceFactory, annotationTypeReader,
-                        specification, target );
+                    specification, target );
         // Exercise
         final Equivalence<WithPublicProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
         // Verify
@@ -156,6 +157,29 @@ public class EquivalenceAnnotationProcessorTest {
 
     @SuppressWarnings( "unchecked" )
     @Test
+    public void liftedTextEquivalenceOnPrimitive( ) throws Exception {
+        // Setup
+        final Method specification = TextIgnoringCaseOnString.class.getMethod( "getValue" );
+        final Method target = WithPublicProperty.class.getMethod( "getValue" );
+        final EquivalenceAnnotationProcessor<WithPublicProperty> annotationProcessor =
+                new EquivalenceAnnotationProcessor<WithPublicProperty>(
+                    liftedEquivalenceFactory, equivalenceFactory, annotationTypeReader,
+                    specification, target );
+        // Exercise
+        final Equivalence<WithPublicProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
+        // Verify
+        verify( liftedEquivalenceFactory )
+            .create( eq( "getValue" ), (Equivalence<String>) equivalenceCaptor.capture( ),
+                EquivalenceAnnotationProcessorTest.<WithDoubleProperty, String>functionOf( target ) );
+
+        assertThat( equivalence, is( sameInstance( (Equivalence<WithPublicProperty>) token ) ) );
+        final Equivalence<String> capturedEquivalence = (Equivalence<String>) equivalenceCaptor.getValue( );
+        assertThat( capturedEquivalence, equates( "abc", "ABC" ) );
+        assertThat( capturedEquivalence, separates( "abc", " abc", "abc " ) );
+    }
+
+    @SuppressWarnings( "unchecked" )
+    @Test
     public void liftedBySpecificationEquivalence( ) throws Exception {
         // Setup
         final Method specification = BySpecificationOnProperty.class.getMethod( "getValue" );
@@ -211,7 +235,7 @@ public class EquivalenceAnnotationProcessorTest {
         final EquivalenceAnnotationProcessor<WithPublicProperty> annotationProcessor =
                 new EquivalenceAnnotationProcessor<WithPublicProperty>(
                     liftedEquivalenceFactory, equivalenceFactory, mockAnnotationTypeReader,
-                        specification, target );
+                    specification, target );
 
         doReturn( Override.class ).when( mockAnnotationTypeReader ).getEquivalenceAnnotationType( specification );
         // Exercise
