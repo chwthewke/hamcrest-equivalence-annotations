@@ -5,7 +5,7 @@ package net.chwthewke.hamcrest.matchers;
  * 
  * @param <T>
  *            The type the equivalence specification applies to.
- * @see EquivalenceMatchers#asSpecifiedBy(Class)
+ * @see Equivalences#asSpecifiedBy(Class)
  */
 public interface EquivalenceSpecification<T> {
 

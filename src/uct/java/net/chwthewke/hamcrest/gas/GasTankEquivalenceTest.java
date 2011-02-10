@@ -1,7 +1,7 @@
 package net.chwthewke.hamcrest.gas;
 
 import static net.chwthewke.hamcrest.MatcherUtils.describe;
-import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
+import static net.chwthewke.hamcrest.matchers.Equivalences.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

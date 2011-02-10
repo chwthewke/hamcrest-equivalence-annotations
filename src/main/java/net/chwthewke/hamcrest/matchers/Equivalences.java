@@ -7,7 +7,7 @@ import net.chwthewke.hamcrest.equivalence.Equivalence;
  * This class has some factory methods to create {@link Equivalence} instances from <em>equivalence specifications</em> (i.e. classes
  * annotated with {@link net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn}).
  */
-public final class EquivalenceMatchers {
+public final class Equivalences {
 
     /**
      * Creates an {@link Equivalence} from the equivalence specification <code>equivalenceSpecification</code>.
@@ -60,7 +60,7 @@ public final class EquivalenceMatchers {
             equivalenceSpecification );
     }
 
-    private EquivalenceMatchers( ) {
+    private Equivalences( ) {
     }
 
     private static final EquivalenceSpecificationValidator SPECIFICATION_VALIDATOR = new EquivalenceSpecificationValidator( );
