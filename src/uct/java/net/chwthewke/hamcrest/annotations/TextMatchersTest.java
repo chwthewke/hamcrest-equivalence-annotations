@@ -5,7 +5,7 @@ import static net.chwthewke.hamcrest.MatcherUtils.describeMismatch;
 import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_CASE;
 import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_LEADING_WHITESPACE;
 import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_TRAILING_WHITESPACE;
-import static net.chwthewke.hamcrest.matchers.EquivalenceMatchers.asSpecifiedBy;
+import static net.chwthewke.hamcrest.matchers.Equivalences.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
