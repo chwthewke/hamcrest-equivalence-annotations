@@ -11,6 +11,7 @@ import net.chwthewke.hamcrest.annotations.ByEquivalence;
 import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.Identity;
+import net.chwthewke.hamcrest.annotations.Text;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -52,6 +53,7 @@ class AnnotationTypeReader {
                 Identity.class,
                 ApproximateEquality.class,
                 BySpecification.class,
-                ByEquivalence.class );
+                ByEquivalence.class,
+                Text.class );
 
 }
