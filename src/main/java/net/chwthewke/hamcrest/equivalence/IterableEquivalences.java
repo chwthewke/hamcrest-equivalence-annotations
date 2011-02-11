@@ -2,7 +2,8 @@ package net.chwthewke.hamcrest.equivalence;
 
 /**
  * {@link IterableEquivalences} allows to create equivalences that act upon Iterables of a type given an equivalence on
- * the component type. The resulting equivalence may optionally ignore the order of elements in the sequences it receives.
+ * the component type. The resulting equivalence may optionally ignore the order of elements in the sequences it
+ * receives.
  */
 public final class IterableEquivalences {
 
@@ -31,7 +32,7 @@ public final class IterableEquivalences {
      * @return The lifted, not in-order equivalence for {@link Iterable}&lt;T&gt;
      */
     public static <T> Equivalence<Iterable<? extends T>> iterableEquivalenceInAnyOrder( final Equivalence<T> equivalence ) {
-        return new IterableEquivalence<T>( equivalence, true );
+        return new IterableEquivalence<T>( equivalence, false );
     }
 
     private IterableEquivalences( ) {
