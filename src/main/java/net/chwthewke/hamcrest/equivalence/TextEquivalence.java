@@ -1,5 +1,6 @@
 package net.chwthewke.hamcrest.equivalence;
 
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Sets.intersection;
 import static com.google.common.collect.Sets.newHashSet;
 import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_CASE;
@@ -52,6 +53,8 @@ public final class TextEquivalence {
 
     private static NamedProjection getNamedProjection( final Set<TextEquivalenceOption> nonCoreOptions ) {
 
+        checkState( !nonCoreOptions.isEmpty( ), "cannot call getNamedProjection( ) on an empty set." );
+
         if ( nonCoreOptions.contains( IGNORE_WHITESPACE ) )
             return new NamedProjection( "ignoring whitespace",
                 new Function<String, String>( ) {
@@ -77,14 +80,12 @@ public final class TextEquivalence {
                 }
             } );
 
-        if ( rightTrimmed )
-            return new NamedProjection( "right-trimmed", new Function<String, String>( ) {
-                public String apply( final String input ) {
-                    return input.replaceAll( "\\s+$", "" );
-                }
-            } );
+        return new NamedProjection( "right-trimmed", new Function<String, String>( ) {
+            public String apply( final String input ) {
+                return input.replaceAll( "\\s+$", "" );
+            }
+        } );
 
-        throw new IllegalStateException( "cannot call getNamedProjection( ) on an empty set." );
     }
 
     private TextEquivalence( ) {
