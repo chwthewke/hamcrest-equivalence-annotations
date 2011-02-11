@@ -11,20 +11,7 @@ import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;
 
-public final class IterableEquivalence<T> implements Equivalence<Iterable<? extends T>> {
-
-    public static <T> Equivalence<Iterable<? extends T>> equivalentElements( final Equivalence<T> equivalence ) {
-        return new IterableEquivalence<T>( equivalence, true );
-    }
-
-    public static <T> Equivalence<Iterable<? extends T>> equivalentElementsInAnyOrder( final Equivalence<T> equivalence ) {
-        return new IterableEquivalence<T>( equivalence, true );
-    }
-
-    private IterableEquivalence( final Equivalence<T> equivalence, final boolean inOrder ) {
-        this.equivalence = equivalence;
-        this.inOrder = inOrder;
-    }
+final class IterableEquivalence<T> implements Equivalence<Iterable<? extends T>> {
 
     public Matcher<Iterable<? extends T>> equivalentTo( final Iterable<? extends T> expected ) {
         final List<Matcher<? super T>> expectedItems =
@@ -35,6 +22,11 @@ public final class IterableEquivalence<T> implements Equivalence<Iterable<? exte
                         }
                     } );
         return inOrder ? contains( expectedItems ) : containsInAnyOrder( expectedItems );
+    }
+
+    IterableEquivalence( final Equivalence<T> equivalence, final boolean inOrder ) {
+        this.equivalence = equivalence;
+        this.inOrder = inOrder;
     }
 
     private final boolean inOrder;
