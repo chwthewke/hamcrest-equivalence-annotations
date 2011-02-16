@@ -138,7 +138,7 @@ public final class ArrayEquivalences {
      *            An equivalence on {@link Iterable}&lt;Integer&gt;
      * @return The adapted equivalence on <code>int[]</code>.
      */
-    public static Equivalence<int[ ]> forIntArrays( final Equivalence<Iterable<? extends Integer>> intEquivalence ) {
+    public static Equivalence<int[ ]> forIntegerArrays( final Equivalence<Iterable<? extends Integer>> intEquivalence ) {
         final Function<int[ ], Iterable<? extends Integer>> toIntList =
                 new Function<int[ ], Iterable<? extends Integer>>( ) {
                     public Iterable<? extends Integer> apply( final int[ ] input ) {

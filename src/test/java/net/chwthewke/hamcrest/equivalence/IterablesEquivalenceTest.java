@@ -13,7 +13,6 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 
 public class IterablesEquivalenceTest {
-    @SuppressWarnings( "unchecked" )
     @Test
     public void inOrderStringEquivalence( ) throws Exception {
         // Setup
@@ -59,7 +58,6 @@ public class IterablesEquivalenceTest {
         assertThat( mismatchDescription, is( equalTo( "item 1: was D ef" ) ) );
     }
 
-    @SuppressWarnings( "unchecked" )
     @Test
     public void inAnyOrderStringEquivalence( ) throws Exception {
         // Setup
