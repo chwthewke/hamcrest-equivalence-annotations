@@ -2,23 +2,42 @@ package net.chwthewke.hamcrest.equivalence;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
-import com.google.common.collect.Lists;
-
 public class EquivalenceClassMatchers {
 
-    public static <T> Matcher<Equivalence<T>> equates( final T first, final T second, final T... others ) {
-        return new EquatesMatcher<T>( true, Lists.asList( first, second, others ) );
+    @SuppressWarnings( "unchecked" )
+    public static <T> Matcher<Equivalence<T>> equates( final T first, final T second ) {
+        return new EquatesMatcher<T>( true, newArrayList( first, second ) );
     }
 
-    public static <T> Matcher<Equivalence<T>> separates( final T first, final T second, final T... others ) {
-        return new EquatesMatcher<T>( false, Lists.asList( first, second, others ) );
+    @SuppressWarnings( "unchecked" )
+    public static <T> Matcher<Equivalence<T>> equates( final T first, final T second, final T third ) {
+        return new EquatesMatcher<T>( true, newArrayList( first, second, third ) );
+    }
+
+    @SuppressWarnings( "unchecked" )
+    public static <T> Matcher<Equivalence<T>> equates( final T first, final T second, final T third, final T fourth ) {
+        return new EquatesMatcher<T>( true, newArrayList( first, second, third, fourth ) );
+    }
+
+    @SuppressWarnings( "unchecked" )
+    public static <T> Matcher<Equivalence<T>> separates( final T first, final T second ) {
+        return new EquatesMatcher<T>( false, newArrayList( first, second ) );
+    }
+
+    @SuppressWarnings( "unchecked" )
+    public static <T> Matcher<Equivalence<T>> separates( final T first, final T second, final T third ) {
+        return new EquatesMatcher<T>( false, newArrayList( first, second, third ) );
+    }
+
+    @SuppressWarnings( "unchecked" )
+    public static <T> Matcher<Equivalence<T>> separates( final T first, final T second, final T third, final T fourth ) {
+        return new EquatesMatcher<T>( false, newArrayList( first, second, third, fourth ) );
     }
 
     private static class EquatesMatcher<T> extends TypeSafeDiagnosingMatcher<Equivalence<T>> {
@@ -57,7 +76,7 @@ public class EquivalenceClassMatchers {
             return match;
         }
 
-        EquatesMatcher( final boolean testForEquivalence, final Collection<T> expectedlyEquivalents ) {
+        EquatesMatcher( final boolean testForEquivalence, final Iterable<T> expectedlyEquivalents ) {
             this.testForEquivalence = testForEquivalence;
             this.expectedlyEquivalents = newArrayList( expectedlyEquivalents );
         }
