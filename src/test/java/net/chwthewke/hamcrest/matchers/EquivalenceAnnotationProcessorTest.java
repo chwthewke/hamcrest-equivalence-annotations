@@ -51,8 +51,9 @@ public class EquivalenceAnnotationProcessorTest {
     @Mock
     private LiftedEquivalenceFactory liftedEquivalenceFactory;
 
-    private EquivalenceFactory equivalenceFactory;
     private AnnotationTypeReader annotationTypeReader;
+    private EquivalenceFactory equivalenceFactory;
+    private TypeEquivalenceComputer typeEquivalenceComputer;
 
     @Mock
     private LiftedEquivalence<?, ?> token;
@@ -68,6 +69,7 @@ public class EquivalenceAnnotationProcessorTest {
             .thenReturn( token );
 
         equivalenceFactory = new EquivalenceFactory( );
+        typeEquivalenceComputer = new TypeEquivalenceComputer( equivalenceFactory );
         annotationTypeReader = new AnnotationTypeReader( );
     }
 
@@ -79,7 +81,7 @@ public class EquivalenceAnnotationProcessorTest {
         final Method target = WithPublicProperty.class.getMethod( "getValue" );
         final EquivalenceAnnotationProcessor<WithPublicProperty> annotationProcessor =
                 new EquivalenceAnnotationProcessor<WithPublicProperty>(
-                    liftedEquivalenceFactory, equivalenceFactory, annotationTypeReader,
+                    typeEquivalenceComputer, liftedEquivalenceFactory, annotationTypeReader,
                     specification, target );
         // Exercise
         final Equivalence<WithPublicProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
@@ -98,7 +100,7 @@ public class EquivalenceAnnotationProcessorTest {
         final Method target = WithObjectProperty.class.getMethod( "getValue" );
         final EquivalenceAnnotationProcessor<WithObjectProperty> annotationProcessor =
                 new EquivalenceAnnotationProcessor<WithObjectProperty>(
-                    liftedEquivalenceFactory, equivalenceFactory, annotationTypeReader,
+                    typeEquivalenceComputer, liftedEquivalenceFactory, annotationTypeReader,
                     specification, target );
         // Exercise
         final Equivalence<WithObjectProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
@@ -117,7 +119,7 @@ public class EquivalenceAnnotationProcessorTest {
         final Method target = WithPublicProperty.class.getMethod( "getIntValue" );
         final EquivalenceAnnotationProcessor<WithPublicProperty> annotationProcessor =
                 new EquivalenceAnnotationProcessor<WithPublicProperty>(
-                    liftedEquivalenceFactory, equivalenceFactory, annotationTypeReader,
+                    typeEquivalenceComputer, liftedEquivalenceFactory, annotationTypeReader,
                     specification, target );
         // Exercise
         final Equivalence<WithPublicProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
@@ -136,7 +138,7 @@ public class EquivalenceAnnotationProcessorTest {
         final Method target = WithDoubleProperty.class.getMethod( "getValue" );
         final EquivalenceAnnotationProcessor<WithDoubleProperty> annotationProcessor =
                 new EquivalenceAnnotationProcessor<WithDoubleProperty>(
-                    liftedEquivalenceFactory, equivalenceFactory, annotationTypeReader,
+                    typeEquivalenceComputer, liftedEquivalenceFactory, annotationTypeReader,
                     specification, target );
         // Exercise
         final Equivalence<WithDoubleProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
@@ -162,7 +164,7 @@ public class EquivalenceAnnotationProcessorTest {
         final Method target = WithPublicProperty.class.getMethod( "getValue" );
         final EquivalenceAnnotationProcessor<WithPublicProperty> annotationProcessor =
                 new EquivalenceAnnotationProcessor<WithPublicProperty>(
-                    liftedEquivalenceFactory, equivalenceFactory, annotationTypeReader,
+                    typeEquivalenceComputer, liftedEquivalenceFactory, annotationTypeReader,
                     specification, target );
         // Exercise
         final Equivalence<WithPublicProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
@@ -185,7 +187,7 @@ public class EquivalenceAnnotationProcessorTest {
         final Method target = WithPropertyWithDefinedEquivalence.class.getMethod( "getValue" );
         final EquivalenceAnnotationProcessor<WithPropertyWithDefinedEquivalence> annotationProcessor =
                 new EquivalenceAnnotationProcessor<WithPropertyWithDefinedEquivalence>(
-                    liftedEquivalenceFactory, equivalenceFactory, annotationTypeReader,
+                    typeEquivalenceComputer, liftedEquivalenceFactory, annotationTypeReader,
                     specification, target );
         // Exercise
         final Equivalence<WithPropertyWithDefinedEquivalence> equivalence = annotationProcessor.processEquivalenceSpecification( );
@@ -214,7 +216,7 @@ public class EquivalenceAnnotationProcessorTest {
         final Method target = WithObjectProperty.class.getMethod( "getValue" );
         final EquivalenceAnnotationProcessor<WithObjectProperty> annotationProcessor =
                 new EquivalenceAnnotationProcessor<WithObjectProperty>(
-                    liftedEquivalenceFactory, equivalenceFactory, annotationTypeReader,
+                    typeEquivalenceComputer, liftedEquivalenceFactory, annotationTypeReader,
                     specification, target );
         // Exercise
         final Equivalence<WithObjectProperty> equivalence = annotationProcessor.processEquivalenceSpecification( );
@@ -236,8 +238,8 @@ public class EquivalenceAnnotationProcessorTest {
         try
         {
             new EquivalenceAnnotationProcessor<WithPublicProperty>(
-                        liftedEquivalenceFactory, equivalenceFactory, mockAnnotationTypeReader,
-                        specification, target );
+                typeEquivalenceComputer, liftedEquivalenceFactory, mockAnnotationTypeReader,
+                specification, target );
             // Verify
             fail( );
         }

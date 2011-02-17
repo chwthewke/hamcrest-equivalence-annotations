@@ -37,7 +37,7 @@ public class EquivalenceActivatorTest {
         final Method method = BySimpleEquivalence.class.getMethod( "getIntValue" );
         // Exercise
         final Equivalence<WithPublicProperty> equivalence = equivalenceActivator
-            .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), method, Integer.class );
+            .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), Integer.class );
         // Verify
         assertThat( equivalence, is( instanceOf( SimpleEquivalence.class ) ) );
     }
@@ -50,7 +50,7 @@ public class EquivalenceActivatorTest {
         try
         {
             equivalenceActivator
-                .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), method, Integer.class );
+                .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), Integer.class );
             // Verify
             fail( );
         }
@@ -70,7 +70,7 @@ public class EquivalenceActivatorTest {
         try
         {
             equivalenceActivator
-                .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), method, Integer.class );
+                .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), Integer.class );
             // Verify
             fail( );
         }
@@ -90,7 +90,7 @@ public class EquivalenceActivatorTest {
         try
         {
             equivalenceActivator
-                .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), method, Integer.class );
+                .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), Integer.class );
             // Verify
             fail( );
         }
@@ -98,8 +98,8 @@ public class EquivalenceActivatorTest {
         {
             assertThat( e.getMessage( ), is( equalTo( "Bad use of @ByEquivalence: " +
                     "value net.chwthewke.hamcrest.sut.equivalences.SimpleStringEquivalence " +
-                    "seems to implement Equivalence<java.lang.String>, whereas property " +
-                    "getIntValue has type class java.lang.Integer" ) ) );
+                    "seems to implement Equivalence<java.lang.String>, " +
+                    "whereas target property has type class java.lang.Integer" ) ) );
         }
     }
 
@@ -111,7 +111,7 @@ public class EquivalenceActivatorTest {
         try
         {
             equivalenceActivator
-                .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), method, Integer.class );
+                .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), Integer.class );
             // Verify
             fail( );
         }
@@ -131,7 +131,7 @@ public class EquivalenceActivatorTest {
         try
         {
             equivalenceActivator
-                .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), method, Integer.class );
+                .createEquivalenceInstance( method.getAnnotation( ByEquivalence.class ), Integer.class );
             // Verify
             fail( );
         }
