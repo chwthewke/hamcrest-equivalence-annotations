@@ -42,6 +42,12 @@ final class EquivalenceAnnotationProcessor<T> {
 
     public Equivalence<T> processEquivalenceSpecification( ) {
 
+        final TypeEquivalence<?> typeEquivalence = computeEquivalenceOnPropertyType( );
+
+        return lift( typeEquivalence );
+    }
+
+    private TypeEquivalence<?> computeEquivalenceOnPropertyType( ) {
         annotationType = annotationTypeReader.getEquivalenceAnnotationType( specification );
 
         if ( annotationType == ApproximateEquality.class )
@@ -53,22 +59,22 @@ final class EquivalenceAnnotationProcessor<T> {
         return computeGenericEquivalence( propertyType( ) );
     }
 
-    private Equivalence<T> computeTextEquivalence( ) {
+    private TypeEquivalence<String> computeTextEquivalence( ) {
         final Equivalence<String> equivalence = equivalenceFactory
             .getTextEquivalence( getSpecificationAnnotation( Text.class ).options( ) );
 
-        return computeTypedEquivalence( String.class, equivalence );
+        return new TypeEquivalence<String>( equivalence, String.class );
     }
 
-    private Equivalence<T> computeApproximateEqualityEquivalence( ) {
+    private TypeEquivalence<Number> computeApproximateEqualityEquivalence( ) {
         final Equivalence<Number> equivalence = equivalenceFactory
             .getApproximateEquality( getSpecificationAnnotation( ApproximateEquality.class ).tolerance( ) );
 
-        return computeTypedEquivalence( Number.class, equivalence );
+        return new TypeEquivalence<Number>( equivalence, Number.class );
     }
 
-    private <U> Equivalence<T> computeTypedEquivalence( final Class<U> requiredPropertyType,
-            final Equivalence<U> propertyEquivalence ) {
+    private <U> Equivalence<T> lift( final TypeEquivalence<U> typeEquivalence ) {
+        final Class<U> requiredPropertyType = typeEquivalence.getType( );
         checkArgument(
             requiredPropertyType.isAssignableFrom( propertyType( ) ),
             String.format(
@@ -76,11 +82,11 @@ final class EquivalenceAnnotationProcessor<T> {
                 specification, annotationType.getSimpleName( ), requiredPropertyType.getName( ) ) );
 
         return liftedEquivalenceFactory.create( specification.getName( ),
-            propertyEquivalence,
+            typeEquivalence.getEquivalence( ),
             new ReadPropertyFunction<T, U>( target, requiredPropertyType ) );
     }
 
-    private <V> Equivalence<T> computeGenericEquivalence( final Class<V> type ) {
+    private <V> TypeEquivalence<V> computeGenericEquivalence( final Class<V> type ) {
 
         final Equivalence<V> propertyEquivalence;
 
@@ -110,9 +116,8 @@ final class EquivalenceAnnotationProcessor<T> {
                 annotationType.getSimpleName( ) ) );
         }
 
-        return liftedEquivalenceFactory.create( specification.getName( ),
-            propertyEquivalence,
-            new ReadPropertyFunction<T, V>( target, type ) );
+        return new TypeEquivalence<V>( propertyEquivalence, type );
+
     }
 
     private <A extends Annotation> A getSpecificationAnnotation( final Class<A> annotationClass ) {
@@ -132,5 +137,24 @@ final class EquivalenceAnnotationProcessor<T> {
     private final LiftedEquivalenceFactory liftedEquivalenceFactory;
     private final AnnotationTypeReader annotationTypeReader;
     private final EquivalenceFactory equivalenceFactory;
+
+    private static class TypeEquivalence<U> {
+
+        public TypeEquivalence( final Equivalence<U> equivalence, final Class<U> type ) {
+            this.equivalence = equivalence;
+            this.type = type;
+        }
+
+        public Equivalence<U> getEquivalence( ) {
+            return equivalence;
+        }
+
+        public Class<U> getType( ) {
+            return type;
+        }
+
+        private final Equivalence<U> equivalence;
+        private final Class<U> type;
+    }
 
 }
