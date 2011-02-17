@@ -13,18 +13,13 @@ import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.Identity;
 import net.chwthewke.hamcrest.annotations.Text;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 class AnnotationTypeReader {
-
-    @Deprecated
-    public Class<? extends Annotation> getEquivalenceAnnotationType( final Method specificationMethod ) {
-
-        return getEquivalenceAnnotation( specificationMethod ).annotationType( );
-    }
 
     public Annotation getEquivalenceAnnotation( final Method specificationMethod ) {
         final Predicate<Class<? extends Annotation>> isOnSpecification =
@@ -48,7 +43,12 @@ class AnnotationTypeReader {
         throw new IllegalArgumentException(
             String.format(
                 "The equivalence specification property %s has these mutually exclusive annotations: %s.",
-                specificationMethod, newArrayList( annotationsOnSpecification ) ) );
+                specificationMethod, newArrayList( Collections2.transform( annotationsOnSpecification,
+                    new Function<Class<? extends Annotation>, String>( ) {
+                        public String apply( final Class<? extends Annotation> input ) {
+                            return input.getSimpleName( );
+                        }
+                    } ) ) ) );
     }
 
     @SuppressWarnings( "unchecked" )

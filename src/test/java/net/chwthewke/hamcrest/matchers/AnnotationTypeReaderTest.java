@@ -1,6 +1,9 @@
 package net.chwthewke.hamcrest.matchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 
 import java.lang.annotation.Annotation;
@@ -25,20 +28,19 @@ public class AnnotationTypeReaderTest {
     public void singleAnnotationIsSelected( ) throws Exception {
         // Setup
         // Exercise
-        final Class<? extends Annotation> annotationType =
-                annotationTypeReader.getEquivalenceAnnotationType( AnnotationTestCases.class.getMethod( "singleAnnotation" ) );
+        final Annotation equivalenceAnnotation =
+                annotationTypeReader.getEquivalenceAnnotation( AnnotationTestCases.class.getMethod( "singleAnnotation" ) );
         // Verify
-        assertThat( "", annotationType == Identity.class );
+        assertThat( equivalenceAnnotation, is( instanceOf( Identity.class ) ) );
     }
 
     @Test
     public void singleAnnotationWithAuxiliaryIsSelected( ) throws Exception {
         // Setup
         // Exercise
-        final Class<? extends Annotation> annotationType =
-                annotationTypeReader.getEquivalenceAnnotationType( AnnotationTestCases.class.getMethod( "withAuxiliaryAnnotation" ) );
+        final Annotation equivalenceAnnotation = annotationTypeReader.getEquivalenceAnnotation( AnnotationTestCases.class.getMethod( "withAuxiliaryAnnotation" ) );
         // Verify
-        assertThat( "", annotationType == Identity.class );
+        assertThat( equivalenceAnnotation, is( instanceOf( Identity.class ) ) );
     }
 
     @Test
@@ -47,12 +49,16 @@ public class AnnotationTypeReaderTest {
         // Exercise
         try
         {
-            annotationTypeReader.getEquivalenceAnnotationType( AnnotationTestCases.class.getMethod( "tooManyAnnotations" ) );
+            annotationTypeReader.getEquivalenceAnnotation( AnnotationTestCases.class.getMethod( "tooManyAnnotations" ) );
             // Verify
             fail( );
         }
         catch ( final IllegalArgumentException e )
         {
+            assertThat( e.getMessage( ), is( equalTo( "The equivalence specification property " +
+                    "public abstract java.lang.Object net.chwthewke.hamcrest.sut.specs." +
+                    "AnnotationTestCases.tooManyAnnotations() has these mutually exclusive annotations: " +
+                    "[ApproximateEquality, BySpecification]." ) ) );
         }
     }
 
@@ -61,10 +67,9 @@ public class AnnotationTypeReaderTest {
         // Setup
 
         // Exercise
-        final Class<? extends Annotation> annotationType =
-                annotationTypeReader.getEquivalenceAnnotationType( AnnotationTestCases.class.getMethod( "noAnnotationDefaultsToEquality" ) );
+        final Annotation equivalenceAnnotation = annotationTypeReader.getEquivalenceAnnotation( AnnotationTestCases.class.getMethod( "noAnnotationDefaultsToEquality" ) );
         // Verify
-        assertThat( "", annotationType == Equality.class );
+        assertThat( equivalenceAnnotation, is( instanceOf( Equality.class ) ) );
     }
 
 }
