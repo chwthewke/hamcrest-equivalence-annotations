@@ -20,8 +20,13 @@ import com.google.common.collect.Lists;
 
 class AnnotationTypeReader {
 
+    @Deprecated
     public Class<? extends Annotation> getEquivalenceAnnotationType( final Method specificationMethod ) {
 
+        return getEquivalenceAnnotation( specificationMethod ).annotationType( );
+    }
+
+    public Annotation getEquivalenceAnnotation( final Method specificationMethod ) {
         final Predicate<Class<? extends Annotation>> isOnSpecification =
                 new Predicate<Class<? extends Annotation>>( ) {
                     public boolean apply( final Class<? extends Annotation> input ) {
@@ -35,10 +40,10 @@ class AnnotationTypeReader {
         final int annotationCount = annotationsOnSpecification.size( );
 
         if ( annotationCount == 0 )
-            return Equality.class;
+            return DEFAULT_EQUALITY;
 
         if ( annotationCount == 1 )
-            return Iterables.get( annotationsOnSpecification, 0 );
+            return specificationMethod.getAnnotation( Iterables.get( annotationsOnSpecification, 0 ) );
 
         throw new IllegalArgumentException(
             String.format(
@@ -56,4 +61,9 @@ class AnnotationTypeReader {
                 ByEquivalence.class,
                 Text.class );
 
+    private static final Equality DEFAULT_EQUALITY = new Equality( ) {
+        public Class<? extends Annotation> annotationType( ) {
+            return Equality.class;
+        }
+    };
 }
