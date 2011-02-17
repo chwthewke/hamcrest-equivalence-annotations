@@ -1,7 +1,7 @@
 package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.primitives.Primitives.wrap;
 
 import java.lang.annotation.Annotation;
@@ -35,40 +35,39 @@ final class EquivalenceAnnotationProcessor<T> {
             final Method specification, final Method target ) {
         this.liftedEquivalenceFactory = liftedEquivalenceFactory;
         this.equivalenceFactory = equivalenceFactory;
-        this.annotationTypeReader = annotationTypeReader;
         this.specification = specification;
         this.target = target;
+
+        equivalenceAnnotation = checkNotNull( annotationTypeReader.getEquivalenceAnnotation( specification ),
+            "Unexpected missing annotation." );
     }
 
     public Equivalence<T> processEquivalenceSpecification( ) {
 
-        final TypeEquivalence<?> typeEquivalence = computeEquivalenceOnPropertyType( );
-
-        return lift( typeEquivalence );
+        return lift( computeEquivalenceOnPropertyType( ) );
     }
 
     private TypeEquivalence<?> computeEquivalenceOnPropertyType( ) {
-        annotationType = annotationTypeReader.getEquivalenceAnnotationType( specification );
 
-        if ( annotationType == ApproximateEquality.class )
-            return computeApproximateEqualityEquivalence( );
+        if ( equivalenceAnnotation instanceof ApproximateEquality )
+            return computeApproximateEqualityEquivalence( (ApproximateEquality) equivalenceAnnotation );
 
-        if ( annotationType == Text.class )
-            return computeTextEquivalence( );
+        if ( equivalenceAnnotation instanceof Text )
+            return computeTextEquivalence( (Text) equivalenceAnnotation );
 
         return computeGenericEquivalence( propertyType( ) );
     }
 
-    private TypeEquivalence<String> computeTextEquivalence( ) {
+    private TypeEquivalence<String> computeTextEquivalence( final Text annotation ) {
         final Equivalence<String> equivalence = equivalenceFactory
-            .getTextEquivalence( getSpecificationAnnotation( Text.class ).options( ) );
+            .getTextEquivalence( annotation.options( ) );
 
         return new TypeEquivalence<String>( equivalence, String.class );
     }
 
-    private TypeEquivalence<Number> computeApproximateEqualityEquivalence( ) {
+    private TypeEquivalence<Number> computeApproximateEqualityEquivalence( final ApproximateEquality annotation ) {
         final Equivalence<Number> equivalence = equivalenceFactory
-            .getApproximateEquality( getSpecificationAnnotation( ApproximateEquality.class ).tolerance( ) );
+            .getApproximateEquality( annotation.tolerance( ) );
 
         return new TypeEquivalence<Number>( equivalence, Number.class );
     }
@@ -79,7 +78,7 @@ final class EquivalenceAnnotationProcessor<T> {
             requiredPropertyType.isAssignableFrom( propertyType( ) ),
             String.format(
                 "The equivalence specification property %s bears %s, so it must have a type assignable to %s.",
-                specification, annotationType.getSimpleName( ), requiredPropertyType.getName( ) ) );
+                specification, getAnnotationType( ).getSimpleName( ), requiredPropertyType.getName( ) ) );
 
         return liftedEquivalenceFactory.create( specification.getName( ),
             typeEquivalence.getEquivalence( ),
@@ -88,55 +87,45 @@ final class EquivalenceAnnotationProcessor<T> {
 
     private <V> TypeEquivalence<V> computeGenericEquivalence( final Class<V> type ) {
 
-        final Equivalence<V> propertyEquivalence;
-
-        if ( annotationType == ByEquivalence.class )
-        {
-            final ByEquivalence specificationAnnotation = getSpecificationAnnotation( ByEquivalence.class );
-            propertyEquivalence = equivalenceFactory
-                .createEquivalenceInstance( specificationAnnotation, specification, type );
-        }
-        else if ( annotationType == BySpecification.class )
-        {
-            final Class<?> subSpecification = getSpecificationAnnotation( BySpecification.class ).value( );
-            propertyEquivalence =
-                    equivalenceFactory.getEquivalenceFromSpecification( type, subSpecification );
-        }
-        else if ( annotationType == Identity.class && !specification.getReturnType( ).isPrimitive( ) )
-        {
-            propertyEquivalence = equivalenceFactory.getIdentity( );
-        }
-        else if ( annotationType == Equality.class || annotationType == Identity.class )
-        {
-            propertyEquivalence = equivalenceFactory.getEquality( );
-        }
-        else
-        {
-            throw new IllegalStateException( String.format( "Cannot process annotation of type %s.",
-                annotationType.getSimpleName( ) ) );
-        }
+        final Equivalence<V> propertyEquivalence = computePropertyEquivalence( type );
 
         return new TypeEquivalence<V>( propertyEquivalence, type );
 
     }
 
-    private <A extends Annotation> A getSpecificationAnnotation( final Class<A> annotationClass ) {
-        checkState( specification.isAnnotationPresent( annotationClass ) );
-        return specification.getAnnotation( annotationClass );
+    private <V> Equivalence<V> computePropertyEquivalence( final Class<V> type ) {
+
+        if ( equivalenceAnnotation instanceof ByEquivalence )
+            return equivalenceFactory
+                .createEquivalenceInstance( (ByEquivalence) equivalenceAnnotation, specification, type );
+
+        if ( equivalenceAnnotation instanceof BySpecification )
+            return equivalenceFactory.getEquivalenceBySpecification( type, (BySpecification) equivalenceAnnotation );
+
+        if ( equivalenceAnnotation instanceof Identity && !specification.getReturnType( ).isPrimitive( ) )
+            return equivalenceFactory.getIdentity( );
+
+        if ( equivalenceAnnotation instanceof Equality || equivalenceAnnotation instanceof Identity )
+            return equivalenceFactory.getEquality( );
+
+        throw new IllegalStateException( String.format( "Cannot process annotation of type %s.",
+                getAnnotationType( ).getSimpleName( ) ) );
     }
 
     private Class<?> propertyType( ) {
         return wrap( specification.getReturnType( ) );
     }
 
+    private Class<? extends Annotation> getAnnotationType( ) {
+        return equivalenceAnnotation.annotationType( );
+    }
+
     private final Method specification;
     private final Method target;
 
-    private Class<? extends Annotation> annotationType;
-
     private final LiftedEquivalenceFactory liftedEquivalenceFactory;
-    private final AnnotationTypeReader annotationTypeReader;
     private final EquivalenceFactory equivalenceFactory;
+    private final Annotation equivalenceAnnotation;
 
     private static class TypeEquivalence<U> {
 

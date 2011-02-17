@@ -12,7 +12,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -227,27 +226,24 @@ public class EquivalenceAnnotationProcessorTest {
     }
 
     @Test
-    public void failsWithUnknownAnnotationType( ) throws Exception {
+    public void failsWithNoAnnotationType( ) throws Exception {
         // Setup
         final AnnotationTypeReader mockAnnotationTypeReader = mock( AnnotationTypeReader.class );
         final Method specification = EqualityOnString.class.getMethod( "getValue" );
         final Method target = WithPublicProperty.class.getMethod( "getValue" );
-        final EquivalenceAnnotationProcessor<WithPublicProperty> annotationProcessor =
-                new EquivalenceAnnotationProcessor<WithPublicProperty>(
-                    liftedEquivalenceFactory, equivalenceFactory, mockAnnotationTypeReader,
-                    specification, target );
 
-        doReturn( Override.class ).when( mockAnnotationTypeReader ).getEquivalenceAnnotationType( specification );
         // Exercise
         try
         {
-            annotationProcessor.processEquivalenceSpecification( );
+            new EquivalenceAnnotationProcessor<WithPublicProperty>(
+                        liftedEquivalenceFactory, equivalenceFactory, mockAnnotationTypeReader,
+                        specification, target );
             // Verify
             fail( );
         }
-        catch ( final IllegalStateException e )
+        catch ( final NullPointerException e )
         {
-            assertThat( e.getMessage( ), is( equalTo( "Cannot process annotation of type Override." ) ) );
+            assertThat( e.getMessage( ), is( equalTo( "Unexpected missing annotation." ) ) );
         }
     }
 
