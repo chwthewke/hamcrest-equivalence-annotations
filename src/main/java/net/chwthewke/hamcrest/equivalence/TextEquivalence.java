@@ -93,8 +93,8 @@ public final class TextEquivalence {
 
     private static EnumSet<TextEquivalenceOption> coreOptions = EnumSet.of( IGNORE_CASE );
 
-    private static class NamedProjection { // NOCHECK HideUtilityClassConstructor
-        NamedProjection( final String name, final Function<String, String> projection ) {
+    private static final class NamedProjection {
+        private NamedProjection( final String name, final Function<String, String> projection ) {
             this.name = name;
             this.projection = projection;
         }
