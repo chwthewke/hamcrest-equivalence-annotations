@@ -1,6 +1,5 @@
 package net.chwthewke.hamcrest.matchers;
 
-import java.lang.reflect.Method;
 
 import net.chwthewke.hamcrest.annotations.ByEquivalence;
 import net.chwthewke.hamcrest.annotations.BySpecification;
@@ -29,16 +28,15 @@ class EquivalenceFactory {
         return new IdentityEquivalence<T>( );
     }
 
-    public <T> Equivalence<T> getEquivalenceBySpecification( final Class<T> targetType,
-            final BySpecification bySpecificationAnnotation ) {
+    public <T> Equivalence<T> getEquivalenceBySpecification( final BySpecification bySpecificationAnnotation,
+            final Class<T> targetType ) {
         return new CompositeEquivalence<T>( propertyFinder, specificationValidator,
                 targetType, bySpecificationAnnotation.value( ) );
     }
 
     public <T> Equivalence<T> createEquivalenceInstance( final ByEquivalence specificationAnnotation,
-            final Method specification,
             final Class<?> propertyType ) {
-        return equivalenceActivator.createEquivalenceInstance( specificationAnnotation, specification, propertyType );
+        return equivalenceActivator.createEquivalenceInstance( specificationAnnotation, propertyType );
     }
 
     private final PropertyFinder propertyFinder = new PropertyFinder( );
