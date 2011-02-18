@@ -18,7 +18,7 @@ final class EquivalenceAnnotationProcessor<T> {
             final Method specification,
             final Method target ) {
         return new EquivalenceAnnotationProcessor<T>(
-            new TypeEquivalenceComputer( new EquivalenceFactory( ) ),
+            new GeneralTypeEquivalenceComputer( new EquivalenceFactory( ) ),
             new LiftedEquivalenceFactory( ), new AnnotationTypeReader( ),
             specification, target );
     }

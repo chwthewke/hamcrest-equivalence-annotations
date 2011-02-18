@@ -69,7 +69,7 @@ public class EquivalenceAnnotationProcessorTest {
             .thenReturn( token );
 
         equivalenceFactory = new EquivalenceFactory( );
-        typeEquivalenceComputer = new TypeEquivalenceComputer( equivalenceFactory );
+        typeEquivalenceComputer = new GeneralTypeEquivalenceComputer( equivalenceFactory );
         annotationTypeReader = new AnnotationTypeReader( );
     }
 
