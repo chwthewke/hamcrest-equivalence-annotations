@@ -12,9 +12,9 @@ import net.chwthewke.hamcrest.annotations.Identity;
 import net.chwthewke.hamcrest.annotations.Text;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
-class TypeEquivalenceComputer {
+class GeneralTypeEquivalenceComputer implements TypeEquivalenceComputer {
 
-    TypeEquivalenceComputer( final EquivalenceFactory equivalenceFactory ) {
+    GeneralTypeEquivalenceComputer( final EquivalenceFactory equivalenceFactory ) {
         this.equivalenceFactory = equivalenceFactory;
     }
 
