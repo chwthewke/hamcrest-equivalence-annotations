@@ -1,6 +1,7 @@
 package net.chwthewke.hamcrest.matchers;
 
-
+import static net.chwthewke.hamcrest.equivalence.IterableEquivalences.iterableEquivalence;
+import static net.chwthewke.hamcrest.equivalence.IterableEquivalences.iterableEquivalenceInAnyOrder;
 import net.chwthewke.hamcrest.annotations.ByEquivalence;
 import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.equivalence.ApproximateEqualityEquivalence;
@@ -37,6 +38,13 @@ class EquivalenceFactory {
     public <T> Equivalence<T> createEquivalenceInstance( final ByEquivalence specificationAnnotation,
             final Class<?> propertyType ) {
         return equivalenceActivator.createEquivalenceInstance( specificationAnnotation, propertyType );
+    }
+
+    public <T> Equivalence<? extends Iterable<? extends T>> createIterableEquivalence(
+            final Equivalence<T> equivalenceOnElementType, final boolean enforceOrder ) {
+        return enforceOrder ?
+                iterableEquivalence( equivalenceOnElementType ) :
+                iterableEquivalenceInAnyOrder( equivalenceOnElementType );
     }
 
     private final PropertyFinder propertyFinder = new PropertyFinder( );
