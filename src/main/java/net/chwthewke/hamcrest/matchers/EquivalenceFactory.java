@@ -11,6 +11,7 @@ import net.chwthewke.hamcrest.equivalence.IdentityEquivalence;
 import net.chwthewke.hamcrest.equivalence.TextEquivalence;
 import net.chwthewke.hamcrest.equivalence.TextEquivalenceOption;
 
+// TODO increasingly non-trivial, needs proper unit-testing.
 class EquivalenceFactory {
 
     public Equivalence<Number> getApproximateEquality( final double tolerance ) {
