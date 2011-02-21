@@ -7,15 +7,16 @@ import java.lang.annotation.Annotation;
 import net.chwthewke.hamcrest.annotations.OnIterableElements;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
-class IterableTypeEquivalenceComputer extends CoreTypeEquivalenceComputer {
+class IterableTypeEquivalenceComputer implements TypeEquivalenceComputer {
 
-    IterableTypeEquivalenceComputer( final EquivalenceFactory equivalenceFactory,
+    IterableTypeEquivalenceComputer(
+            final TypeEquivalenceComputer delegate,
+            final EquivalenceFactory equivalenceFactory,
             final OnIterableElements elementTypeAnnotation,
             final boolean enforceOrder ) {
-        super( equivalenceFactory );
+        this.delegate = delegate;
         this.equivalenceFactory = equivalenceFactory;
         this.enforceOrder = enforceOrder;
-
         elementType = elementTypeAnnotation.elementType( );
     }
 
@@ -27,7 +28,7 @@ class IterableTypeEquivalenceComputer extends CoreTypeEquivalenceComputer {
             "'propertyType' must be a subtype of Iterable." );
 
         final Equivalence<?> equivalenceOnElementType =
-                computeCoreAnnotationEquivalence( equivalenceAnnotation, elementType )
+                delegate.computeEquivalenceOnPropertyType( equivalenceAnnotation, elementType )
                     .getEquivalence( );
 
         return liftToIterable( equivalenceOnElementType, (Class<? extends Iterable<?>>) propertyType );
@@ -43,6 +44,7 @@ class IterableTypeEquivalenceComputer extends CoreTypeEquivalenceComputer {
         return new TypeEquivalence<X>( equivalenceOnProperty, propertyType );
     }
 
+    private final TypeEquivalenceComputer delegate;
     private final EquivalenceFactory equivalenceFactory;
     private final Class<?> elementType;
     private final boolean enforceOrder;
