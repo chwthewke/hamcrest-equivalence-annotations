@@ -12,20 +12,15 @@ import net.chwthewke.hamcrest.annotations.Identity;
 import net.chwthewke.hamcrest.annotations.Text;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
-class SimpleTypeEquivalenceComputer implements TypeEquivalenceComputer {
+class BasicTypeEquivalenceComputer {
 
-    SimpleTypeEquivalenceComputer( final EquivalenceFactory equivalenceFactory ) {
+    BasicTypeEquivalenceComputer( final EquivalenceFactory equivalenceFactory ) {
         this.equivalenceFactory = equivalenceFactory;
     }
 
-    public TypeEquivalence<?> computeEquivalenceOnPropertyType( final Annotation equivalenceAnnotation,
+    public TypeEquivalence<?> computeEquivalenceOnBasicPropertyType( final Annotation equivalenceAnnotation,
             final Class<?> propertyType ) {
 
-        return computeCoreAnnotationEquivalence( equivalenceAnnotation, propertyType );
-    }
-
-    protected final TypeEquivalence<?> computeCoreAnnotationEquivalence( final Annotation equivalenceAnnotation,
-            final Class<?> propertyType ) {
         if ( equivalenceAnnotation instanceof ApproximateEquality )
             return computeApproximateEqualityEquivalence( (ApproximateEquality) equivalenceAnnotation );
 
