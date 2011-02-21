@@ -12,6 +12,7 @@ import net.chwthewke.hamcrest.annotations.Identity;
 import net.chwthewke.hamcrest.annotations.Text;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
+// TODO probably better to refactor this hierarchy as Decorator
 abstract class CoreTypeEquivalenceComputer implements TypeEquivalenceComputer {
 
     CoreTypeEquivalenceComputer( final EquivalenceFactory equivalenceFactory ) {

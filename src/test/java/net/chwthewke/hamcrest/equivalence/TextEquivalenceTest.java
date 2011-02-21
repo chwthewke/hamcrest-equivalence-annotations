@@ -60,8 +60,6 @@ public class TextEquivalenceTest {
         assertThat( description, is( equalTo( "equalToIgnoringCase(\"abc\")" ) ) );
     }
 
-    // TODO also test matcher descriptions
-
     @Test
     public void textEquivalenceIgnoringLeadingWhitespace( ) throws Exception {
         // Setup
