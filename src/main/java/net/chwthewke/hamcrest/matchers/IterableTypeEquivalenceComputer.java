@@ -4,13 +4,13 @@ import static com.google.common.base.Preconditions.checkState;
 
 import java.lang.annotation.Annotation;
 
-import net.chwthewke.hamcrest.annotations.ByIterableElements;
+import net.chwthewke.hamcrest.annotations.OnIterableElements;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
 class IterableTypeEquivalenceComputer extends CoreTypeEquivalenceComputer {
 
     IterableTypeEquivalenceComputer( final EquivalenceFactory equivalenceFactory,
-            final ByIterableElements elementTypeAnnotation,
+            final OnIterableElements elementTypeAnnotation,
             final boolean enforceOrder ) {
         super( equivalenceFactory );
         this.equivalenceFactory = equivalenceFactory;
