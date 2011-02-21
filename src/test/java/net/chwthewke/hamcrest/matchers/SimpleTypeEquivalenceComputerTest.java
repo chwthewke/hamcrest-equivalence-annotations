@@ -9,7 +9,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.annotation.Annotation;
-import java.util.Calendar;
 import java.util.Date;
 
 import net.chwthewke.hamcrest.annotations.ApproximateEquality;
@@ -18,8 +17,8 @@ import net.chwthewke.hamcrest.annotations.BySpecification;
 import net.chwthewke.hamcrest.annotations.Equality;
 import net.chwthewke.hamcrest.annotations.Identity;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
-import net.chwthewke.hamcrest.equivalence.IdentityEquivalence;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -134,19 +133,19 @@ public class SimpleTypeEquivalenceComputerTest {
     @Test
     public void computeByEquivalenceEquivalence( ) throws Exception {
         // Setup
-        final ByEquivalence byEquivalence = byEquivalence( (Class<? extends Equivalence<?>>) IdentityEquivalence.class );
+        final ByEquivalence byEquivalence = byEquivalence( DateEquivalence.class );
 
-        final Equivalence<Calendar> equivalence = mock( Equivalence.class );
-        when( equivalenceFactory.<Calendar>createEquivalenceInstance( byEquivalence, Calendar.class ) )
+        final Equivalence<Date> equivalence = mock( Equivalence.class );
+        when( equivalenceFactory.<Date>createEquivalenceInstance( byEquivalence, Date.class ) )
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnPropertyType( byEquivalence, Calendar.class );
+                typeEquivalenceComputer.computeEquivalenceOnPropertyType( byEquivalence, Date.class );
 
         // Verify
-        verify( equivalenceFactory ).createEquivalenceInstance( byEquivalence, Calendar.class );
-        assertThat( (Class<Calendar>) typeEquivalence.getType( ), is( equalTo( Calendar.class ) ) );
-        assertThat( (Equivalence<Calendar>) typeEquivalence.getEquivalence( ), is( sameInstance( equivalence ) ) );
+        verify( equivalenceFactory ).createEquivalenceInstance( byEquivalence, Date.class );
+        assertThat( (Class<Date>) typeEquivalence.getType( ), is( equalTo( Date.class ) ) );
+        assertThat( (Equivalence<Date>) typeEquivalence.getEquivalence( ), is( sameInstance( equivalence ) ) );
     }
 
     private Equality equality( ) {
@@ -201,6 +200,13 @@ public class SimpleTypeEquivalenceComputerTest {
                 return value;
             }
         };
+    }
+
+    private static class DateEquivalence implements Equivalence<Date> {
+        public Matcher<Date> equivalentTo( final Date expected ) {
+            return equalTo( expected );
+        }
+
     }
 
 }
