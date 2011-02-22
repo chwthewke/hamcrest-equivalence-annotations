@@ -11,8 +11,6 @@ import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences.forLongArrays
 import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences.forShortArrays;
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.equates;
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.separates;
-import static net.chwthewke.hamcrest.equivalence.IterableEquivalences.iterableEquivalence;
-import static net.chwthewke.hamcrest.equivalence.IterableEquivalences.iterableEquivalenceInAnyOrder;
 import static net.chwthewke.hamcrest.equivalence.TextEquivalence.textEquivalenceWith;
 import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_CASE;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,7 +23,7 @@ public class ArrayEquivalencesTest {
     public void testStringArrayInOrderEquivalence( ) throws Exception {
         // Setup
         final Equivalence<String[ ]> equivalence =
-                forArrays( iterableEquivalence( textEquivalenceWith( IGNORE_CASE ) ) );
+                forArrays( new IterableEquivalence<String>( textEquivalenceWith( IGNORE_CASE ), true ) );
         // Exercise
         // Verify
         assertThat( equivalence,
@@ -39,7 +37,7 @@ public class ArrayEquivalencesTest {
     public void testBooleanArrayInAnyOrder( ) throws Exception {
         // Setup
         final Equivalence<boolean[ ]> equivalence =
-                forBooleanArrays( iterableEquivalenceInAnyOrder( new EqualityEquivalence<Boolean>( ) ) );
+                forBooleanArrays( new IterableEquivalence<Boolean>( new EqualityEquivalence<Boolean>( ), false ) );
         // Exercise
         // Verify
         assertThat( equivalence, equates( new boolean[ ] { true, false, false },
@@ -53,7 +51,7 @@ public class ArrayEquivalencesTest {
     public void testByteArrayInOrderTest( ) throws Exception {
         // Setup
         final Equivalence<byte[ ]> equivalence =
-                forByteArrays( iterableEquivalence( new EqualityEquivalence<Byte>( ) ) );
+                forByteArrays( new IterableEquivalence<Byte>( new EqualityEquivalence<Byte>( ), true ) );
         // Exercise
         // Verify
         assertThat( equivalence, equates( new byte[ ] { 0x51, 0x12, -0x44 },
@@ -66,7 +64,7 @@ public class ArrayEquivalencesTest {
     public void testCharArrayInOrderTest( ) throws Exception {
         // Setup
         final Equivalence<char[ ]> equivalence =
-                forCharacterArrays( iterableEquivalence( new EqualityEquivalence<Character>( ) ) );
+                forCharacterArrays( new IterableEquivalence<Character>( new EqualityEquivalence<Character>( ), true ) );
         // Exercise
         // Verify
         assertThat( equivalence, equates( new char[ ] { 'A', 'B', 'þ' },
@@ -79,8 +77,8 @@ public class ArrayEquivalencesTest {
     public void testDoubleArrayInOrderApproxTest( ) throws Exception {
         // Setup
         final Equivalence<double[ ]> equivalence =
-                forDoubleArrays( iterableEquivalence(
-                    Transforms.<Number, Double>narrow( new ApproximateEqualityEquivalence( 0.001d ) ) ) );
+                forDoubleArrays( new IterableEquivalence<Double>(
+                    Transforms.<Number, Double>narrow( new ApproximateEqualityEquivalence( 0.001d ) ), true ) );
         // Exercise
         // Verify
         assertThat( equivalence, equates( new double[ ] { 1d, 4d, -5d },
@@ -93,8 +91,8 @@ public class ArrayEquivalencesTest {
     public void testFloatArrayInOrderApproxTest( ) throws Exception {
         // Setup
         final Equivalence<float[ ]> equivalence =
-                forFloatArrays( iterableEquivalence(
-                    Transforms.<Number, Float>narrow( new ApproximateEqualityEquivalence( 0.001d ) ) ) );
+                forFloatArrays( new IterableEquivalence<Float>(
+                    Transforms.<Number, Float>narrow( new ApproximateEqualityEquivalence( 0.001d ) ), true ) );
         // Exercise
         // Verify
         assertThat( equivalence, equates( new float[ ] { 1f, 4f, -5f },
@@ -107,7 +105,7 @@ public class ArrayEquivalencesTest {
     public void testIntArrayInOrderTest( ) throws Exception {
         // Setup
         final Equivalence<int[ ]> equivalence =
-                forIntegerArrays( iterableEquivalence( new EqualityEquivalence<Integer>( ) ) );
+                forIntegerArrays( new IterableEquivalence<Integer>( new EqualityEquivalence<Integer>( ), true ) );
         // Exercise
         // Verify
         assertThat( equivalence, equates( new int[ ] { 0x51, 0x12, -0x44 },
@@ -120,7 +118,7 @@ public class ArrayEquivalencesTest {
     public void testLongArrayInOrderTest( ) throws Exception {
         // Setup
         final Equivalence<long[ ]> equivalence =
-                forLongArrays( iterableEquivalence( new EqualityEquivalence<Long>( ) ) );
+                forLongArrays( new IterableEquivalence<Long>( new EqualityEquivalence<Long>( ), true ) );
         // Exercise
         // Verify
         assertThat( equivalence, equates( new long[ ] { 0x51, 0x12, -0x44 },
@@ -133,7 +131,7 @@ public class ArrayEquivalencesTest {
     public void testShortArrayInOrderTest( ) throws Exception {
         // Setup
         final Equivalence<short[ ]> equivalence =
-                forShortArrays( iterableEquivalence( new EqualityEquivalence<Short>( ) ) );
+                forShortArrays( new IterableEquivalence<Short>( new EqualityEquivalence<Short>( ), true ) );
         // Exercise
         // Verify
         assertThat( equivalence, equates( new short[ ] { 0x51, 0x12, -0x44 },

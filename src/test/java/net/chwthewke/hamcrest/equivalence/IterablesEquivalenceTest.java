@@ -3,8 +3,6 @@ package net.chwthewke.hamcrest.equivalence;
 import static com.google.common.collect.Lists.newArrayList;
 import static net.chwthewke.hamcrest.MatcherUtils.describe;
 import static net.chwthewke.hamcrest.MatcherUtils.describeMismatch;
-import static net.chwthewke.hamcrest.equivalence.IterableEquivalences.iterableEquivalence;
-import static net.chwthewke.hamcrest.equivalence.IterableEquivalences.iterableEquivalenceInAnyOrder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -19,7 +17,8 @@ public class IterablesEquivalenceTest {
         final Equivalence<String> componentEquivalence =
                 TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
         // Exercise
-        final Equivalence<Iterable<? extends String>> equivalence = iterableEquivalence( componentEquivalence );
+        final Equivalence<Iterable<? extends String>> equivalence = new IterableEquivalence<String>(
+            componentEquivalence, true );
         // Verify
         assertThat(
             equivalence, EquivalenceClassMatchers.<Iterable<? extends String>>equates(
@@ -38,7 +37,8 @@ public class IterablesEquivalenceTest {
         final Equivalence<String> componentEquivalence =
                 TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
         // Exercise
-        final Equivalence<Iterable<? extends String>> equivalence = iterableEquivalence( componentEquivalence );
+        final Equivalence<Iterable<? extends String>> equivalence = new IterableEquivalence<String>(
+            componentEquivalence, true );
         // Verify
         final String description = describe( equivalence.equivalentTo( newArrayList( "Abc", "def" ) ) );
         assertThat( description, is( equalTo( "iterable containing " +
@@ -51,7 +51,8 @@ public class IterablesEquivalenceTest {
         final Equivalence<String> componentEquivalence =
                 TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
         // Exercise
-        final Equivalence<Iterable<? extends String>> equivalence = iterableEquivalence( componentEquivalence );
+        final Equivalence<Iterable<? extends String>> equivalence = new IterableEquivalence<String>(
+            componentEquivalence, true );
         final Matcher<Iterable<? extends String>> matcher = equivalence.equivalentTo( newArrayList( "ABC", "Def" ) );
         // Verify
         final String mismatchDescription = describeMismatch( matcher, newArrayList( "ABC", "D ef" ) );
@@ -64,7 +65,8 @@ public class IterablesEquivalenceTest {
         final Equivalence<String> componentEquivalence =
                 TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
         // Exercise
-        final Equivalence<Iterable<? extends String>> equivalence = iterableEquivalenceInAnyOrder( componentEquivalence );
+        final Equivalence<Iterable<? extends String>> equivalence = new IterableEquivalence<String>(
+            componentEquivalence, false );
         // Verify
         assertThat(
             equivalence, EquivalenceClassMatchers.<Iterable<? extends String>>equates(
@@ -83,7 +85,8 @@ public class IterablesEquivalenceTest {
         final Equivalence<String> componentEquivalence =
                 TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
         // Exercise
-        final Equivalence<Iterable<? extends String>> equivalence = iterableEquivalenceInAnyOrder( componentEquivalence );
+        final Equivalence<Iterable<? extends String>> equivalence = new IterableEquivalence<String>(
+            componentEquivalence, false );
         // Verify
         final String description = describe( equivalence.equivalentTo( newArrayList( "Abc", "def" ) ) );
         assertThat( description, is( equalTo( "iterable over " +
@@ -97,7 +100,8 @@ public class IterablesEquivalenceTest {
         final Equivalence<String> componentEquivalence =
                 TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
         // Exercise
-        final Equivalence<Iterable<? extends String>> equivalence = iterableEquivalenceInAnyOrder( componentEquivalence );
+        final Equivalence<Iterable<? extends String>> equivalence = new IterableEquivalence<String>(
+            componentEquivalence, false );
         final Matcher<Iterable<? extends String>> matcher = equivalence.equivalentTo( newArrayList( "ABC", "Def" ) );
         // Verify
         final String mismatchDescription = describeMismatch( matcher, newArrayList( "Def", "AB C" ) );
