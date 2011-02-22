@@ -15,15 +15,20 @@ final class EquivalenceAnnotationProcessor<T> {
             @SuppressWarnings( "unused" ) final Class<T> sourceType,
             final Method specification,
             final Method target ) {
+
         final EquivalenceFactory equivalenceFactory = new EquivalenceFactory( );
+
         final TypeEquivalenceComputer typeEquivalenceComputer =
                 new TypeEquivalenceComputer(
                     equivalenceFactory,
                     new BasicTypeEquivalenceComputer( equivalenceFactory ),
                     new AnnotationTypeReader( ) );
+
+        final LiftedEquivalenceFactory liftedEquivalenceFactory = new LiftedEquivalenceFactory( );
+
         return new EquivalenceAnnotationProcessor<T>(
             typeEquivalenceComputer,
-            new LiftedEquivalenceFactory( ),
+            liftedEquivalenceFactory,
             specification,
             target );
     }

@@ -1,10 +1,12 @@
 package net.chwthewke.hamcrest.matchers;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import net.chwthewke.hamcrest.annotations.OnIterableElements;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
 class TypeEquivalenceComputer {
@@ -18,27 +20,33 @@ class TypeEquivalenceComputer {
         this.annotationTypeReader = annotationTypeReader;
     }
 
-    // TODO rename, remove 'property' ?
+    // TODO refactor to decouple from "Method" (pass type and 'set' of annotations)
     public TypeEquivalence<?> computeEquivalenceOnPropertyType( final Method specification ) {
-        final Class<?> propertyType = specification.getReturnType( );
         final Annotation equivalenceAnnotation =
                 checkNotNull( annotationTypeReader.getEquivalenceAnnotation( specification ),
                     "Unexpected missing annotation." );
-        return basicTypeEquivalenceComputer.computeEquivalenceOnBasicPropertyType( equivalenceAnnotation, propertyType );
-    }
 
-//    private TypeEquivalence<?> computeIterableEquivalenceOnPropertyType(
-//            final Method specification ) {
-//
-//        checkState( Iterable.class.isAssignableFrom( propertyType ),
-//            "'propertyType' must be a subtype of Iterable." );
-//
-//        final Equivalence<?> equivalenceOnElementType =
-//                basicTypeEquivalenceComputer.computeEquivalenceOnBasicPropertyType( )
-//                    .getEquivalence( );
-//
-//        return liftToIterable( equivalenceOnElementType, (Class<? extends Iterable<?>>) propertyType );
-//    }
+        final Class<?> propertyType = specification.getReturnType( );
+        if ( specification.isAnnotationPresent( OnIterableElements.class ) )
+        {
+            checkArgument( Iterable.class.isAssignableFrom( propertyType ),
+                "'propertyType' must be a subtype of Iterable." );
+
+            final Class<?> elementType = specification.getAnnotation( OnIterableElements.class ).elementType( );
+
+            final Equivalence<?> equivalenceOnElementType =
+                    basicTypeEquivalenceComputer.computeEquivalenceOnBasicType(
+                        equivalenceAnnotation, elementType )
+                        .getEquivalence( );
+
+            @SuppressWarnings( "unchecked" )
+            final Class<? extends Iterable<?>> propertyTypeAsIterable = (Class<? extends Iterable<?>>) propertyType;
+
+            return liftToIterable( equivalenceOnElementType, propertyTypeAsIterable );
+        }
+
+        return basicTypeEquivalenceComputer.computeEquivalenceOnBasicType( equivalenceAnnotation, propertyType );
+    }
 
     private <X extends Iterable<?>> TypeEquivalence<X> liftToIterable( final Equivalence<?> equivalenceOnElementType,
             final Class<X> propertyType ) {

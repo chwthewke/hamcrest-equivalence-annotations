@@ -11,7 +11,7 @@ import org.hamcrest.Matcher;
 
 import com.google.common.base.Function;
 
-final class IterableEquivalence<T> implements Equivalence<Iterable<? extends T>> {
+public final class IterableEquivalence<T> implements Equivalence<Iterable<? extends T>> {
 
     public Matcher<Iterable<? extends T>> equivalentTo( final Iterable<? extends T> expected ) {
         final List<Matcher<? super T>> expectedItems =
@@ -24,7 +24,7 @@ final class IterableEquivalence<T> implements Equivalence<Iterable<? extends T>>
         return inOrder ? contains( expectedItems ) : containsInAnyOrder( expectedItems );
     }
 
-    IterableEquivalence( final Equivalence<T> equivalence, final boolean inOrder ) {
+    public IterableEquivalence( final Equivalence<T> equivalence, final boolean inOrder ) {
         this.equivalence = equivalence;
         this.inOrder = inOrder;
     }
