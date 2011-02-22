@@ -18,7 +18,7 @@ class BasicTypeEquivalenceComputer {
         this.equivalenceFactory = equivalenceFactory;
     }
 
-    public TypeEquivalence<?> computeEquivalenceOnBasicPropertyType( final Annotation equivalenceAnnotation,
+    public TypeEquivalence<?> computeEquivalenceOnBasicType( final Annotation equivalenceAnnotation,
             final Class<?> propertyType ) {
 
         if ( equivalenceAnnotation instanceof ApproximateEquality )
@@ -61,7 +61,10 @@ class BasicTypeEquivalenceComputer {
                 .createEquivalenceInstance( (ByEquivalence) equivalenceAnnotation, type );
 
         if ( equivalenceAnnotation instanceof BySpecification )
-            return equivalenceFactory.getEquivalenceBySpecification( (BySpecification) equivalenceAnnotation, type );
+        {
+            final Class<?> specificationInterface = ( (BySpecification) equivalenceAnnotation ).value( );
+            return equivalenceFactory.getEquivalenceBySpecification( specificationInterface, type );
+        }
 
         if ( equivalenceAnnotation instanceof Identity && !isPrimitive )
             return equivalenceFactory.getIdentity( );

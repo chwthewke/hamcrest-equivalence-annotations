@@ -4,7 +4,10 @@ package net.chwthewke.hamcrest.equivalence;
  * {@link IterableEquivalences} allows to create equivalences that act upon Iterables of a type given an equivalence on
  * the component type. The resulting equivalence may optionally ignore the order of elements in the sequences it
  * receives.
+ * 
+ * @deprecated Use the IterableEquivalence ctor.
  */
+@Deprecated
 public final class IterableEquivalences {
 
     /**

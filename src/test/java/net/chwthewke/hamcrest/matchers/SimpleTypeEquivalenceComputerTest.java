@@ -44,7 +44,7 @@ public class SimpleTypeEquivalenceComputerTest {
         when( equivalenceFactory.<String>getEquality( ) ).thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicPropertyType( equality, String.class );
+                typeEquivalenceComputer.computeEquivalenceOnBasicType( equality, String.class );
         // Verify
         verify( equivalenceFactory ).getEquality( );
         assertThat( (Class<String>) typeEquivalence.getType( ), is( equalTo( String.class ) ) );
@@ -61,7 +61,7 @@ public class SimpleTypeEquivalenceComputerTest {
         when( equivalenceFactory.getIdentity( ) ).thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicPropertyType( identity, Object.class );
+                typeEquivalenceComputer.computeEquivalenceOnBasicType( identity, Object.class );
 
         // Verify
         verify( equivalenceFactory ).getIdentity( );
@@ -81,7 +81,7 @@ public class SimpleTypeEquivalenceComputerTest {
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicPropertyType( approx, float.class );
+                typeEquivalenceComputer.computeEquivalenceOnBasicType( approx, float.class );
 
         // Verify
         verify( equivalenceFactory ).getApproximateEquality( 0.001d );
@@ -101,7 +101,7 @@ public class SimpleTypeEquivalenceComputerTest {
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicPropertyType( approx, Double.class );
+                typeEquivalenceComputer.computeEquivalenceOnBasicType( approx, Double.class );
 
         // Verify
         verify( equivalenceFactory ).getApproximateEquality( 2e-6d );
@@ -117,14 +117,14 @@ public class SimpleTypeEquivalenceComputerTest {
         final BySpecification bySpecification = bySpecification( EquivalenceSpecification.class );
 
         final Equivalence<Date> equivalence = mock( Equivalence.class );
-        when( equivalenceFactory.<Date>getEquivalenceBySpecification( bySpecification, Date.class ) )
+        when( equivalenceFactory.<Date>getEquivalenceBySpecification( EquivalenceSpecification.class, Date.class ) )
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicPropertyType( bySpecification, Date.class );
+                typeEquivalenceComputer.computeEquivalenceOnBasicType( bySpecification, Date.class );
 
         // Verify
-        verify( equivalenceFactory ).getEquivalenceBySpecification( bySpecification, Date.class );
+        verify( equivalenceFactory ).getEquivalenceBySpecification( EquivalenceSpecification.class, Date.class );
         assertThat( (Class<Date>) typeEquivalence.getType( ), is( equalTo( Date.class ) ) );
         assertThat( (Equivalence<Date>) typeEquivalence.getEquivalence( ), is( sameInstance( equivalence ) ) );
     }
@@ -140,7 +140,7 @@ public class SimpleTypeEquivalenceComputerTest {
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicPropertyType( byEquivalence, Date.class );
+                typeEquivalenceComputer.computeEquivalenceOnBasicType( byEquivalence, Date.class );
 
         // Verify
         verify( equivalenceFactory ).createEquivalenceInstance( byEquivalence, Date.class );
