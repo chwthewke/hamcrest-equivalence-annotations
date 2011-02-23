@@ -53,7 +53,7 @@ class TypeEquivalenceComputer {
 
         @SuppressWarnings( "unchecked" )
         final Equivalence<X> equivalenceOnProperty =
-                (Equivalence<X>) equivalenceFactory.createIterableEquivalence( equivalenceOnElementType, false );
+                (Equivalence<X>) equivalenceFactory.createIterableEquivalence( equivalenceOnElementType, true );
 
         return new TypeEquivalence<X>( equivalenceOnProperty, propertyType );
     }
