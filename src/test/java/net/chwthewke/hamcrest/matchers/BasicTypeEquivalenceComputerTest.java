@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,7 +23,7 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SimpleTypeEquivalenceComputerTest {
+public class BasicTypeEquivalenceComputerTest {
 
     private BasicTypeEquivalenceComputer typeEquivalenceComputer;
     private EquivalenceFactory equivalenceFactory;
@@ -146,6 +147,27 @@ public class SimpleTypeEquivalenceComputerTest {
         verify( equivalenceFactory ).createEquivalenceInstance( byEquivalence, Date.class );
         assertThat( (Class<Date>) typeEquivalence.getType( ), is( equalTo( Date.class ) ) );
         assertThat( (Equivalence<Date>) typeEquivalence.getEquivalence( ), is( sameInstance( equivalence ) ) );
+    }
+
+    @Test
+    public void failWithUnknownAnnotation( ) throws Exception {
+        // Setup
+        final Override nonsensicalAnnotation = new Override( ) {
+            public Class<? extends Annotation> annotationType( ) {
+                return Override.class;
+            }
+        };
+        // Exercise
+        try
+        {
+            typeEquivalenceComputer.computeEquivalenceOnBasicType( nonsensicalAnnotation, Object.class );
+            // Verify
+            fail( );
+        }
+        catch ( final IllegalStateException e )
+        {
+            assertThat( e.getMessage( ), is( equalTo( "Cannot process annotation of type Override." ) ) );
+        }
     }
 
     private Equality equality( ) {

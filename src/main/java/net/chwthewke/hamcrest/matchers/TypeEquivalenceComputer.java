@@ -32,7 +32,8 @@ class TypeEquivalenceComputer {
             checkArgument( Iterable.class.isAssignableFrom( propertyType ),
                 "'propertyType' must be a subtype of Iterable." );
 
-            final Class<?> elementType = specification.getAnnotation( OnIterableElements.class ).elementType( );
+            final OnIterableElements onElementsAnnotation = specification.getAnnotation( OnIterableElements.class );
+            final Class<?> elementType = onElementsAnnotation.elementType( );
 
             final Equivalence<?> equivalenceOnElementType =
                     basicTypeEquivalenceComputer.computeEquivalenceOnBasicType(
@@ -42,18 +43,18 @@ class TypeEquivalenceComputer {
             @SuppressWarnings( "unchecked" )
             final Class<? extends Iterable<?>> propertyTypeAsIterable = (Class<? extends Iterable<?>>) propertyType;
 
-            return liftToIterable( equivalenceOnElementType, propertyTypeAsIterable );
+            return liftToIterable( equivalenceOnElementType, propertyTypeAsIterable, onElementsAnnotation.inOrder( ) );
         }
 
         return basicTypeEquivalenceComputer.computeEquivalenceOnBasicType( equivalenceAnnotation, propertyType );
     }
 
     private <X extends Iterable<?>> TypeEquivalence<X> liftToIterable( final Equivalence<?> equivalenceOnElementType,
-            final Class<X> propertyType ) {
+            final Class<X> propertyType, final boolean enforceOrder ) {
 
         @SuppressWarnings( "unchecked" )
         final Equivalence<X> equivalenceOnProperty =
-                (Equivalence<X>) equivalenceFactory.createIterableEquivalence( equivalenceOnElementType, true );
+                (Equivalence<X>) equivalenceFactory.createIterableEquivalence( equivalenceOnElementType, enforceOrder );
 
         return new TypeEquivalence<X>( equivalenceOnProperty, propertyType );
     }
