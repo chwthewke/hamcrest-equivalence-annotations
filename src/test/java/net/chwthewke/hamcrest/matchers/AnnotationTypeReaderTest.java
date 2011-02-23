@@ -67,11 +67,8 @@ public class AnnotationTypeReaderTest {
         }
         catch ( final IllegalArgumentException e )
         {
-            assertThat( e.getMessage( ), is( equalTo( "The equivalence specification property " +
-                    "tooManyAnnotations has these mutually exclusive annotations: " +
-                    "[@net.chwthewke.hamcrest.annotations.ApproximateEquality(tolerance=0.01), " +
-                    "@net.chwthewke.hamcrest.annotations.BySpecification(value=interface net.chwthewke." +
-                    "hamcrest.sut.specs.AnnotationTestCases)]." ) ) );
+            assertThat( e.getMessage( ), is( equalTo( "The equivalence specification property tooManyAnnotations " +
+                    "has these mutually exclusive annotations: [ApproximateEquality, BySpecification]." ) ) );
         }
     }
 
@@ -91,9 +88,8 @@ public class AnnotationTypeReaderTest {
                 e.getMessage( ),
                 is( equalTo( "The equivalence specification property " +
                         "tooManyContainerAnnotations has these mutually exclusive " +
-                        "annotations: [@net.chwthewke.hamcrest.annotations.OnArrayElements(inOrder=true), " +
-                        "@net.chwthewke.hamcrest.annotations.OnIterableElements(" +
-                        "elementType=class java.lang.Object, inOrder=true)]." ) ) );
+                        "annotations: [OnArrayElements, " +
+                        "OnIterableElements]." ) ) );
         }
     }
 
