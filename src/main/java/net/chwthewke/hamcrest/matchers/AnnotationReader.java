@@ -4,7 +4,6 @@ import static com.google.common.base.Predicates.notNull;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.getOnlyElement;
 import static com.google.common.collect.Iterables.transform;
-import static com.google.common.collect.Lists.newArrayList;
 import static net.chwthewke.hamcrest.matchers.TypeEquivalenceSpecification.createTypeEquivalenceSpecification;
 
 import java.lang.annotation.Annotation;
@@ -61,8 +60,16 @@ class AnnotationReader {
             throw new IllegalArgumentException( String.format(
                 "The equivalence specification property %s has these mutually exclusive annotations: %s.",
                 specificationMethod.getName( ),
-                newArrayList( eligibleAnnotations ) ) );
+                getAnnotationNames( eligibleAnnotations ) ) );
         }
+    }
+
+    private Iterable<String> getAnnotationNames( final Iterable<Annotation> eligibleAnnotations ) {
+        return transform( eligibleAnnotations, new Function<Annotation, String>( ) {
+            public String apply( final Annotation annotation ) {
+                return annotation.annotationType( ).getSimpleName( );
+            }
+        } );
     }
 
     @SuppressWarnings( "unchecked" )
