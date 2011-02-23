@@ -30,6 +30,21 @@ public class OnIterableElementsTest {
                 new Matched( "ABC" ), new Matched( "abc", "deg" ) ) );
     }
 
+    @Test
+    public void equivalenceInAnyOrder( ) throws Exception {
+        // Setup
+        final Equivalence<Matched> equivalence = asSpecifiedBy( EqualInAnyOrder.class, Matched.class );
+        // Exercise
+
+        // Verify
+        assertThat( equivalence,
+            equates( new Matched( "abc", "def" ), new Matched( "def", "abc" ) ) );
+        assertThat( equivalence,
+            EquivalenceClassMatchers.separates(
+                new Matched( "abc", "def" ), new Matched( "ABC", "def" ),
+                new Matched( "DEF", "abc" ), new Matched( "abc", "deg" ) ) );
+    }
+
     public static class Matched {
         public Matched( final String... words ) {
             this.words = newArrayList( words );
@@ -51,6 +66,13 @@ public class OnIterableElementsTest {
     public static interface EqualIgnoringCaseInOrder {
         @Text( options = IGNORE_CASE )
         @OnIterableElements( elementType = String.class )
+        Collection<String> getWords( );
+    }
+
+    @EquivalenceSpecificationOn( Matched.class )
+    public static interface EqualInAnyOrder {
+        @Text
+        @OnIterableElements( elementType = String.class, inOrder = false )
         Collection<String> getWords( );
     }
 
