@@ -8,5 +8,7 @@ import java.lang.annotation.Target;
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.METHOD )
 public @interface OnIterableElements {
-    Class<?> elementType( );
+    Class<?> elementType( ) default Object.class;
+
+    boolean inOrder( ) default true;
 }
