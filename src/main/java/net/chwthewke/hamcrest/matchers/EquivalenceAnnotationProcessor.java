@@ -21,12 +21,14 @@ final class EquivalenceAnnotationProcessor<T> {
         final TypeEquivalenceComputer typeEquivalenceComputer =
                 new TypeEquivalenceComputer(
                     equivalenceFactory,
-                    new BasicTypeEquivalenceComputer( equivalenceFactory ),
-                    new AnnotationTypeReader( ) );
+                    new BasicTypeEquivalenceComputer( equivalenceFactory ) );
 
         final LiftedEquivalenceFactory liftedEquivalenceFactory = new LiftedEquivalenceFactory( );
 
+        final AnnotationReader annotationReader = new AnnotationReader( );
+
         return new EquivalenceAnnotationProcessor<T>(
+            annotationReader,
             typeEquivalenceComputer,
             liftedEquivalenceFactory,
             specification,
@@ -35,9 +37,11 @@ final class EquivalenceAnnotationProcessor<T> {
 
     @VisibleForTesting
     EquivalenceAnnotationProcessor(
+            final AnnotationReader annotationReader,
             final TypeEquivalenceComputer typeEquivalenceComputer,
             final LiftedEquivalenceFactory liftedEquivalenceFactory,
             final Method specification, final Method target ) {
+        this.annotationReader = annotationReader;
         this.typeEquivalenceComputer = typeEquivalenceComputer;
         this.liftedEquivalenceFactory = liftedEquivalenceFactory;
         this.specification = specification;
@@ -47,8 +51,9 @@ final class EquivalenceAnnotationProcessor<T> {
 
     public Equivalence<T> processEquivalenceSpecification( ) {
 
+        // TODO fieldize
         final TypeEquivalence<?> equivalenceOnPropertyType = typeEquivalenceComputer
-            .computeEquivalenceOnPropertyType( specification );
+            .computeEquivalenceOnPropertyType( annotationReader.getTypeEquivalenceSpecification( specification ) );
         return lift( equivalenceOnPropertyType );
     }
 
@@ -69,6 +74,7 @@ final class EquivalenceAnnotationProcessor<T> {
     private final Method target;
 
     private final LiftedEquivalenceFactory liftedEquivalenceFactory;
+    private final AnnotationReader annotationReader;
 
     private final TypeEquivalenceComputer typeEquivalenceComputer;
 

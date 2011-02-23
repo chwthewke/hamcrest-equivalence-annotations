@@ -1,10 +1,8 @@
 package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 
 import net.chwthewke.hamcrest.annotations.OnArrayElements;
 import net.chwthewke.hamcrest.annotations.OnIterableElements;
@@ -15,26 +13,25 @@ class TypeEquivalenceComputer {
 
     TypeEquivalenceComputer(
             final EquivalenceFactory equivalenceFactory,
-            final BasicTypeEquivalenceComputer basicTypeEquivalenceComputer,
-            final AnnotationTypeReader annotationTypeReader ) {
+            final BasicTypeEquivalenceComputer basicTypeEquivalenceComputer ) {
         this.equivalenceFactory = equivalenceFactory;
         this.basicTypeEquivalenceComputer = basicTypeEquivalenceComputer;
-        this.annotationTypeReader = annotationTypeReader;
     }
 
     // TODO refactor to decouple from "Method" (pass type and 'set' of annotations)
-    public TypeEquivalence<?> computeEquivalenceOnPropertyType( final Method specification ) {
+    public <T> TypeEquivalence<?> computeEquivalenceOnPropertyType( final TypeEquivalenceSpecification<T> specification ) {
         final Annotation equivalenceAnnotation =
-                checkNotNull( annotationTypeReader.getEquivalenceAnnotation( specification ),
-                    "Unexpected missing annotation." );
+                specification.getEquivalenceAnnotation( );
 
-        final Class<?> propertyType = specification.getReturnType( );
-        if ( specification.isAnnotationPresent( OnIterableElements.class ) )
+        final Class<?> propertyType = specification.getTargetType( );
+
+        if ( specification.hasContainerAnnotation( )
+                && specification.getContainerAnnotation( ).annotationType( ) == OnIterableElements.class )
         {
             checkArgument( Iterable.class.isAssignableFrom( propertyType ),
                 "'propertyType' must be a subtype of Iterable." );
 
-            final OnIterableElements onElementsAnnotation = specification.getAnnotation( OnIterableElements.class );
+            final OnIterableElements onElementsAnnotation = (OnIterableElements) specification.getContainerAnnotation( );
             final Class<?> elementType = onElementsAnnotation.elementType( );
 
             final Equivalence<?> equivalenceOnElementType = basicTypeEquivalenceComputer
@@ -47,11 +44,12 @@ class TypeEquivalenceComputer {
             return liftToIterable( equivalenceOnElementType, propertyTypeAsIterable, onElementsAnnotation.inOrder( ) );
         }
 
-        if ( specification.isAnnotationPresent( OnArrayElements.class ) )
+        if ( specification.hasContainerAnnotation( )
+                && specification.getContainerAnnotation( ).annotationType( ) == OnArrayElements.class )
         {
             checkArgument( propertyType.isArray( ), "'propertyType' must be an array type." );
 
-            final OnArrayElements onElementsAnnotation = specification.getAnnotation( OnArrayElements.class );
+            final OnArrayElements onElementsAnnotation = (OnArrayElements) specification.getContainerAnnotation( );
             final Class<?> elementType = propertyType.getComponentType( );
 
             final Equivalence<?> equivalenceOnElementType = basicTypeEquivalenceComputer
@@ -78,6 +76,5 @@ class TypeEquivalenceComputer {
     }
 
     private final EquivalenceFactory equivalenceFactory;
-    private final AnnotationTypeReader annotationTypeReader;
     private final BasicTypeEquivalenceComputer basicTypeEquivalenceComputer;
 }

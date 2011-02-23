@@ -1,5 +1,6 @@
 package net.chwthewke.hamcrest.matchers;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.primitives.Primitives.wrap;
 
 import java.lang.annotation.Annotation;
@@ -20,6 +21,8 @@ class BasicTypeEquivalenceComputer {
 
     public TypeEquivalence<?> computeEquivalenceOnBasicType( final Annotation equivalenceAnnotation,
             final Class<?> propertyType ) {
+
+        checkNotNull( equivalenceAnnotation, "Unexpected missing annotation." );
 
         if ( equivalenceAnnotation instanceof ApproximateEquality )
             return computeApproximateEqualityEquivalence( (ApproximateEquality) equivalenceAnnotation );
