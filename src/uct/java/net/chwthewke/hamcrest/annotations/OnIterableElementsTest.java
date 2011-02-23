@@ -18,35 +18,35 @@ public class OnIterableElementsTest {
     @Test
     public void equivalenceInOrderIgnoringCase( ) throws Exception {
         // Setup
-        final Equivalence<Matched> equivalence = asSpecifiedBy( EqualIgnoringCaseInOrder.class, Matched.class );
+        final Equivalence<WithStringCollection> equivalence = asSpecifiedBy( EqualIgnoringCaseInOrder.class, WithStringCollection.class );
         // Exercise
 
         // Verify
         assertThat( equivalence,
-            equates( new Matched( "abc", "def" ), new Matched( "abc", "def" ), new Matched( "ABC", "DeF" ) ) );
+            equates( new WithStringCollection( "abc", "def" ), new WithStringCollection( "abc", "def" ), new WithStringCollection( "ABC", "DeF" ) ) );
         assertThat( equivalence,
             EquivalenceClassMatchers.separates(
-                new Matched( "abc", "def" ), new Matched( "def", "abc" ),
-                new Matched( "ABC" ), new Matched( "abc", "deg" ) ) );
+                new WithStringCollection( "abc", "def" ), new WithStringCollection( "def", "abc" ),
+                new WithStringCollection( "ABC" ), new WithStringCollection( "abc", "deg" ) ) );
     }
 
     @Test
     public void equivalenceInAnyOrder( ) throws Exception {
         // Setup
-        final Equivalence<Matched> equivalence = asSpecifiedBy( EqualInAnyOrder.class, Matched.class );
+        final Equivalence<WithStringCollection> equivalence = asSpecifiedBy( EqualInAnyOrder.class, WithStringCollection.class );
         // Exercise
 
         // Verify
         assertThat( equivalence,
-            equates( new Matched( "abc", "def" ), new Matched( "def", "abc" ) ) );
+            equates( new WithStringCollection( "abc", "def" ), new WithStringCollection( "def", "abc" ) ) );
         assertThat( equivalence,
             EquivalenceClassMatchers.separates(
-                new Matched( "abc", "def" ), new Matched( "ABC", "def" ),
-                new Matched( "DEF", "abc" ), new Matched( "abc", "deg" ) ) );
+                new WithStringCollection( "abc", "def" ), new WithStringCollection( "ABC", "def" ),
+                new WithStringCollection( "DEF", "abc" ), new WithStringCollection( "abc", "deg" ) ) );
     }
 
-    public static class Matched {
-        public Matched( final String... words ) {
+    public static class WithStringCollection {
+        public WithStringCollection( final String... words ) {
             this.words = newArrayList( words );
         }
 
@@ -62,14 +62,14 @@ public class OnIterableElementsTest {
         private final Collection<String> words;
     }
 
-    @EquivalenceSpecificationOn( Matched.class )
+    @EquivalenceSpecificationOn( WithStringCollection.class )
     public static interface EqualIgnoringCaseInOrder {
         @Text( options = IGNORE_CASE )
         @OnIterableElements( elementType = String.class )
         Collection<String> getWords( );
     }
 
-    @EquivalenceSpecificationOn( Matched.class )
+    @EquivalenceSpecificationOn( WithStringCollection.class )
     public static interface EqualInAnyOrder {
         @Text
         @OnIterableElements( elementType = String.class, inOrder = false )

@@ -2,6 +2,7 @@ package net.chwthewke.hamcrest.matchers;
 
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.equates;
 import static net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers.separates;
+import static net.chwthewke.hamcrest.matchers.TypeEquivalenceSpecification.createTypeEquivalenceSpecification;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -51,7 +52,7 @@ public class EquivalenceAnnotationProcessorTest {
     @Mock
     private LiftedEquivalenceFactory liftedEquivalenceFactory;
 
-    private AnnotationTypeReader annotationTypeReader;
+    private AnnotationReader annotationReader;
 
     @Mock
     private LiftedEquivalence<?, ?> token;
@@ -66,7 +67,7 @@ public class EquivalenceAnnotationProcessorTest {
         when( liftedEquivalenceFactory.create( anyString( ), any( Equivalence.class ), any( Function.class ) ) )
             .thenReturn( token );
 
-        annotationTypeReader = new AnnotationTypeReader( );
+        annotationReader = new AnnotationReader( );
     }
 
     @SuppressWarnings( "unchecked" )
@@ -209,11 +210,14 @@ public class EquivalenceAnnotationProcessorTest {
         assertThat( equivalence, is( sameInstance( (Equivalence<WithObjectProperty>) token ) ) );
     }
 
+    @SuppressWarnings( "unchecked" )
     @Test
     public void failsWithNoAnnotationType( ) throws Exception {
         // Setup
-        annotationTypeReader = mock( AnnotationTypeReader.class );
+        annotationReader = mock( AnnotationReader.class );
         final Method specification = EqualityOnString.class.getMethod( "getValue" );
+        when( (TypeEquivalenceSpecification<String>) annotationReader.getTypeEquivalenceSpecification( specification ) )
+            .thenReturn( createTypeEquivalenceSpecification( String.class, null, null ) );
         final Method target = WithPublicProperty.class.getMethod( "getValue" );
 
         // Exercise
@@ -236,10 +240,9 @@ public class EquivalenceAnnotationProcessorTest {
         final EquivalenceFactory equivalenceFactory = new EquivalenceFactory( );
         final TypeEquivalenceComputer typeEquivalenceComputer =
                 new TypeEquivalenceComputer( equivalenceFactory,
-                    new BasicTypeEquivalenceComputer( equivalenceFactory ),
-                    annotationTypeReader );
+                    new BasicTypeEquivalenceComputer( equivalenceFactory ) );
 
-        return new EquivalenceAnnotationProcessor<U>(
+        return new EquivalenceAnnotationProcessor<U>( annotationReader,
             typeEquivalenceComputer, liftedEquivalenceFactory, specification, target );
     }
 
