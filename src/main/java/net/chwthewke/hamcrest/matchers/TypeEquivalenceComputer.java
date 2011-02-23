@@ -6,7 +6,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import net.chwthewke.hamcrest.annotations.OnArrayElements;
 import net.chwthewke.hamcrest.annotations.OnIterableElements;
+import net.chwthewke.hamcrest.equivalence.ArrayEquivalences;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
 class TypeEquivalenceComputer {
@@ -35,15 +37,31 @@ class TypeEquivalenceComputer {
             final OnIterableElements onElementsAnnotation = specification.getAnnotation( OnIterableElements.class );
             final Class<?> elementType = onElementsAnnotation.elementType( );
 
-            final Equivalence<?> equivalenceOnElementType =
-                    basicTypeEquivalenceComputer.computeEquivalenceOnBasicType(
-                        equivalenceAnnotation, elementType )
-                        .getEquivalence( );
+            final Equivalence<?> equivalenceOnElementType = basicTypeEquivalenceComputer
+                .computeEquivalenceOnBasicType( equivalenceAnnotation, elementType )
+                .getEquivalence( );
 
             @SuppressWarnings( "unchecked" )
             final Class<? extends Iterable<?>> propertyTypeAsIterable = (Class<? extends Iterable<?>>) propertyType;
 
             return liftToIterable( equivalenceOnElementType, propertyTypeAsIterable, onElementsAnnotation.inOrder( ) );
+        }
+
+        if ( specification.isAnnotationPresent( OnArrayElements.class ) )
+        {
+            checkArgument( propertyType.isArray( ), "'propertyType' must be an array type." );
+
+            final OnArrayElements onElementsAnnotation = specification.getAnnotation( OnArrayElements.class );
+            final Class<?> elementType = propertyType.getComponentType( );
+
+            final Equivalence<?> equivalenceOnElementType = basicTypeEquivalenceComputer
+                .computeEquivalenceOnBasicType( equivalenceAnnotation, elementType )
+                .getEquivalence( );
+            final TypeEquivalence<Iterable<?>> iterableEquivalence = liftToIterable( equivalenceOnElementType,
+                (Class) Iterable.class,
+                onElementsAnnotation.inOrder( ) );
+            return new TypeEquivalence(
+                ArrayEquivalences.<Object>forArrays( iterableEquivalence.getEquivalence( ) ), propertyType );
         }
 
         return basicTypeEquivalenceComputer.computeEquivalenceOnBasicType( equivalenceAnnotation, propertyType );
