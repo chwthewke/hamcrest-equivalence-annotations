@@ -33,11 +33,6 @@ class AnnotationReader {
         return createTypeEquivalenceSpecification( targetType, equivalenceAnnotation, containerAnnotation );
     }
 
-    @Deprecated
-    public Annotation getEquivalenceAnnotation( final Method specificationMethod ) {
-        return getOnlyAnnotationAmongTypes( equivalenceAnnotations, DEFAULT_EQUALITY, specificationMethod );
-    }
-
     private Annotation getOnlyAnnotationAmongTypes( final Iterable<Class<? extends Annotation>> annotationTypes,
             final Annotation defaultValue, final Method specificationMethod ) {
 

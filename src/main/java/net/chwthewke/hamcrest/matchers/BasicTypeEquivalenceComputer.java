@@ -1,6 +1,7 @@
 package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.primitives.Primitives.wrap;
 
 import java.lang.annotation.Annotation;
@@ -19,32 +20,44 @@ class BasicTypeEquivalenceComputer {
         this.equivalenceFactory = equivalenceFactory;
     }
 
-    public TypeEquivalence<?> computeEquivalenceOnBasicType( final Annotation equivalenceAnnotation,
-            final Class<?> propertyType ) {
+    public <T> TypeEquivalence<? super T> computeEquivalenceOnBasicType( final Annotation equivalenceAnnotation,
+            final Class<T> propertyType ) {
 
         checkNotNull( equivalenceAnnotation, "Unexpected missing annotation." );
 
         if ( equivalenceAnnotation instanceof ApproximateEquality )
-            return computeApproximateEqualityEquivalence( (ApproximateEquality) equivalenceAnnotation );
+        {
+            return computeApproximateEquality( (ApproximateEquality) equivalenceAnnotation, propertyType );
+        }
 
         if ( equivalenceAnnotation instanceof Text )
-            return computeTextEquivalence( (Text) equivalenceAnnotation );
+        {
+            return computeTextEquivalence( (Text) equivalenceAnnotation, propertyType );
+        }
 
         return computeGenericEquivalence( equivalenceAnnotation, wrap( propertyType ), propertyType.isPrimitive( ) );
     }
 
-    private TypeEquivalence<String> computeTextEquivalence( final Text annotation ) {
+    @SuppressWarnings( "unchecked" )
+    private <T> TypeEquivalence<? super T> computeApproximateEquality( final ApproximateEquality equivalenceAnnotation,
+            final Class<T> propertyType ) {
+        checkState( Number.class.isAssignableFrom( wrap( propertyType ) ) );
+
+        final Equivalence<Number> equivalence =
+                equivalenceFactory.getApproximateEquality( ( equivalenceAnnotation ).tolerance( ) );
+
+        return (TypeEquivalence<? super T>) new TypeEquivalence<Number>( equivalence, Number.class );
+    }
+
+    @SuppressWarnings( "unchecked" )
+    private <T> TypeEquivalence<? super T> computeTextEquivalence( final Text annotation,
+            final Class<T> propertyType ) {
+        checkState( String.class.isAssignableFrom( wrap( propertyType ) ) );
+
         final Equivalence<String> equivalence = equivalenceFactory
             .getTextEquivalence( annotation.options( ) );
 
-        return new TypeEquivalence<String>( equivalence, String.class );
-    }
-
-    private TypeEquivalence<Number> computeApproximateEqualityEquivalence( final ApproximateEquality annotation ) {
-        final Equivalence<Number> equivalence = equivalenceFactory
-            .getApproximateEquality( annotation.tolerance( ) );
-
-        return new TypeEquivalence<Number>( equivalence, Number.class );
+        return (TypeEquivalence<? super T>) new TypeEquivalence<String>( equivalence, String.class );
     }
 
     private <V> TypeEquivalence<V> computeGenericEquivalence( final Annotation equivalenceAnnotation,
@@ -76,7 +89,7 @@ class BasicTypeEquivalenceComputer {
             return equivalenceFactory.getEquality( );
 
         throw new IllegalStateException( String.format( "Cannot process annotation of type %s.",
-                equivalenceAnnotation.annotationType( ).getSimpleName( ) ) );
+            equivalenceAnnotation.annotationType( ).getSimpleName( ) ) );
     }
 
     private final EquivalenceFactory equivalenceFactory;
