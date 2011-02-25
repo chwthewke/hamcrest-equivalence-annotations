@@ -238,9 +238,9 @@ public class EquivalenceAnnotationProcessorTest {
             final Method target ) {
 
         final EquivalenceFactory equivalenceFactory = new EquivalenceFactory( );
-        final TypeEquivalenceComputer typeEquivalenceComputer =
-                new TypeEquivalenceComputer( equivalenceFactory,
-                    new BasicTypeEquivalenceComputer( equivalenceFactory ) );
+        final TypeEquivalenceInterpreter typeEquivalenceComputer =
+                new TypeEquivalenceInterpreter( equivalenceFactory,
+                    new BasicTypeEquivalenceInterpreter( equivalenceFactory ) );
 
         return new EquivalenceAnnotationProcessor<U>( annotationReader,
             typeEquivalenceComputer, liftedEquivalenceFactory, specification, target );

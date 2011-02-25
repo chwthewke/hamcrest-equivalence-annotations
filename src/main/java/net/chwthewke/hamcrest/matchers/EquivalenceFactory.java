@@ -39,8 +39,8 @@ class EquivalenceFactory { // NOCHECK ClassDataAbstractionCoupling
         return equivalenceActivator.createEquivalenceInstance( specificationAnnotation, propertyType );
     }
 
-    public <T> Equivalence<? extends Iterable<? extends T>> createIterableEquivalence(
-            final Equivalence<T> equivalenceOnElementType, final boolean enforceOrder ) {
+    public <T> Equivalence<Iterable<? extends T>> createIterableEquivalence(
+            final Equivalence<? super T> equivalenceOnElementType, final boolean enforceOrder ) {
 
         return new IterableEquivalence<T>( equivalenceOnElementType, enforceOrder );
     }

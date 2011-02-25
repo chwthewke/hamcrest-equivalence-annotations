@@ -48,12 +48,12 @@ public final class IterableEquivalence<T> implements Equivalence<Iterable<? exte
      * @param inOrder
      *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must respect iteration order.
      */
-    public IterableEquivalence( final Equivalence<T> equivalence, final boolean inOrder ) {
+    public IterableEquivalence( final Equivalence<? super T> equivalence, final boolean inOrder ) {
         this.equivalence = equivalence;
         this.inOrder = inOrder;
     }
 
     private final boolean inOrder;
-    private final Equivalence<T> equivalence;
+    private final Equivalence<? super T> equivalence;
 
 }

@@ -18,10 +18,10 @@ final class EquivalenceAnnotationProcessor<T> {
 
         final EquivalenceFactory equivalenceFactory = new EquivalenceFactory( );
 
-        final TypeEquivalenceComputer typeEquivalenceComputer =
-                new TypeEquivalenceComputer(
+        final TypeEquivalenceInterpreter typeEquivalenceInterpreter =
+                new TypeEquivalenceInterpreter(
                     equivalenceFactory,
-                    new BasicTypeEquivalenceComputer( equivalenceFactory ) );
+                    new BasicTypeEquivalenceInterpreter( equivalenceFactory ) );
 
         final LiftedEquivalenceFactory liftedEquivalenceFactory = new LiftedEquivalenceFactory( );
 
@@ -29,7 +29,7 @@ final class EquivalenceAnnotationProcessor<T> {
 
         return new EquivalenceAnnotationProcessor<T>(
             annotationReader,
-            typeEquivalenceComputer,
+            typeEquivalenceInterpreter,
             liftedEquivalenceFactory,
             specification,
             target );
@@ -38,11 +38,11 @@ final class EquivalenceAnnotationProcessor<T> {
     @VisibleForTesting
     EquivalenceAnnotationProcessor(
             final AnnotationReader annotationReader,
-            final TypeEquivalenceComputer typeEquivalenceComputer,
+            final TypeEquivalenceInterpreter typeEquivalenceInterpreter,
             final LiftedEquivalenceFactory liftedEquivalenceFactory,
             final Method specification, final Method target ) {
         this.annotationReader = annotationReader;
-        this.typeEquivalenceComputer = typeEquivalenceComputer;
+        this.typeEquivalenceInterpreter = typeEquivalenceInterpreter;
         this.liftedEquivalenceFactory = liftedEquivalenceFactory;
         this.specification = specification;
         this.target = target;
@@ -51,8 +51,7 @@ final class EquivalenceAnnotationProcessor<T> {
 
     public Equivalence<T> processEquivalenceSpecification( ) {
 
-        // TODO fieldize
-        final TypeEquivalence<?> equivalenceOnPropertyType = typeEquivalenceComputer
+        final TypeEquivalence<?> equivalenceOnPropertyType = typeEquivalenceInterpreter
             .computeEquivalenceOnPropertyType( annotationReader.getTypeEquivalenceSpecification( specification ) );
         return lift( equivalenceOnPropertyType );
     }
@@ -76,6 +75,6 @@ final class EquivalenceAnnotationProcessor<T> {
     private final LiftedEquivalenceFactory liftedEquivalenceFactory;
     private final AnnotationReader annotationReader;
 
-    private final TypeEquivalenceComputer typeEquivalenceComputer;
+    private final TypeEquivalenceInterpreter typeEquivalenceInterpreter;
 
 }
