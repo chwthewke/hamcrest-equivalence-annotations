@@ -13,6 +13,7 @@ import net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class OnArrayElementsTest {
 
     @Test

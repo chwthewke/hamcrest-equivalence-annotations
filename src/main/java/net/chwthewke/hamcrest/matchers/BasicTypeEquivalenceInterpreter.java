@@ -14,26 +14,22 @@ import net.chwthewke.hamcrest.annotations.Identity;
 import net.chwthewke.hamcrest.annotations.Text;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
-class BasicTypeEquivalenceComputer {
+class BasicTypeEquivalenceInterpreter {
 
-    BasicTypeEquivalenceComputer( final EquivalenceFactory equivalenceFactory ) {
+    BasicTypeEquivalenceInterpreter( final EquivalenceFactory equivalenceFactory ) {
         this.equivalenceFactory = equivalenceFactory;
     }
 
-    public <T> TypeEquivalence<? super T> computeEquivalenceOnBasicType( final Annotation equivalenceAnnotation,
+    public <T> TypeEquivalence<? super T> createTypeEquivalence( final Annotation equivalenceAnnotation,
             final Class<T> propertyType ) {
 
         checkNotNull( equivalenceAnnotation, "Unexpected missing annotation." );
 
-        if ( equivalenceAnnotation instanceof ApproximateEquality )
-        {
+        if ( equivalenceAnnotation.annotationType( ) == ApproximateEquality.class )
             return computeApproximateEquality( (ApproximateEquality) equivalenceAnnotation, propertyType );
-        }
 
-        if ( equivalenceAnnotation instanceof Text )
-        {
+        if ( equivalenceAnnotation.annotationType( ) == Text.class )
             return computeTextEquivalence( (Text) equivalenceAnnotation, propertyType );
-        }
 
         return computeGenericEquivalence( equivalenceAnnotation, wrap( propertyType ), propertyType.isPrimitive( ) );
     }
@@ -63,33 +59,35 @@ class BasicTypeEquivalenceComputer {
     private <V> TypeEquivalence<V> computeGenericEquivalence( final Annotation equivalenceAnnotation,
             final Class<V> type, final boolean isPrimitive ) {
 
-        final Equivalence<V> propertyEquivalence = computePropertyEquivalence( equivalenceAnnotation, type, isPrimitive );
+        final Equivalence<V> equivalence = computeEquivalence( equivalenceAnnotation, type, isPrimitive );
 
-        return new TypeEquivalence<V>( propertyEquivalence, type );
+        return new TypeEquivalence<V>( equivalence, type );
 
     }
 
-    private <V> Equivalence<V> computePropertyEquivalence( final Annotation equivalenceAnnotation, final Class<V> type,
+    private <V> Equivalence<V> computeEquivalence( final Annotation equivalenceAnnotation, final Class<V> type,
             final boolean isPrimitive ) {
 
-        if ( equivalenceAnnotation instanceof ByEquivalence )
+        final Class<? extends Annotation> annotationType = equivalenceAnnotation.annotationType( );
+
+        if ( annotationType == ByEquivalence.class )
             return equivalenceFactory
                 .createEquivalenceInstance( (ByEquivalence) equivalenceAnnotation, type );
 
-        if ( equivalenceAnnotation instanceof BySpecification )
+        if ( annotationType == BySpecification.class )
         {
             final Class<?> specificationInterface = ( (BySpecification) equivalenceAnnotation ).value( );
             return equivalenceFactory.getEquivalenceBySpecification( specificationInterface, type );
         }
 
-        if ( equivalenceAnnotation instanceof Identity && !isPrimitive )
+        if ( annotationType == Identity.class && !isPrimitive )
             return equivalenceFactory.getIdentity( );
 
-        if ( equivalenceAnnotation instanceof Equality || equivalenceAnnotation instanceof Identity )
+        if ( annotationType == Equality.class || annotationType == Identity.class )
             return equivalenceFactory.getEquality( );
 
         throw new IllegalStateException( String.format( "Cannot process annotation of type %s.",
-            equivalenceAnnotation.annotationType( ).getSimpleName( ) ) );
+            annotationType.getSimpleName( ) ) );
     }
 
     private final EquivalenceFactory equivalenceFactory;

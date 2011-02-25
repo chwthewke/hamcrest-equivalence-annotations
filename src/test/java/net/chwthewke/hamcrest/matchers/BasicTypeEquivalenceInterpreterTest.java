@@ -23,15 +23,15 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BasicTypeEquivalenceComputerTest {
+public class BasicTypeEquivalenceInterpreterTest {
 
-    private BasicTypeEquivalenceComputer typeEquivalenceComputer;
+    private BasicTypeEquivalenceInterpreter typeEquivalenceInterpreter;
     private EquivalenceFactory equivalenceFactory;
 
     @Before
     public void setupTypeEquivalenceComputer( ) {
         equivalenceFactory = mock( EquivalenceFactory.class );
-        typeEquivalenceComputer = new BasicTypeEquivalenceComputer( equivalenceFactory );
+        typeEquivalenceInterpreter = new BasicTypeEquivalenceInterpreter( equivalenceFactory );
     }
 
     @SuppressWarnings( "unchecked" )
@@ -45,7 +45,7 @@ public class BasicTypeEquivalenceComputerTest {
         when( equivalenceFactory.<String>getEquality( ) ).thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicType( equality, String.class );
+                typeEquivalenceInterpreter.createTypeEquivalence( equality, String.class );
         // Verify
         verify( equivalenceFactory ).getEquality( );
         assertThat( (Class<String>) typeEquivalence.getType( ), is( equalTo( String.class ) ) );
@@ -62,7 +62,7 @@ public class BasicTypeEquivalenceComputerTest {
         when( equivalenceFactory.getIdentity( ) ).thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicType( identity, Object.class );
+                typeEquivalenceInterpreter.createTypeEquivalence( identity, Object.class );
 
         // Verify
         verify( equivalenceFactory ).getIdentity( );
@@ -82,7 +82,7 @@ public class BasicTypeEquivalenceComputerTest {
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicType( approx, float.class );
+                typeEquivalenceInterpreter.createTypeEquivalence( approx, float.class );
 
         // Verify
         verify( equivalenceFactory ).getApproximateEquality( 0.001d );
@@ -102,7 +102,7 @@ public class BasicTypeEquivalenceComputerTest {
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicType( approx, Double.class );
+                typeEquivalenceInterpreter.createTypeEquivalence( approx, Double.class );
 
         // Verify
         verify( equivalenceFactory ).getApproximateEquality( 2e-6d );
@@ -122,7 +122,7 @@ public class BasicTypeEquivalenceComputerTest {
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicType( bySpecification, Date.class );
+                typeEquivalenceInterpreter.createTypeEquivalence( bySpecification, Date.class );
 
         // Verify
         verify( equivalenceFactory ).getEquivalenceBySpecification( EquivalenceSpecification.class, Date.class );
@@ -141,7 +141,7 @@ public class BasicTypeEquivalenceComputerTest {
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceComputer.computeEquivalenceOnBasicType( byEquivalence, Date.class );
+                typeEquivalenceInterpreter.createTypeEquivalence( byEquivalence, Date.class );
 
         // Verify
         verify( equivalenceFactory ).createEquivalenceInstance( byEquivalence, Date.class );
@@ -160,7 +160,7 @@ public class BasicTypeEquivalenceComputerTest {
         // Exercise
         try
         {
-            typeEquivalenceComputer.computeEquivalenceOnBasicType( nonsensicalAnnotation, Object.class );
+            typeEquivalenceInterpreter.createTypeEquivalence( nonsensicalAnnotation, Object.class );
             // Verify
             fail( );
         }
