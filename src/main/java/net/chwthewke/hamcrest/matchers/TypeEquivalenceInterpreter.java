@@ -1,11 +1,16 @@
 package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.primitives.Primitives.wrap;
 
 import java.lang.annotation.Annotation;
 
+import net.chwthewke.hamcrest.annotations.OnArrayElements;
 import net.chwthewke.hamcrest.annotations.OnIterableElements;
+import net.chwthewke.hamcrest.equivalence.ArrayEquivalences;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
+
+import com.google.common.base.Function;
 
 class TypeEquivalenceInterpreter {
 
@@ -17,7 +22,8 @@ class TypeEquivalenceInterpreter {
     }
 
     // TODO rename, as well as similar method on BTEI
-    public <T> TypeEquivalence<?> computeEquivalenceOnPropertyType( final TypeEquivalenceSpecification<T> specification ) {
+    public <T> TypeEquivalence<? super T> computeEquivalenceOnPropertyType(
+            final TypeEquivalenceSpecification<T> specification ) {
 
         final Annotation equivalenceAnnotation = specification.getEquivalenceAnnotation( );
 
@@ -35,6 +41,20 @@ class TypeEquivalenceInterpreter {
             final Class<?> elementType = onIterableAnnotation.elementType( );
 
             return createIterableEquivalence( equivalenceAnnotation,
+                inOrder, propertyType, elementType );
+        }
+
+        if ( containerAnnotation.annotationType( ) == OnArrayElements.class )
+        {
+            final OnArrayElements onArrayAnnotation = (OnArrayElements) containerAnnotation;
+
+            final boolean inOrder = onArrayAnnotation.inOrder( );
+
+            checkArgument( propertyType.isArray( ), "'propertyType' must be an array type." );
+
+            final Class<?> elementType = propertyType.getComponentType( );
+
+            return createArrayEquivalence( equivalenceAnnotation,
                 inOrder, propertyType, elementType );
         }
 
@@ -62,7 +82,7 @@ class TypeEquivalenceInterpreter {
 //        return basicTypeEquivalenceInterpreter.createTypeEquivalence( equivalenceAnnotation, propertyType );
     }
 
-    private <T, U> TypeEquivalence<?> createIterableEquivalence( final Annotation equivalenceAnnotation,
+    private <T, U> TypeEquivalence<? super T> createIterableEquivalence( final Annotation equivalenceAnnotation,
             final boolean inOrder, final Class<T> iterableType, final Class<U> elementType ) {
         checkArgument( Iterable.class.isAssignableFrom( iterableType ),
             "'propertyType' must be a subtype of Iterable." );
@@ -75,10 +95,51 @@ class TypeEquivalenceInterpreter {
                     equivalenceOnElements.getEquivalence( ),
                     inOrder );
 
-        @SuppressWarnings( { "unchecked", "rawtypes" } )
-        final Class<Iterable<? extends U>> coercedIterableType = (Class) iterableType;
+        return new TypeEquivalence<T>( (Equivalence<T>) iterableEquivalence, iterableType );
+    }
 
-        return new TypeEquivalence<Iterable<? extends U>>( iterableEquivalence, coercedIterableType );
+    private <T, U> TypeEquivalence<? super T> createArrayEquivalence( final Annotation equivalenceAnnotation,
+            final boolean inOrder, final Class<T> arrayType, final Class<U> elementType ) {
+
+        final TypeEquivalence<? super U> equivalenceOnElements =
+                interpretEquivalenceOnBasicType( equivalenceAnnotation,
+                    wrap( elementType ) );
+
+        if ( elementType == boolean.class )
+        {
+            final Equivalence<Iterable<? extends Boolean>> iterableEquivalence =
+                    equivalenceFactory.<Boolean>createIterableEquivalence(
+                        (Equivalence<Boolean>) equivalenceOnElements.getEquivalence( ),
+                        inOrder );
+            final Equivalence<boolean[ ]> arrayEquivalence =
+                    ArrayEquivalences.forBooleanArrays( iterableEquivalence );
+            return new TypeEquivalence<T>( (Equivalence<T>) arrayEquivalence, arrayType );
+        }
+
+        if ( !elementType.isPrimitive( ) )
+        {
+            final Equivalence<Iterable<? extends U>> iterableEquivalence =
+                    equivalenceFactory.<U>createIterableEquivalence(
+                        equivalenceOnElements.getEquivalence( ),
+                        inOrder );
+            final Equivalence<U[ ]> arrayEquivalence =
+                    ArrayEquivalences.forArrays( iterableEquivalence );
+            return new TypeEquivalence<T>( (Equivalence<T>) arrayEquivalence, arrayType );
+        }
+        // TODO
+        return null;
+    }
+
+    private <T, U> TypeEquivalence<T> toArray( final Equivalence<U> equivalence, final boolean inOrder,
+            final Class<T> arrayType, final Function<Equivalence<Iterable<? extends U>>, Equivalence<?>> converter ) {
+        final Equivalence<Iterable<? extends U>> iterableEquivalence =
+                equivalenceFactory.<U>createIterableEquivalence(
+                    equivalence,
+                    inOrder );
+        final Equivalence<T> arrayEquivalence =
+                (Equivalence<T>) converter.apply( iterableEquivalence );
+        return new TypeEquivalence<T>( arrayEquivalence, arrayType );
+
     }
 
     private <T> TypeEquivalence<? super T> interpretEquivalenceOnBasicType( final Annotation equivalenceAnnotation,
