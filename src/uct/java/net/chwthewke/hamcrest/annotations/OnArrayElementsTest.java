@@ -13,7 +13,6 @@ import net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class OnArrayElementsTest {
 
     @Test
@@ -49,8 +48,8 @@ public class OnArrayElementsTest {
                 new WithStringArray( "DEF", "abc" ), new WithStringArray( "abc", "deg" ) ) );
     }
 
-    @Test
     @Ignore
+    @Test
     public void approxEqualityInOrderOnPrimitives( ) throws Exception {
         // Setup
         final Equivalence<WithPrimitiveArray> equivalence =
