@@ -10,7 +10,6 @@ import java.util.Arrays;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 import net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class OnArrayElementsTest {
@@ -48,7 +47,6 @@ public class OnArrayElementsTest {
                 new WithStringArray( "DEF", "abc" ), new WithStringArray( "abc", "deg" ) ) );
     }
 
-    @Ignore
     @Test
     public void approxEqualityInOrderOnPrimitives( ) throws Exception {
         // Setup

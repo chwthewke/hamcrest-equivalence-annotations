@@ -35,9 +35,14 @@ public final class ArrayEquivalences {
      */
     public static <T> Equivalence<T[ ]> arrayEquivalence( final Equivalence<? super T> equivalence,
             final boolean inOrder ) {
-        final Function<T[ ], Iterable<? extends T>> toList = arrayToListFunction( );
+        final Function<T[ ], Iterable<? extends T>> toList =
+                new Function<T[ ], Iterable<? extends T>>( ) {
+                    public Iterable<T> apply( final T[ ] input ) {
+                        return newArrayList( input );
+                    }
+                };
 
-        return liftToArray( equivalence, inOrder, toList );
+        return ArrayEquivalences.<T, T[ ]>liftToArray( equivalence, inOrder, toList );
     }
 
     /**
@@ -220,14 +225,6 @@ public final class ArrayEquivalences {
             final Function<U, Iterable<? extends T>> toList ) {
         return new LiftedEquivalence<U, Iterable<? extends T>>( "",
             new IterableEquivalence<T>( equivalence, inOrder ), toList );
-    }
-
-    private static <T> Function<T[ ], Iterable<? extends T>> arrayToListFunction( ) {
-        return new Function<T[ ], Iterable<? extends T>>( ) {
-            public Iterable<T> apply( final T[ ] input ) {
-                return newArrayList( input );
-            }
-        };
     }
 
     private ArrayEquivalences( ) {
