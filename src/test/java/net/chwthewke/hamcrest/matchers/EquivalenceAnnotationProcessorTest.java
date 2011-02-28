@@ -238,8 +238,12 @@ public class EquivalenceAnnotationProcessorTest {
             final Method target ) {
 
         final EquivalenceFactory equivalenceFactory = new EquivalenceFactory( );
+
+        final ContainerEquivalenceFactory containerEquivalenceFactory =
+                new ContainerEquivalenceFactory( );
+
         final TypeEquivalenceInterpreter typeEquivalenceComputer =
-                new TypeEquivalenceInterpreter( equivalenceFactory,
+                new TypeEquivalenceInterpreter( containerEquivalenceFactory,
                     new BasicTypeEquivalenceInterpreter( equivalenceFactory ) );
 
         return new EquivalenceAnnotationProcessor<U>( annotationReader,

@@ -21,8 +21,7 @@ public final class ArrayEquivalences {
     /**
      * Adapts an equivalence on <code>T</code> into an equivalence on <code>T[]</code>. Two arrays will be equivalent
      * by the returned equivalence iff there exists a 1-to-1 mapping between their respective
-     * elements such that each pair of elements in the mapping are equivalent according to the provided
-     * <code>equivalence</code>.
+     * elements such that each pair of elements in the mapping are equivalent according to the provided <code>equivalence</code>.
      * 
      * @param <T>
      *            The component type.
@@ -48,8 +47,7 @@ public final class ArrayEquivalences {
     /**
      * Adapts an equivalence on <code>Boolean</code> into an equivalence on <code>boolean[]</code>. Two arrays will be
      * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
-     * elements such that each pair of elements in the mapping are equivalent according to the provided
-     * <code>equivalence</code>.
+     * elements such that each pair of elements in the mapping are equivalent according to the provided <code>equivalence</code>.
      * 
      * @param equivalence
      *            An equivalence on Boolean.
@@ -70,8 +68,7 @@ public final class ArrayEquivalences {
     /**
      * Adapts an equivalence on <code>Byte</code> into an equivalence on <code>byte[]</code>. Two arrays will be
      * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
-     * elements such that each pair of elements in the mapping are equivalent according to the provided
-     * <code>equivalence</code>.
+     * elements such that each pair of elements in the mapping are equivalent according to the provided <code>equivalence</code>.
      * 
      * @param equivalence
      *            An equivalence on Byte.
@@ -92,8 +89,7 @@ public final class ArrayEquivalences {
     /**
      * Adapts an equivalence on <code>Character</code> into an equivalence on <code>char[]</code>. Two arrays will be
      * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
-     * elements such that each pair of elements in the mapping are equivalent according to the provided
-     * <code>equivalence</code>.
+     * elements such that each pair of elements in the mapping are equivalent according to the provided <code>equivalence</code>.
      * 
      * @param equivalence
      *            An equivalence on Character.
@@ -114,8 +110,7 @@ public final class ArrayEquivalences {
     /**
      * Adapts an equivalence on <code>Double</code> into an equivalence on <code>double[]</code>. Two arrays will be
      * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
-     * elements such that each pair of elements in the mapping are equivalent according to the provided
-     * <code>equivalence</code>.
+     * elements such that each pair of elements in the mapping are equivalent according to the provided <code>equivalence</code>.
      * 
      * @param equivalence
      *            An equivalence on Double.
@@ -136,8 +131,7 @@ public final class ArrayEquivalences {
     /**
      * Adapts an equivalence on <code>Float</code> into an equivalence on <code>float[]</code>. Two arrays will be
      * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
-     * elements such that each pair of elements in the mapping are equivalent according to the provided
-     * <code>equivalence</code>.
+     * elements such that each pair of elements in the mapping are equivalent according to the provided <code>equivalence</code>.
      * 
      * @param equivalence
      *            An equivalence on Float.
@@ -158,8 +152,7 @@ public final class ArrayEquivalences {
     /**
      * Adapts an equivalence on <code>Integer</code> into an equivalence on <code>int[]</code>. Two arrays will be
      * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
-     * elements such that each pair of elements in the mapping are equivalent according to the provided
-     * <code>equivalence</code>.
+     * elements such that each pair of elements in the mapping are equivalent according to the provided <code>equivalence</code>.
      * 
      * @param equivalence
      *            An equivalence on Integer.
@@ -180,8 +173,7 @@ public final class ArrayEquivalences {
     /**
      * Adapts an equivalence on <code>Long</code> into an equivalence on <code>long[]</code>. Two arrays will be
      * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
-     * elements such that each pair of elements in the mapping are equivalent according to the provided
-     * <code>equivalence</code>.
+     * elements such that each pair of elements in the mapping are equivalent according to the provided <code>equivalence</code>.
      * 
      * @param equivalence
      *            An equivalence on Long.
@@ -202,8 +194,7 @@ public final class ArrayEquivalences {
     /**
      * Adapts an equivalence on <code>Short</code> into an equivalence on <code>short[]</code>. Two arrays will be
      * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
-     * elements such that each pair of elements in the mapping are equivalent according to the provided
-     * <code>equivalence</code>.
+     * elements such that each pair of elements in the mapping are equivalent according to the provided <code>equivalence</code>.
      * 
      * @param equivalence
      *            An equivalence on Short.
