@@ -1,7 +1,16 @@
 package net.chwthewke.hamcrest.matchers;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.primitives.Primitives.wrap;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.booleanArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.byteArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.charArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.doubleArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.floatArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.intArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.longArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.shortArrayEquivalence;
 
 import java.lang.annotation.Annotation;
 
@@ -156,6 +165,31 @@ class TypeEquivalenceInterpreter {
 //
 //        return new TypeEquivalence<X>( equivalenceOnProperty, propertyType );
 //    }
+
+    @SuppressWarnings( "unchecked" )
+    public static <T, U> Equivalence<U> primitiveArrayEquivalence( final Equivalence<T> equivalence,
+            final boolean inOrder, final Class<T> componentType, final Class<U> arrayType ) {
+        checkState( componentType.isPrimitive( ) && arrayType.getComponentType( ) == componentType );
+
+        if ( componentType == boolean.class )
+            return (Equivalence<U>) booleanArrayEquivalence( (Equivalence<Boolean>) equivalence, inOrder );
+        else if ( componentType == byte.class )
+            return (Equivalence<U>) byteArrayEquivalence( (Equivalence<Byte>) equivalence, inOrder );
+        else if ( componentType == char.class )
+            return (Equivalence<U>) charArrayEquivalence( (Equivalence<Character>) equivalence, inOrder );
+        else if ( componentType == double.class )
+            return (Equivalence<U>) doubleArrayEquivalence( (Equivalence<Double>) equivalence, inOrder );
+        else if ( componentType == float.class )
+            return (Equivalence<U>) floatArrayEquivalence( (Equivalence<Float>) equivalence, inOrder );
+        else if ( componentType == int.class )
+            return (Equivalence<U>) intArrayEquivalence( (Equivalence<Integer>) equivalence, inOrder );
+        else if ( componentType == long.class )
+            return (Equivalence<U>) longArrayEquivalence( (Equivalence<Long>) equivalence, inOrder );
+        else if ( componentType == short.class )
+            return (Equivalence<U>) shortArrayEquivalence( (Equivalence<Short>) equivalence, inOrder );
+
+        throw new IllegalStateException( "Unreachable." );
+    }
 
     private final EquivalenceFactory equivalenceFactory;
     private final BasicTypeEquivalenceInterpreter basicTypeEquivalenceInterpreter;
