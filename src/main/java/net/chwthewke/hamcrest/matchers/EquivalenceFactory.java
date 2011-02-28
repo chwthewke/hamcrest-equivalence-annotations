@@ -5,12 +5,10 @@ import net.chwthewke.hamcrest.equivalence.ApproximateEqualityEquivalence;
 import net.chwthewke.hamcrest.equivalence.EqualityEquivalence;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 import net.chwthewke.hamcrest.equivalence.IdentityEquivalence;
-import net.chwthewke.hamcrest.equivalence.IterableEquivalence;
 import net.chwthewke.hamcrest.equivalence.TextEquivalence;
 import net.chwthewke.hamcrest.equivalence.TextEquivalenceOption;
 
-// TODO can anything be done about this DAC
-class EquivalenceFactory { // NOCHECK ClassDataAbstractionCoupling
+class EquivalenceFactory {
 
     public Equivalence<Number> getApproximateEquality( final double tolerance ) {
         return new ApproximateEqualityEquivalence( tolerance );
@@ -37,12 +35,6 @@ class EquivalenceFactory { // NOCHECK ClassDataAbstractionCoupling
     public <T> Equivalence<T> createEquivalenceInstance( final ByEquivalence specificationAnnotation,
             final Class<?> propertyType ) {
         return equivalenceActivator.createEquivalenceInstance( specificationAnnotation, propertyType );
-    }
-
-    public <T> Equivalence<Iterable<? extends T>> createIterableEquivalence(
-            final Equivalence<? super T> equivalenceOnElementType, final boolean enforceOrder ) {
-
-        return new IterableEquivalence<T>( equivalenceOnElementType, enforceOrder );
     }
 
     private final PropertyFinder propertyFinder = new PropertyFinder( );

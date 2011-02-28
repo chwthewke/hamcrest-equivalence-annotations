@@ -20,7 +20,7 @@ final class EquivalenceAnnotationProcessor<T> {
 
         final TypeEquivalenceInterpreter typeEquivalenceInterpreter =
                 new TypeEquivalenceInterpreter(
-                    equivalenceFactory,
+                    new ContainerEquivalenceFactory( ),
                     new BasicTypeEquivalenceInterpreter( equivalenceFactory ) );
 
         final LiftedEquivalenceFactory liftedEquivalenceFactory = new LiftedEquivalenceFactory( );
