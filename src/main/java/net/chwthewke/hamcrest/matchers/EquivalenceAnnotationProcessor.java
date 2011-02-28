@@ -50,14 +50,22 @@ final class EquivalenceAnnotationProcessor<T> {
     }
 
     public Equivalence<T> processEquivalenceSpecification( ) {
+        final TypeEquivalenceSpecification<?> typeEquivalenceSpecification =
+                annotationReader.getTypeEquivalenceSpecification( specification );
 
-        final TypeEquivalence<?> equivalenceOnPropertyType = typeEquivalenceInterpreter
-            .getEquivalenceFor( annotationReader.getTypeEquivalenceSpecification( specification ) );
-        return lift( equivalenceOnPropertyType );
+        return processSpecification( typeEquivalenceSpecification );
     }
 
-    private <U> Equivalence<T> lift( final TypeEquivalence<U> typeEquivalence ) {
-        final Class<U> requiredPropertyType = typeEquivalence.getType( );
+    private <U> Equivalence<T> processSpecification( final TypeEquivalenceSpecification<U> equivalenceSpecification ) {
+        final TypeEquivalence<? super U> equivalenceOnPropertyType =
+                typeEquivalenceInterpreter.getEquivalenceFor( equivalenceSpecification );
+
+        return liftPropertyEquivalence( equivalenceSpecification.getTargetType( ),
+            equivalenceOnPropertyType.getEquivalence( ) );
+    }
+
+    private <U> Equivalence<T> liftPropertyEquivalence( final Class<U> requiredPropertyType,
+            final Equivalence<? super U> equivalenceOnProperty ) {
         checkArgument(
             requiredPropertyType.isAssignableFrom( wrap( specification.getReturnType( ) ) ),
             String.format(
@@ -65,7 +73,7 @@ final class EquivalenceAnnotationProcessor<T> {
                 specification, requiredPropertyType.getName( ) ) );
 
         return liftedEquivalenceFactory.create( specification.getName( ),
-            typeEquivalence.getEquivalence( ),
+            equivalenceOnProperty,
             new ReadPropertyFunction<T, U>( target, requiredPropertyType ) );
     }
 
