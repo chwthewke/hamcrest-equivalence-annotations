@@ -79,7 +79,7 @@ public class TypeEquivalenceInterpreterTest {
         }
     }
 
-    @SuppressWarnings( { "rawtypes", "unchecked" } )
+    @SuppressWarnings( { "rawtypes" } )
     @Test
     public void specificationForIterableEquivalenceTransformsEquivalenceOnElementType( ) throws Exception {
         // Setup
@@ -105,7 +105,7 @@ public class TypeEquivalenceInterpreterTest {
         verify( basicInterpreter ).getEquivalenceFor( textAnnotation, String.class );
         verify( equivalenceFactory ).iterableEquivalence( textEquivalence, false );
 
-        assertThat( (Equivalence<Iterable<? extends String>>) actualEquivalence, is( sameInstance( token ) ) );
+        assertThat( (Equivalence) actualEquivalence, is( sameInstance( (Equivalence) token ) ) );
     }
 
     @Test
