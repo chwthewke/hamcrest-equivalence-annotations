@@ -54,7 +54,7 @@ class TypeEquivalenceInterpreter {
         }
 
         throw new IllegalArgumentException(
-            String.format( "Unknown container annotation %s", containerAnnotation.annotationType( ).getSimpleName( ) ) );
+            String.format( "Unknown container annotation @%s.", containerAnnotation.annotationType( ).getSimpleName( ) ) );
     }
 
     private <T, U> Equivalence<? super T> createIterableEquivalence( final Annotation equivalenceAnnotation,
