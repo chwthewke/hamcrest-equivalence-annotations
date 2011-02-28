@@ -44,11 +44,11 @@ public class BasicTypeEquivalenceInterpreterTest {
 
         when( equivalenceFactory.<String>getEquality( ) ).thenReturn( equivalence );
         // Exercise
-        final TypeEquivalence<?> typeEquivalence =
+        final Equivalence<?> actualEquivalence =
                 typeEquivalenceInterpreter.getEquivalenceFor( equality, String.class );
         // Verify
         verify( equivalenceFactory ).getEquality( );
-        assertThat( (Equivalence<String>) typeEquivalence.getEquivalence( ), is( sameInstance( equivalence ) ) );
+        assertThat( (Equivalence<String>) actualEquivalence, is( sameInstance( equivalence ) ) );
     }
 
     @SuppressWarnings( "unchecked" )
@@ -60,12 +60,12 @@ public class BasicTypeEquivalenceInterpreterTest {
         final Equivalence<Object> equivalence = mock( Equivalence.class );
         when( equivalenceFactory.getIdentity( ) ).thenReturn( equivalence );
         // Exercise
-        final TypeEquivalence<?> typeEquivalence =
+        final Equivalence<?> actualEquivalence =
                 typeEquivalenceInterpreter.getEquivalenceFor( identity, Object.class );
 
         // Verify
         verify( equivalenceFactory ).getIdentity( );
-        assertThat( (Equivalence<Object>) typeEquivalence.getEquivalence( ), is( sameInstance( equivalence ) ) );
+        assertThat( (Equivalence<Object>) actualEquivalence, is( sameInstance( equivalence ) ) );
 
     }
 
@@ -79,12 +79,12 @@ public class BasicTypeEquivalenceInterpreterTest {
         when( equivalenceFactory.getApproximateEquality( 0.001d ) )
             .thenReturn( equivalence );
         // Exercise
-        final TypeEquivalence<?> typeEquivalence =
+        final Equivalence<?> actualEquivalence =
                 typeEquivalenceInterpreter.getEquivalenceFor( approx, float.class );
 
         // Verify
         verify( equivalenceFactory ).getApproximateEquality( 0.001d );
-        assertThat( (Equivalence<Number>) typeEquivalence.getEquivalence( ), is( sameInstance( equivalence ) ) );
+        assertThat( (Equivalence<Number>) actualEquivalence, is( sameInstance( equivalence ) ) );
 
     }
 
@@ -98,12 +98,12 @@ public class BasicTypeEquivalenceInterpreterTest {
         when( equivalenceFactory.getApproximateEquality( 2e-6d ) )
             .thenReturn( equivalence );
         // Exercise
-        final TypeEquivalence<?> typeEquivalence =
+        final Equivalence<?> actualEquivalence =
                 typeEquivalenceInterpreter.getEquivalenceFor( approx, Double.class );
 
         // Verify
         verify( equivalenceFactory ).getApproximateEquality( 2e-6d );
-        assertThat( (Equivalence<Number>) typeEquivalence.getEquivalence( ), is( sameInstance( equivalence ) ) );
+        assertThat( (Equivalence<Number>) actualEquivalence, is( sameInstance( equivalence ) ) );
 
     }
 
@@ -117,12 +117,12 @@ public class BasicTypeEquivalenceInterpreterTest {
         when( equivalenceFactory.<Date>getEquivalenceBySpecification( EquivalenceSpecification.class, Date.class ) )
             .thenReturn( equivalence );
         // Exercise
-        final TypeEquivalence<?> typeEquivalence =
+        final Equivalence<?> actualEquivalence =
                 typeEquivalenceInterpreter.getEquivalenceFor( bySpecification, Date.class );
 
         // Verify
         verify( equivalenceFactory ).getEquivalenceBySpecification( EquivalenceSpecification.class, Date.class );
-        assertThat( (Equivalence<Date>) typeEquivalence.getEquivalence( ), is( sameInstance( equivalence ) ) );
+        assertThat( (Equivalence<Date>) actualEquivalence, is( sameInstance( equivalence ) ) );
     }
 
     @SuppressWarnings( "unchecked" )
@@ -135,12 +135,12 @@ public class BasicTypeEquivalenceInterpreterTest {
         when( equivalenceFactory.<Date>createEquivalenceInstance( byEquivalence, Date.class ) )
             .thenReturn( equivalence );
         // Exercise
-        final TypeEquivalence<?> typeEquivalence =
+        final Equivalence<?> actualEquivalence =
                 typeEquivalenceInterpreter.getEquivalenceFor( byEquivalence, Date.class );
 
         // Verify
         verify( equivalenceFactory ).createEquivalenceInstance( byEquivalence, Date.class );
-        assertThat( (Equivalence<Date>) typeEquivalence.getEquivalence( ), is( sameInstance( equivalence ) ) );
+        assertThat( (Equivalence<Date>) actualEquivalence, is( sameInstance( equivalence ) ) );
     }
 
     @Test

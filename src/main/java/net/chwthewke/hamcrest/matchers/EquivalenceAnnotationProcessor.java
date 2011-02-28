@@ -57,11 +57,12 @@ final class EquivalenceAnnotationProcessor<T> {
     }
 
     private <U> Equivalence<T> processSpecification( final TypeEquivalenceSpecification<U> equivalenceSpecification ) {
-        final TypeEquivalence<? super U> equivalenceOnPropertyType =
+        final Equivalence<? super U> equivalenceOnPropertyType =
                 typeEquivalenceInterpreter.getEquivalenceFor( equivalenceSpecification );
 
-        return liftPropertyEquivalence( equivalenceSpecification.getTargetType( ),
-            equivalenceOnPropertyType.getEquivalence( ) );
+        return liftPropertyEquivalence(
+            wrap( equivalenceSpecification.getTargetType( ) ),
+            equivalenceOnPropertyType );
     }
 
     private <U> Equivalence<T> liftPropertyEquivalence( final Class<U> requiredPropertyType,

@@ -20,7 +20,7 @@ class BasicTypeEquivalenceInterpreter {
         this.equivalenceFactory = equivalenceFactory;
     }
 
-    public <T> TypeEquivalence<? super T> getEquivalenceFor( final Annotation equivalenceAnnotation,
+    public <T> Equivalence<? super T> getEquivalenceFor( final Annotation equivalenceAnnotation,
             final Class<T> propertyType ) {
 
         checkNotNull( equivalenceAnnotation, "Unexpected missing annotation." );
@@ -35,38 +35,26 @@ class BasicTypeEquivalenceInterpreter {
     }
 
     @SuppressWarnings( "unchecked" )
-    private <T> TypeEquivalence<? super T> computeApproximateEquality( final ApproximateEquality equivalenceAnnotation,
+    private <T> Equivalence<? super T> computeApproximateEquality( final ApproximateEquality equivalenceAnnotation,
             final Class<T> propertyType ) {
         checkState( Number.class.isAssignableFrom( wrap( propertyType ) ) );
 
-        final Equivalence<Number> equivalence =
-                equivalenceFactory.getApproximateEquality( ( equivalenceAnnotation ).tolerance( ) );
-
-        return (TypeEquivalence<? super T>) new TypeEquivalence<Number>( equivalence, Number.class );
+        return (Equivalence<? super T>) equivalenceFactory
+            .getApproximateEquality( ( equivalenceAnnotation ).tolerance( ) );
     }
 
     @SuppressWarnings( "unchecked" )
-    private <T> TypeEquivalence<? super T> computeTextEquivalence( final Text annotation,
+    private <T> Equivalence<? super T> computeTextEquivalence( final Text annotation,
             final Class<T> propertyType ) {
         checkState( String.class.isAssignableFrom( wrap( propertyType ) ) );
 
-        final Equivalence<String> equivalence = equivalenceFactory
+        return (Equivalence<? super T>) equivalenceFactory
             .getTextEquivalence( annotation.options( ) );
 
-        return (TypeEquivalence<? super T>) new TypeEquivalence<String>( equivalence, String.class );
     }
 
-    private <V> TypeEquivalence<V> computeGenericEquivalence( final Annotation equivalenceAnnotation,
+    private <V> Equivalence<V> computeGenericEquivalence( final Annotation equivalenceAnnotation,
             final Class<V> type, final boolean isPrimitive ) {
-
-        final Equivalence<V> equivalence = computeEquivalence( equivalenceAnnotation, type, isPrimitive );
-
-        return new TypeEquivalence<V>( equivalence, type );
-
-    }
-
-    private <V> Equivalence<V> computeEquivalence( final Annotation equivalenceAnnotation, final Class<V> type,
-            final boolean isPrimitive ) {
 
         final Class<? extends Annotation> annotationType = equivalenceAnnotation.annotationType( );
 
@@ -88,6 +76,7 @@ class BasicTypeEquivalenceInterpreter {
 
         throw new IllegalStateException( String.format( "Cannot process annotation of type %s.",
             annotationType.getSimpleName( ) ) );
+
     }
 
     private final EquivalenceFactory equivalenceFactory;
