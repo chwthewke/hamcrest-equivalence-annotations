@@ -3,7 +3,7 @@
 
     <groupId>net.chwthewke</groupId>
     <artifactId>hamcrest-equivalence-annotations</artifactId>
-    <version>0.9.4-SNAPSHOT</version>
+    <version>0.9.4</version>
     <packaging>jar</packaging>
 
     <name>hamcrest-equivalence-annotations</name>
