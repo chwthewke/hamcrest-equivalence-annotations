@@ -2,6 +2,7 @@ package net.chwthewke.hamcrest.matchers;
 
 import net.chwthewke.hamcrest.equivalence.Equivalence;
 
+// TODO is this type still useful
 class TypeEquivalence<U> {
 
     public TypeEquivalence( final Equivalence<U> equivalence, final Class<U> type ) {

@@ -3,6 +3,7 @@ package net.chwthewke.hamcrest.matchers;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.primitives.Primitives.wrap;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.arrayEquivalence;
 import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.booleanArrayEquivalence;
 import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.byteArrayEquivalence;
 import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.charArrayEquivalence;
@@ -16,10 +17,7 @@ import java.lang.annotation.Annotation;
 
 import net.chwthewke.hamcrest.annotations.OnArrayElements;
 import net.chwthewke.hamcrest.annotations.OnIterableElements;
-import net.chwthewke.hamcrest.equivalence.ArrayEquivalences;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
-
-import com.google.common.base.Function;
 
 class TypeEquivalenceInterpreter {
 
@@ -30,8 +28,7 @@ class TypeEquivalenceInterpreter {
         this.basicTypeEquivalenceInterpreter = basicTypeEquivalenceInterpreter;
     }
 
-    // TODO rename, as well as similar method on BTEI
-    public <T> TypeEquivalence<? super T> computeEquivalenceOnPropertyType(
+    public <T> TypeEquivalence<? super T> getEquivalenceFor(
             final TypeEquivalenceSpecification<T> specification ) {
 
         final Annotation equivalenceAnnotation = specification.getEquivalenceAnnotation( );
@@ -59,7 +56,7 @@ class TypeEquivalenceInterpreter {
 
             final boolean inOrder = onArrayAnnotation.inOrder( );
 
-            checkArgument( propertyType.isArray( ), "'propertyType' must be an array type." );
+            checkArgument( propertyType.isArray( ), "'specification.getTargetType( )' must be an array type." );
 
             final Class<?> elementType = propertyType.getComponentType( );
 
@@ -70,25 +67,6 @@ class TypeEquivalenceInterpreter {
         throw new IllegalArgumentException(
             String.format( "Unknown container annotation %s", containerAnnotation.annotationType( ).getSimpleName( ) ) );
 
-//        if ( specification.hasContainerAnnotation( )
-//                && containerAnnotation.annotationType( ) == OnArrayElements.class )
-//        {
-//            checkArgument( propertyType.isArray( ), "'propertyType' must be an array type." );
-//
-//            final OnArrayElements onElementsAnnotation = (OnArrayElements) containerAnnotation;
-//            final Class<?> elementType = propertyType.getComponentType( );
-//
-//            final Equivalence<?> equivalenceOnElementType = basicTypeEquivalenceInterpreter
-//                .createTypeEquivalence( equivalenceAnnotation, elementType )
-//                .getEquivalence( );
-//            final TypeEquivalence<Iterable<?>> iterableEquivalence = liftToIterable( equivalenceOnElementType,
-//                (Class) Iterable.class,
-//                onElementsAnnotation.inOrder( ) );
-//            return new TypeEquivalence(
-//                ArrayEquivalences.<Object>forArrays( iterableEquivalence.getEquivalence( ) ), propertyType );
-//        }
-//
-//        return basicTypeEquivalenceInterpreter.createTypeEquivalence( equivalenceAnnotation, propertyType );
     }
 
     private <T, U> TypeEquivalence<? super T> createIterableEquivalence( final Annotation equivalenceAnnotation,
@@ -104,89 +82,55 @@ class TypeEquivalenceInterpreter {
                     equivalenceOnElements.getEquivalence( ),
                     inOrder );
 
-        return new TypeEquivalence<T>( (Equivalence<T>) iterableEquivalence, iterableType );
+        return unckechedTypeEquivalence( iterableEquivalence, iterableType );
     }
 
     private <T, U> TypeEquivalence<? super T> createArrayEquivalence( final Annotation equivalenceAnnotation,
             final boolean inOrder, final Class<T> arrayType, final Class<U> elementType ) {
 
         final TypeEquivalence<? super U> equivalenceOnElements =
-                interpretEquivalenceOnBasicType( equivalenceAnnotation,
-                    wrap( elementType ) );
+                interpretEquivalenceOnBasicType( equivalenceAnnotation, wrap( elementType ) );
 
-        if ( elementType == boolean.class )
-        {
-            final Equivalence<Iterable<? extends Boolean>> iterableEquivalence =
-                    equivalenceFactory.<Boolean>createIterableEquivalence(
-                        (Equivalence<Boolean>) equivalenceOnElements.getEquivalence( ),
-                        inOrder );
-            final Equivalence<boolean[ ]> arrayEquivalence =
-                    ArrayEquivalences.forBooleanArrays( iterableEquivalence );
-            return new TypeEquivalence<T>( (Equivalence<T>) arrayEquivalence, arrayType );
-        }
+        if ( elementType.isPrimitive( ) )
+            return new TypeEquivalence<T>(
+                primitiveArrayEquivalence( equivalenceOnElements.getEquivalence( ), inOrder, elementType, arrayType ),
+                arrayType );
 
-        if ( !elementType.isPrimitive( ) )
-        {
-            final Equivalence<Iterable<? extends U>> iterableEquivalence =
-                    equivalenceFactory.<U>createIterableEquivalence(
-                        equivalenceOnElements.getEquivalence( ),
-                        inOrder );
-            final Equivalence<U[ ]> arrayEquivalence =
-                    ArrayEquivalences.forArrays( iterableEquivalence );
-            return new TypeEquivalence<T>( (Equivalence<T>) arrayEquivalence, arrayType );
-        }
-        // TODO
-        return null;
-    }
-
-    private <T, U> TypeEquivalence<T> toArray( final Equivalence<U> equivalence, final boolean inOrder,
-            final Class<T> arrayType, final Function<Equivalence<Iterable<? extends U>>, Equivalence<?>> converter ) {
-        final Equivalence<Iterable<? extends U>> iterableEquivalence =
-                equivalenceFactory.<U>createIterableEquivalence(
-                    equivalence,
-                    inOrder );
-        final Equivalence<T> arrayEquivalence =
-                (Equivalence<T>) converter.apply( iterableEquivalence );
-        return new TypeEquivalence<T>( arrayEquivalence, arrayType );
-
+        return unckechedTypeEquivalence(
+            arrayEquivalence( equivalenceOnElements.getEquivalence( ), inOrder ), arrayType );
     }
 
     private <T> TypeEquivalence<? super T> interpretEquivalenceOnBasicType( final Annotation equivalenceAnnotation,
             final Class<T> propertyType ) {
-        return basicTypeEquivalenceInterpreter.createTypeEquivalence( equivalenceAnnotation, propertyType );
+        return basicTypeEquivalenceInterpreter.getEquivalenceFor( equivalenceAnnotation, propertyType );
     }
 
-//    private <X extends Iterable<?>> TypeEquivalence<X> liftToIterable( final Equivalence<?> equivalenceOnElementType,
-//            final Class<X> propertyType, final boolean enforceOrder ) {
-//
-//        @SuppressWarnings( "unchecked" )
-//        final Equivalence<X> equivalenceOnProperty =
-//                (Equivalence<X>) equivalenceFactory.createIterableEquivalence( equivalenceOnElementType, enforceOrder );
-//
-//        return new TypeEquivalence<X>( equivalenceOnProperty, propertyType );
-//    }
+    @SuppressWarnings( "unchecked" )
+    private <T, U> TypeEquivalence<T> unckechedTypeEquivalence( final Equivalence<U> equivalence, final Class<T> type ) {
+        return new TypeEquivalence<T>( (Equivalence<T>) equivalence, type );
+    }
 
     @SuppressWarnings( "unchecked" )
-    public static <T, U> Equivalence<U> primitiveArrayEquivalence( final Equivalence<T> equivalence,
-            final boolean inOrder, final Class<T> componentType, final Class<U> arrayType ) {
+    public static <U, V> Equivalence<V> primitiveArrayEquivalence( final Equivalence<? super U> equivalence,
+            final boolean inOrder, final Class<U> componentType, final Class<V> arrayType ) {
         checkState( componentType.isPrimitive( ) && arrayType.getComponentType( ) == componentType );
 
         if ( componentType == boolean.class )
-            return (Equivalence<U>) booleanArrayEquivalence( (Equivalence<Boolean>) equivalence, inOrder );
+            return (Equivalence<V>) booleanArrayEquivalence( (Equivalence<Boolean>) equivalence, inOrder );
         else if ( componentType == byte.class )
-            return (Equivalence<U>) byteArrayEquivalence( (Equivalence<Byte>) equivalence, inOrder );
+            return (Equivalence<V>) byteArrayEquivalence( (Equivalence<Byte>) equivalence, inOrder );
         else if ( componentType == char.class )
-            return (Equivalence<U>) charArrayEquivalence( (Equivalence<Character>) equivalence, inOrder );
+            return (Equivalence<V>) charArrayEquivalence( (Equivalence<Character>) equivalence, inOrder );
         else if ( componentType == double.class )
-            return (Equivalence<U>) doubleArrayEquivalence( (Equivalence<Double>) equivalence, inOrder );
+            return (Equivalence<V>) doubleArrayEquivalence( (Equivalence<Double>) equivalence, inOrder );
         else if ( componentType == float.class )
-            return (Equivalence<U>) floatArrayEquivalence( (Equivalence<Float>) equivalence, inOrder );
+            return (Equivalence<V>) floatArrayEquivalence( (Equivalence<Float>) equivalence, inOrder );
         else if ( componentType == int.class )
-            return (Equivalence<U>) intArrayEquivalence( (Equivalence<Integer>) equivalence, inOrder );
+            return (Equivalence<V>) intArrayEquivalence( (Equivalence<Integer>) equivalence, inOrder );
         else if ( componentType == long.class )
-            return (Equivalence<U>) longArrayEquivalence( (Equivalence<Long>) equivalence, inOrder );
+            return (Equivalence<V>) longArrayEquivalence( (Equivalence<Long>) equivalence, inOrder );
         else if ( componentType == short.class )
-            return (Equivalence<U>) shortArrayEquivalence( (Equivalence<Short>) equivalence, inOrder );
+            return (Equivalence<V>) shortArrayEquivalence( (Equivalence<Short>) equivalence, inOrder );
 
         throw new IllegalStateException( "Unreachable." );
     }

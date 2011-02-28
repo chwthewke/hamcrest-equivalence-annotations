@@ -52,7 +52,7 @@ final class EquivalenceAnnotationProcessor<T> {
     public Equivalence<T> processEquivalenceSpecification( ) {
 
         final TypeEquivalence<?> equivalenceOnPropertyType = typeEquivalenceInterpreter
-            .computeEquivalenceOnPropertyType( annotationReader.getTypeEquivalenceSpecification( specification ) );
+            .getEquivalenceFor( annotationReader.getTypeEquivalenceSpecification( specification ) );
         return lift( equivalenceOnPropertyType );
     }
 

@@ -20,7 +20,7 @@ class BasicTypeEquivalenceInterpreter {
         this.equivalenceFactory = equivalenceFactory;
     }
 
-    public <T> TypeEquivalence<? super T> createTypeEquivalence( final Annotation equivalenceAnnotation,
+    public <T> TypeEquivalence<? super T> getEquivalenceFor( final Annotation equivalenceAnnotation,
             final Class<T> propertyType ) {
 
         checkNotNull( equivalenceAnnotation, "Unexpected missing annotation." );

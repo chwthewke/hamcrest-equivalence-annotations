@@ -45,7 +45,7 @@ public class BasicTypeEquivalenceInterpreterTest {
         when( equivalenceFactory.<String>getEquality( ) ).thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceInterpreter.createTypeEquivalence( equality, String.class );
+                typeEquivalenceInterpreter.getEquivalenceFor( equality, String.class );
         // Verify
         verify( equivalenceFactory ).getEquality( );
         assertThat( (Class<String>) typeEquivalence.getType( ), is( equalTo( String.class ) ) );
@@ -62,7 +62,7 @@ public class BasicTypeEquivalenceInterpreterTest {
         when( equivalenceFactory.getIdentity( ) ).thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceInterpreter.createTypeEquivalence( identity, Object.class );
+                typeEquivalenceInterpreter.getEquivalenceFor( identity, Object.class );
 
         // Verify
         verify( equivalenceFactory ).getIdentity( );
@@ -82,7 +82,7 @@ public class BasicTypeEquivalenceInterpreterTest {
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceInterpreter.createTypeEquivalence( approx, float.class );
+                typeEquivalenceInterpreter.getEquivalenceFor( approx, float.class );
 
         // Verify
         verify( equivalenceFactory ).getApproximateEquality( 0.001d );
@@ -102,7 +102,7 @@ public class BasicTypeEquivalenceInterpreterTest {
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceInterpreter.createTypeEquivalence( approx, Double.class );
+                typeEquivalenceInterpreter.getEquivalenceFor( approx, Double.class );
 
         // Verify
         verify( equivalenceFactory ).getApproximateEquality( 2e-6d );
@@ -122,7 +122,7 @@ public class BasicTypeEquivalenceInterpreterTest {
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceInterpreter.createTypeEquivalence( bySpecification, Date.class );
+                typeEquivalenceInterpreter.getEquivalenceFor( bySpecification, Date.class );
 
         // Verify
         verify( equivalenceFactory ).getEquivalenceBySpecification( EquivalenceSpecification.class, Date.class );
@@ -141,7 +141,7 @@ public class BasicTypeEquivalenceInterpreterTest {
             .thenReturn( equivalence );
         // Exercise
         final TypeEquivalence<?> typeEquivalence =
-                typeEquivalenceInterpreter.createTypeEquivalence( byEquivalence, Date.class );
+                typeEquivalenceInterpreter.getEquivalenceFor( byEquivalence, Date.class );
 
         // Verify
         verify( equivalenceFactory ).createEquivalenceInstance( byEquivalence, Date.class );
@@ -160,7 +160,7 @@ public class BasicTypeEquivalenceInterpreterTest {
         // Exercise
         try
         {
-            typeEquivalenceInterpreter.createTypeEquivalence( nonsensicalAnnotation, Object.class );
+            typeEquivalenceInterpreter.getEquivalenceFor( nonsensicalAnnotation, Object.class );
             // Verify
             fail( );
         }
