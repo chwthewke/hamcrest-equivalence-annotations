@@ -15,7 +15,10 @@ import com.google.common.primitives.Shorts;
 /**
  * {@link ArrayEquivalences} allows to adapt an equivalence on an {@link Iterable} into an equivalence that acts upon arrays
  * of the same component type. Additional overloads for arrays of primitive types are provided.
+ * 
+ * @deprecated use {@link ArrayEquivalences2}.
  */
+@Deprecated
 public final class ArrayEquivalences {
 
     /**
