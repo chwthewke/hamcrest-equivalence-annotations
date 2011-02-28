@@ -3,15 +3,15 @@ package net.chwthewke.hamcrest.matchers;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.primitives.Primitives.wrap;
-import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.arrayEquivalence;
-import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.booleanArrayEquivalence;
-import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.byteArrayEquivalence;
-import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.charArrayEquivalence;
-import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.doubleArrayEquivalence;
-import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.floatArrayEquivalence;
-import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.intArrayEquivalence;
-import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.longArrayEquivalence;
-import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences2.shortArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences.arrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences.booleanArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences.byteArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences.charArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences.doubleArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences.floatArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences.intArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences.longArrayEquivalence;
+import static net.chwthewke.hamcrest.equivalence.ArrayEquivalences.shortArrayEquivalence;
 
 import java.lang.annotation.Annotation;
 

@@ -13,179 +13,221 @@ import com.google.common.primitives.Longs;
 import com.google.common.primitives.Shorts;
 
 /**
- * {@link ArrayEquivalences} allows to adapt an equivalence on an {@link Iterable} into an equivalence that acts upon arrays
- * of the same component type. Additional overloads for arrays of primitive types are provided.
- * 
- * @deprecated use {@link ArrayEquivalences2}.
+ * {@link ArrayEquivalences} allows to adapt an equivalence on a given type into an equivalence that acts upon arrays
+ * of that type. Additional overloads for arrays of primitive types are provided.
  */
-@Deprecated
 public final class ArrayEquivalences {
 
     /**
-     * Adapts an equivalence on {@link Iterable}&lt;T&gt; into an equivalence on <code>T[]</code>.
+     * Adapts an equivalence on <code>T</code> into an equivalence on <code>T[]</code>. Two arrays will be equivalent
+     * by the returned equivalence iff there exists a 1-to-1 mapping between their respective
+     * elements such that each pair of elements in the mapping are equivalent according to the provided
+     * <code>equivalence</code>.
      * 
      * @param <T>
      *            The component type.
-     * @param iterableEquivalence
-     *            An equivalence on {@link Iterable}&lt;T&gt;.
+     * @param equivalence
+     *            An equivalence on T.
+     * @param inOrder
+     *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must
+     *            respect array order.
      * @return The adapted equivalence on <code>T[]</code>.
      */
-    public static <T> Equivalence<T[ ]> forArrays( final Equivalence<Iterable<? extends T>> iterableEquivalence ) {
-        final Function<T[ ], Iterable<? extends T>> toList =
-                new Function<T[ ], Iterable<? extends T>>( ) {
-                    public Iterable<T> apply( final T[ ] input ) {
-                        return newArrayList( input );
-                    }
-                };
-        return new LiftedEquivalence<T[ ], Iterable<? extends T>>( "",
-                iterableEquivalence, toList );
+    public static <T> Equivalence<T[ ]> arrayEquivalence( final Equivalence<? super T> equivalence,
+            final boolean inOrder ) {
+        final Function<T[ ], Iterable<? extends T>> toList = arrayToListFunction( );
+
+        return liftToArray( equivalence, inOrder, toList );
     }
 
     /**
-     * Adapts an equivalence on {@link Iterable}&lt;Boolean&gt; into an equivalence on <code>boolean[]</code>.
+     * Adapts an equivalence on <code>Boolean</code> into an equivalence on <code>boolean[]</code>. Two arrays will be
+     * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
+     * elements such that each pair of elements in the mapping are equivalent according to the provided
+     * <code>equivalence</code>.
      * 
-     * @param booleanEquivalence
-     *            An equivalence on {@link Iterable}&lt;Boolean&gt;
+     * @param equivalence
+     *            An equivalence on Boolean.
+     * @param inOrder
+     *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must
+     *            respect array order.
      * @return The adapted equivalence on <code>boolean[]</code>.
      */
-    public static Equivalence<boolean[ ]> forBooleanArrays(
-            final Equivalence<Iterable<? extends Boolean>> booleanEquivalence ) {
-        final Function<boolean[ ], Iterable<? extends Boolean>> toBooleanList =
-                new Function<boolean[ ], Iterable<? extends Boolean>>( ) {
-                    public Iterable<? extends Boolean> apply( final boolean[ ] input ) {
-                        return Booleans.asList( input );
-                    }
-                };
-        return new LiftedEquivalence<boolean[ ], Iterable<? extends Boolean>>( "",
-                booleanEquivalence, toBooleanList );
+    public static Equivalence<boolean[ ]> booleanArrayEquivalence( final Equivalence<? super Boolean> equivalence,
+            final boolean inOrder ) {
+        return liftToArray( equivalence, inOrder, new Function<boolean[ ], Iterable<? extends Boolean>>( ) {
+            public Iterable<Boolean> apply( final boolean[ ] array ) {
+                return Booleans.asList( array );
+            }
+        } );
     }
 
     /**
-     * Adapts an equivalence on {@link Iterable}&lt;Byte&gt; into an equivalence on <code>byte[]</code>.
+     * Adapts an equivalence on <code>Byte</code> into an equivalence on <code>byte[]</code>. Two arrays will be
+     * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
+     * elements such that each pair of elements in the mapping are equivalent according to the provided
+     * <code>equivalence</code>.
      * 
-     * @param byteEquivalence
-     *            An equivalence on {@link Iterable}&lt;Byte&gt;
+     * @param equivalence
+     *            An equivalence on Byte.
+     * @param inOrder
+     *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must
+     *            respect array order.
      * @return The adapted equivalence on <code>byte[]</code>.
      */
-    public static Equivalence<byte[ ]> forByteArrays( final Equivalence<Iterable<? extends Byte>> byteEquivalence ) {
-        final Function<byte[ ], Iterable<? extends Byte>> toByteList =
-                new Function<byte[ ], Iterable<? extends Byte>>( ) {
-                    public Iterable<? extends Byte> apply( final byte[ ] input ) {
-                        return Bytes.asList( input );
-                    }
-                };
-        return new LiftedEquivalence<byte[ ], Iterable<? extends Byte>>( "",
-                byteEquivalence, toByteList );
+    public static Equivalence<byte[ ]> byteArrayEquivalence( final Equivalence<? super Byte> equivalence,
+            final boolean inOrder ) {
+        return liftToArray( equivalence, inOrder, new Function<byte[ ], Iterable<? extends Byte>>( ) {
+            public Iterable<Byte> apply( final byte[ ] array ) {
+                return Bytes.asList( array );
+            }
+        } );
     }
 
     /**
-     * Adapts an equivalence on {@link Iterable}&lt;Character&gt; into an equivalence on <code>char[]</code>.
+     * Adapts an equivalence on <code>Character</code> into an equivalence on <code>char[]</code>. Two arrays will be
+     * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
+     * elements such that each pair of elements in the mapping are equivalent according to the provided
+     * <code>equivalence</code>.
      * 
-     * @param charEquivalence
-     *            An equivalence on {@link Iterable}&lt;Character&gt;
+     * @param equivalence
+     *            An equivalence on Character.
+     * @param inOrder
+     *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must
+     *            respect array order.
      * @return The adapted equivalence on <code>char[]</code>.
      */
-    public static Equivalence<char[ ]> forCharacterArrays(
-            final Equivalence<Iterable<? extends Character>> charEquivalence ) {
-        final Function<char[ ], Iterable<? extends Character>> toCharacterList =
-                new Function<char[ ], Iterable<? extends Character>>( ) {
-                    public Iterable<? extends Character> apply( final char[ ] input ) {
-                        return Chars.asList( input );
-                    }
-                };
-        return new LiftedEquivalence<char[ ], Iterable<? extends Character>>( "",
-                charEquivalence, toCharacterList );
+    public static Equivalence<char[ ]> charArrayEquivalence( final Equivalence<? super Character> equivalence,
+            final boolean inOrder ) {
+        return liftToArray( equivalence, inOrder, new Function<char[ ], Iterable<? extends Character>>( ) {
+            public Iterable<Character> apply( final char[ ] array ) {
+                return Chars.asList( array );
+            }
+        } );
     }
 
     /**
-     * Adapts an equivalence on {@link Iterable}&lt;Double&gt; into an equivalence on <code>double[]</code>.
+     * Adapts an equivalence on <code>Double</code> into an equivalence on <code>double[]</code>. Two arrays will be
+     * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
+     * elements such that each pair of elements in the mapping are equivalent according to the provided
+     * <code>equivalence</code>.
      * 
-     * @param doubleEquivalence
-     *            An equivalence on {@link Iterable}&lt;Double&gt;
+     * @param equivalence
+     *            An equivalence on Double.
+     * @param inOrder
+     *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must
+     *            respect array order.
      * @return The adapted equivalence on <code>double[]</code>.
      */
-    public static Equivalence<double[ ]> forDoubleArrays(
-            final Equivalence<Iterable<? extends Double>> doubleEquivalence ) {
-        final Function<double[ ], Iterable<? extends Double>> toDoubleList =
-                new Function<double[ ], Iterable<? extends Double>>( ) {
-                    public Iterable<? extends Double> apply( final double[ ] input ) {
-                        return Doubles.asList( input );
-                    }
-                };
-        return new LiftedEquivalence<double[ ], Iterable<? extends Double>>( "",
-                doubleEquivalence, toDoubleList );
+    public static Equivalence<double[ ]> doubleArrayEquivalence( final Equivalence<? super Double> equivalence,
+            final boolean inOrder ) {
+        return liftToArray( equivalence, inOrder, new Function<double[ ], Iterable<? extends Double>>( ) {
+            public Iterable<Double> apply( final double[ ] array ) {
+                return Doubles.asList( array );
+            }
+        } );
     }
 
     /**
-     * Adapts an equivalence on {@link Iterable}&lt;Float&gt; into an equivalence on <code>float[]</code>.
+     * Adapts an equivalence on <code>Float</code> into an equivalence on <code>float[]</code>. Two arrays will be
+     * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
+     * elements such that each pair of elements in the mapping are equivalent according to the provided
+     * <code>equivalence</code>.
      * 
-     * @param floatEquivalence
-     *            An equivalence on {@link Iterable}&lt;Float&gt;
+     * @param equivalence
+     *            An equivalence on Float.
+     * @param inOrder
+     *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must
+     *            respect array order.
      * @return The adapted equivalence on <code>float[]</code>.
      */
-    public static Equivalence<float[ ]> forFloatArrays( final Equivalence<Iterable<? extends Float>> floatEquivalence ) {
-        final Function<float[ ], Iterable<? extends Float>> toFloatList =
-                new Function<float[ ], Iterable<? extends Float>>( ) {
-                    public Iterable<? extends Float> apply( final float[ ] input ) {
-                        return Floats.asList( input );
-                    }
-                };
-        return new LiftedEquivalence<float[ ], Iterable<? extends Float>>( "",
-                floatEquivalence, toFloatList );
+    public static Equivalence<float[ ]> floatArrayEquivalence( final Equivalence<? super Float> equivalence,
+            final boolean inOrder ) {
+        return liftToArray( equivalence, inOrder, new Function<float[ ], Iterable<? extends Float>>( ) {
+            public Iterable<Float> apply( final float[ ] array ) {
+                return Floats.asList( array );
+            }
+        } );
     }
 
     /**
-     * Adapts an equivalence on {@link Iterable}&lt;Integer&gt; into an equivalence on <code>int[]</code>.
+     * Adapts an equivalence on <code>Integer</code> into an equivalence on <code>int[]</code>. Two arrays will be
+     * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
+     * elements such that each pair of elements in the mapping are equivalent according to the provided
+     * <code>equivalence</code>.
      * 
-     * @param intEquivalence
-     *            An equivalence on {@link Iterable}&lt;Integer&gt;
+     * @param equivalence
+     *            An equivalence on Integer.
+     * @param inOrder
+     *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must
+     *            respect array order.
      * @return The adapted equivalence on <code>int[]</code>.
      */
-    public static Equivalence<int[ ]> forIntegerArrays( final Equivalence<Iterable<? extends Integer>> intEquivalence ) {
-        final Function<int[ ], Iterable<? extends Integer>> toIntList =
-                new Function<int[ ], Iterable<? extends Integer>>( ) {
-                    public Iterable<? extends Integer> apply( final int[ ] input ) {
-                        return Ints.asList( input );
-                    }
-                };
-        return new LiftedEquivalence<int[ ], Iterable<? extends Integer>>( "",
-                intEquivalence, toIntList );
+    public static Equivalence<int[ ]> intArrayEquivalence( final Equivalence<? super Integer> equivalence,
+            final boolean inOrder ) {
+        return liftToArray( equivalence, inOrder, new Function<int[ ], Iterable<? extends Integer>>( ) {
+            public Iterable<Integer> apply( final int[ ] array ) {
+                return Ints.asList( array );
+            }
+        } );
     }
 
     /**
-     * Adapts an equivalence on {@link Iterable}&lt;Long&gt; into an equivalence on <code>long[]</code>.
+     * Adapts an equivalence on <code>Long</code> into an equivalence on <code>long[]</code>. Two arrays will be
+     * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
+     * elements such that each pair of elements in the mapping are equivalent according to the provided
+     * <code>equivalence</code>.
      * 
-     * @param longEquivalence
-     *            An equivalence on {@link Iterable}&lt;Long&gt;
+     * @param equivalence
+     *            An equivalence on Long.
+     * @param inOrder
+     *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must
+     *            respect array order.
      * @return The adapted equivalence on <code>long[]</code>.
      */
-    public static Equivalence<long[ ]> forLongArrays( final Equivalence<Iterable<? extends Long>> longEquivalence ) {
-        final Function<long[ ], Iterable<? extends Long>> toLongList =
-                new Function<long[ ], Iterable<? extends Long>>( ) {
-                    public Iterable<? extends Long> apply( final long[ ] input ) {
-                        return Longs.asList( input );
-                    }
-                };
-        return new LiftedEquivalence<long[ ], Iterable<? extends Long>>( "",
-                longEquivalence, toLongList );
+    public static Equivalence<long[ ]> longArrayEquivalence( final Equivalence<? super Long> equivalence,
+            final boolean inOrder ) {
+        return liftToArray( equivalence, inOrder, new Function<long[ ], Iterable<? extends Long>>( ) {
+            public Iterable<Long> apply( final long[ ] array ) {
+                return Longs.asList( array );
+            }
+        } );
     }
 
     /**
-     * Adapts an equivalence on {@link Iterable}&lt;Short&gt; into an equivalence on <code>short[]</code>.
+     * Adapts an equivalence on <code>Short</code> into an equivalence on <code>short[]</code>. Two arrays will be
+     * equivalent by the returned equivalence iff there exists a 1-to-1 mapping between their respective
+     * elements such that each pair of elements in the mapping are equivalent according to the provided
+     * <code>equivalence</code>.
      * 
-     * @param shortEquivalence
-     *            An equivalence on {@link Iterable}&lt;Short&gt;
+     * @param equivalence
+     *            An equivalence on Short.
+     * @param inOrder
+     *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must
+     *            respect array order.
      * @return The adapted equivalence on <code>short[]</code>.
      */
-    public static Equivalence<short[ ]> forShortArrays( final Equivalence<Iterable<? extends Short>> shortEquivalence ) {
-        final Function<short[ ], Iterable<? extends Short>> toShortList =
-                new Function<short[ ], Iterable<? extends Short>>( ) {
-                    public Iterable<? extends Short> apply( final short[ ] input ) {
-                        return Shorts.asList( input );
-                    }
-                };
-        return new LiftedEquivalence<short[ ], Iterable<? extends Short>>( "",
-                shortEquivalence, toShortList );
+    public static Equivalence<short[ ]> shortArrayEquivalence( final Equivalence<? super Short> equivalence,
+            final boolean inOrder ) {
+        return liftToArray( equivalence, inOrder, new Function<short[ ], Iterable<? extends Short>>( ) {
+            public Iterable<Short> apply( final short[ ] array ) {
+                return Shorts.asList( array );
+            }
+        } );
+    }
+
+    private static <T, U> Equivalence<U> liftToArray( final Equivalence<? super T> equivalence, final boolean inOrder,
+            final Function<U, Iterable<? extends T>> toList ) {
+        return new LiftedEquivalence<U, Iterable<? extends T>>( "",
+            new IterableEquivalence<T>( equivalence, inOrder ), toList );
+    }
+
+    private static <T> Function<T[ ], Iterable<? extends T>> arrayToListFunction( ) {
+        return new Function<T[ ], Iterable<? extends T>>( ) {
+            public Iterable<T> apply( final T[ ] input ) {
+                return newArrayList( input );
+            }
+        };
     }
 
     private ArrayEquivalences( ) {
