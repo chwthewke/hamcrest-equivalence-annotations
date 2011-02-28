@@ -28,15 +28,15 @@ class TypeEquivalenceInterpreter {
         this.basicTypeEquivalenceInterpreter = basicTypeEquivalenceInterpreter;
     }
 
-    public <T> TypeEquivalence<? super T> getEquivalenceFor(
+    public <T> Equivalence<? super T> getEquivalenceFor(
             final TypeEquivalenceSpecification<T> specification ) {
 
         final Annotation equivalenceAnnotation = specification.getEquivalenceAnnotation( );
 
-        final Class<T> propertyType = specification.getTargetType( );
+        final Class<T> targetType = specification.getTargetType( );
 
         if ( !specification.hasContainerAnnotation( ) )
-            return interpretEquivalenceOnBasicType( equivalenceAnnotation, propertyType );
+            return interpretEquivalenceOnBasicType( equivalenceAnnotation, targetType );
 
         final Annotation containerAnnotation = specification.getContainerAnnotation( );
         if ( containerAnnotation.annotationType( ) == OnIterableElements.class )
@@ -47,7 +47,7 @@ class TypeEquivalenceInterpreter {
             final Class<?> elementType = onIterableAnnotation.elementType( );
 
             return createIterableEquivalence( equivalenceAnnotation,
-                inOrder, propertyType, elementType );
+                inOrder, targetType, elementType );
         }
 
         if ( containerAnnotation.annotationType( ) == OnArrayElements.class )
@@ -56,63 +56,59 @@ class TypeEquivalenceInterpreter {
 
             final boolean inOrder = onArrayAnnotation.inOrder( );
 
-            checkArgument( propertyType.isArray( ), "'specification.getTargetType( )' must be an array type." );
-
-            final Class<?> elementType = propertyType.getComponentType( );
+            final Class<?> elementType = targetType.getComponentType( );
 
             return createArrayEquivalence( equivalenceAnnotation,
-                inOrder, propertyType, elementType );
+                inOrder, targetType, elementType );
         }
 
         throw new IllegalArgumentException(
             String.format( "Unknown container annotation %s", containerAnnotation.annotationType( ).getSimpleName( ) ) );
-
     }
 
-    private <T, U> TypeEquivalence<? super T> createIterableEquivalence( final Annotation equivalenceAnnotation,
+    private <T, U> Equivalence<? super T> createIterableEquivalence( final Annotation equivalenceAnnotation,
             final boolean inOrder, final Class<T> iterableType, final Class<U> elementType ) {
         checkArgument( Iterable.class.isAssignableFrom( iterableType ),
             "'propertyType' must be a subtype of Iterable." );
 
-        final TypeEquivalence<? super U> equivalenceOnElements =
+        final Equivalence<? super U> equivalenceOnElements =
                 interpretEquivalenceOnBasicType( equivalenceAnnotation, elementType );
 
         final Equivalence<Iterable<? extends U>> iterableEquivalence =
                 equivalenceFactory.<U>createIterableEquivalence(
-                    equivalenceOnElements.getEquivalence( ),
+                    equivalenceOnElements,
                     inOrder );
 
-        return unckechedTypeEquivalence( iterableEquivalence, iterableType );
+        return unckechedTypeEquivalence( iterableEquivalence );
     }
 
-    private <T, U> TypeEquivalence<? super T> createArrayEquivalence( final Annotation equivalenceAnnotation,
+    private <T, U> Equivalence<? super T> createArrayEquivalence( final Annotation equivalenceAnnotation,
             final boolean inOrder, final Class<T> arrayType, final Class<U> elementType ) {
 
-        final TypeEquivalence<? super U> equivalenceOnElements =
+        checkArgument( arrayType.isArray( ), "'specification.getTargetType( )' must be an array type." );
+
+        final Equivalence<? super U> equivalenceOnElements =
                 interpretEquivalenceOnBasicType( equivalenceAnnotation, wrap( elementType ) );
 
         if ( elementType.isPrimitive( ) )
-            return new TypeEquivalence<T>(
-                primitiveArrayEquivalence( equivalenceOnElements.getEquivalence( ), inOrder, elementType, arrayType ),
-                arrayType );
+            return primitiveArrayEquivalence( equivalenceOnElements, inOrder, arrayType, elementType );
 
-        return unckechedTypeEquivalence(
-            arrayEquivalence( equivalenceOnElements.getEquivalence( ), inOrder ), arrayType );
+        return unckechedTypeEquivalence( arrayEquivalence( equivalenceOnElements, inOrder ) );
     }
 
-    private <T> TypeEquivalence<? super T> interpretEquivalenceOnBasicType( final Annotation equivalenceAnnotation,
+    private <T> Equivalence<? super T> interpretEquivalenceOnBasicType( final Annotation equivalenceAnnotation,
             final Class<T> propertyType ) {
         return basicTypeEquivalenceInterpreter.getEquivalenceFor( equivalenceAnnotation, propertyType );
     }
 
     @SuppressWarnings( "unchecked" )
-    private <T, U> TypeEquivalence<T> unckechedTypeEquivalence( final Equivalence<U> equivalence, final Class<T> type ) {
-        return new TypeEquivalence<T>( (Equivalence<T>) equivalence, type );
+    private <T, U> Equivalence<T> unckechedTypeEquivalence( final Equivalence<U> equivalence ) {
+        return (Equivalence<T>) equivalence;
     }
 
     @SuppressWarnings( "unchecked" )
     public static <U, V> Equivalence<V> primitiveArrayEquivalence( final Equivalence<? super U> equivalence,
-            final boolean inOrder, final Class<U> componentType, final Class<V> arrayType ) {
+            final boolean inOrder, final Class<V> arrayType, final Class<U> componentType ) {
         checkState( componentType.isPrimitive( ) && arrayType.getComponentType( ) == componentType );
 
         if ( componentType == boolean.class )
