@@ -3,10 +3,11 @@ package net.chwthewke.hamcrest.annotations;
 import static net.chwthewke.hamcrest.matchers.Equivalences.asSpecifiedBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import net.chwthewke.hamcrest.annotations.Equality;
-import net.chwthewke.hamcrest.annotations.EquivalenceSpecificationOn;
+import static org.hamcrest.Matchers.startsWith;
+import net.chwthewke.hamcrest.MatcherUtils;
 import net.chwthewke.hamcrest.matchers.EquivalenceSpecification;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 public class EqualityMatchersTest {
@@ -39,6 +40,22 @@ public class EqualityMatchersTest {
             .matches( second );
         // Verify
         assertThat( match, is( true ) );
+    }
+
+    @Test
+    public void unequalReferencesMismatch( ) throws Exception {
+        // Setup
+        final Matched first = new Matched( new IntHolder( 12 ) );
+        final Matched second = new Matched( new IntHolder( 11 ) );
+
+        final Matcher<Matched> matcher = asSpecifiedBy( MatchingSpecification.class )
+            .equivalentTo( first );
+        // Exercise
+        final boolean match = matcher.matches( second );
+        // Verify
+        assertThat( match, is( false ) );
+        assertThat( MatcherUtils.describeMismatch( matcher, second ),
+            startsWith( "getHolder() was <net.chwthewke.hamcrest.annotations.EqualityMatchersTest$IntHolder@" ) );
     }
 
     public static class Matched {
