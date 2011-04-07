@@ -29,6 +29,17 @@ public class IdentityEquivalenceTest {
         assertThat( equivalence, separates( v1, v2 ) );
     }
 
+    @Test
+    public void identitySupportsNulls( ) throws Exception {
+        // Setup
+        // Exercise
+        final IdentityEquivalence<V> equivalence = new IdentityEquivalence<V>( );
+
+        // Verify
+        assertThat( equivalence, EquivalenceClassMatchers.<V>equates( null, null ) );
+        assertThat( equivalence, EquivalenceClassMatchers.<V>separates( null, new V( 12 ) ) );
+    }
+
     private static class V {
 
         public V( final int value ) {

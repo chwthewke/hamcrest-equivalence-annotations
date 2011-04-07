@@ -10,6 +10,9 @@ import static net.chwthewke.hamcrest.equivalence.TextEquivalenceOption.IGNORE_CA
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+
+import java.util.Collections;
+
 import net.chwthewke.hamcrest.equivalence.ApproximateEqualityEquivalence;
 import net.chwthewke.hamcrest.equivalence.EqualityEquivalence;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
@@ -62,6 +65,32 @@ public class ContainerEquivalenceFactoryTest {
         final String description = describe( equivalence.equivalentTo( newArrayList( "Abc", "def" ) ) );
         assertThat( description, is( equalTo( "iterable containing " +
                 "[equalToIgnoringCase(\"Abc\"), equalToIgnoringCase(\"def\")]" ) ) );
+    }
+
+    @Test
+    public void inOrderEquivalenceWithEmptyIterable( ) throws Exception {
+        // Setup
+        final Equivalence<String> componentEquivalence =
+                TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
+        // Exercise
+        final Equivalence<Iterable<? extends String>> equivalence = equivalenceFactory
+            .iterableEquivalence( componentEquivalence, true );
+        // Verify
+        assertThat( equivalence, EquivalenceClassMatchers.<Iterable<? extends String>>equates(
+            Collections.<String>emptyList( ), Collections.<String>emptyList( ) ) );
+    }
+
+    @Test
+    public void inAnyOrderEquivalenceWithEmptyIterable( ) throws Exception {
+        // Setup
+        final Equivalence<String> componentEquivalence =
+                TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
+        // Exercise
+        final Equivalence<Iterable<? extends String>> equivalence = equivalenceFactory
+            .iterableEquivalence( componentEquivalence, false );
+        // Verify
+        assertThat( equivalence, EquivalenceClassMatchers.<Iterable<? extends String>>equates(
+            Collections.<String>emptyList( ), Collections.<String>emptyList( ) ) );
     }
 
     @Test
@@ -131,7 +160,7 @@ public class ContainerEquivalenceFactoryTest {
     public void testStringArrayInOrderEquivalence( ) throws Exception {
         // Setup
         final Equivalence<String[ ]> equivalence = equivalenceFactory
-                .arrayEquivalence( textEquivalenceWith( IGNORE_CASE ), true );
+            .arrayEquivalence( textEquivalenceWith( IGNORE_CASE ), true );
         // Exercise
         // Verify
         assertThat( equivalence,
@@ -139,6 +168,32 @@ public class ContainerEquivalenceFactoryTest {
         assertThat( equivalence,
             separates(
                 new String[ ] { "abc", "def" }, new String[ ] { "ABC" }, new String[ ] { "ABC", "deg" } ) );
+    }
+
+    @Test
+    public void inOrderEquivalenceWithEmptyArray( ) throws Exception {
+        // Setup
+        final Equivalence<String> componentEquivalence =
+                TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
+        // Exercise
+        final Equivalence<String[ ]> equivalence = equivalenceFactory
+            .arrayEquivalence( componentEquivalence, true );
+        // Verify
+        assertThat( equivalence, EquivalenceClassMatchers.<String[ ]>equates(
+            new String[ 0 ], new String[ 0 ] ) );
+    }
+
+    @Test
+    public void inAnyOrderEquivalenceWithEmptyArray( ) throws Exception {
+        // Setup
+        final Equivalence<String> componentEquivalence =
+                TextEquivalence.textEquivalenceWith( TextEquivalenceOption.IGNORE_CASE );
+        // Exercise
+        final Equivalence<String[ ]> equivalence = equivalenceFactory
+            .arrayEquivalence( componentEquivalence, false );
+        // Verify
+        assertThat( equivalence, EquivalenceClassMatchers.<String[ ]>equates(
+            new String[ 0 ], new String[ 0 ] ) );
     }
 
     @Test
