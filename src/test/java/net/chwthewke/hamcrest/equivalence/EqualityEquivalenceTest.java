@@ -46,4 +46,15 @@ public class EqualityEquivalenceTest {
         // Verify
         assertThat( equivalence, separates( "a", "b" ) );
     }
+
+    @Test
+    public void equalitySupportsNulls( ) throws Exception {
+        // Setup
+        final EqualityEquivalence<String> equality = new EqualityEquivalence<String>( );
+        // Exercise
+
+        // Verify
+        assertThat( equality, EquivalenceClassMatchers.<String>equates( null, null ) );
+        assertThat( equality, EquivalenceClassMatchers.<String>separates( null, "ab" ) );
+    }
 }

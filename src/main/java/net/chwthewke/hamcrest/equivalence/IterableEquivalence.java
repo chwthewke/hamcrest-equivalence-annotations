@@ -1,5 +1,6 @@
 package net.chwthewke.hamcrest.equivalence;
 
+import static com.google.common.collect.Iterables.isEmpty;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.transform;
 import static org.hamcrest.Matchers.contains;
@@ -36,17 +37,21 @@ public final class IterableEquivalence<T> implements Equivalence<Iterable<? exte
                             return equivalence.equivalentTo( input );
                         }
                     } );
-        return inOrder ? contains( expectedItems ) : containsInAnyOrder( expectedItems );
+        return ( inOrder && !isEmpty( expectedItems ) ) ?
+                contains( expectedItems ) :
+                containsInAnyOrder( expectedItems );
     }
 
     /**
-     * Creates an equivalence such that two {@link Iterable}s are equivalent iff there exists a 1-to-1 mapping between their respective
+     * Creates an equivalence such that two {@link Iterable}s are equivalent iff there exists a 1-to-1 mapping between
+     * their respective
      * elements such that each pair of elements in the mapping are equivalent.
      * 
      * @param equivalence
      *            The equivalence on the component type.
      * @param inOrder
-     *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must respect iteration order.
+     *            When <code>true</code>, imposes the additional restriction that the above-mentioned mapping must
+     *            respect iteration order.
      */
     public IterableEquivalence( final Equivalence<? super T> equivalence, final boolean inOrder ) {
         this.equivalence = equivalence;
