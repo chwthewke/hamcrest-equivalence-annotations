@@ -23,8 +23,10 @@ import java.lang.reflect.Method;
 import net.chwthewke.hamcrest.equivalence.ApproximateEqualityEquivalence;
 import net.chwthewke.hamcrest.equivalence.EqualityEquivalence;
 import net.chwthewke.hamcrest.equivalence.Equivalence;
+import net.chwthewke.hamcrest.equivalence.EquivalenceClassMatchers;
 import net.chwthewke.hamcrest.equivalence.IdentityEquivalence;
 import net.chwthewke.hamcrest.equivalence.LiftedEquivalence;
+import net.chwthewke.hamcrest.equivalence.NullAwareEquivalence;
 import net.chwthewke.hamcrest.sut.classes.WithDoubleProperty;
 import net.chwthewke.hamcrest.sut.classes.WithObjectProperty;
 import net.chwthewke.hamcrest.sut.classes.WithPropertyWithDefinedEquivalence;
@@ -184,11 +186,15 @@ public class EquivalenceAnnotationProcessorTest {
                 EquivalenceAnnotationProcessorTest.<WithPropertyWithDefinedEquivalence, WithPublicProperty>functionOf( target ) );
 
         final Equivalence<WithPublicProperty> capturedEquivalence = (Equivalence<WithPublicProperty>) equivalenceCaptor.getValue( );
-        assertThat( capturedEquivalence, is( instanceOf( CompositeEquivalence.class ) ) );
+        assertThat( capturedEquivalence, is( instanceOf( NullAwareEquivalence.class ) ) );
         assertThat( capturedEquivalence,
             equates( new WithPublicProperty( "abc" ), new WithPublicProperty( "abc" ) ) );
         assertThat( capturedEquivalence,
             separates( new WithPublicProperty( "abc" ), new WithPublicProperty( "def" ) ) );
+        assertThat( capturedEquivalence, EquivalenceClassMatchers.<WithPublicProperty>equates( null, null ) );
+        assertThat(
+            capturedEquivalence,
+            separates( new WithPublicProperty( "abc" ), null ) );
 
         assertThat( equivalence, is( sameInstance( (Equivalence<WithPropertyWithDefinedEquivalence>) token ) ) );
     }

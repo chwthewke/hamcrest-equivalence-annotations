@@ -1,5 +1,6 @@
 package net.chwthewke.hamcrest.matchers;
 
+import static net.chwthewke.hamcrest.equivalence.NullAwareEquivalence.nullAware;
 import net.chwthewke.hamcrest.annotations.ByEquivalence;
 import net.chwthewke.hamcrest.equivalence.ApproximateEqualityEquivalence;
 import net.chwthewke.hamcrest.equivalence.EqualityEquivalence;
@@ -28,8 +29,9 @@ class EquivalenceFactory {
 
     public <T> Equivalence<T> getEquivalenceBySpecification( final Class<?> specificationInterface,
             final Class<T> targetType ) {
-        return new CompositeEquivalence<T>( propertyFinder, specificationValidator,
-                targetType, specificationInterface );
+        return nullAware(
+            new CompositeEquivalence<T>( propertyFinder, specificationValidator, targetType, specificationInterface ),
+            targetType );
     }
 
     public <T> Equivalence<T> createEquivalenceInstance( final ByEquivalence specificationAnnotation,
