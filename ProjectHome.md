@@ -1,0 +1,1 @@
+Flexible replacement for the "equalTo" hamcrest matcher when using the "equals" method is not possible. Relies on annotation-driven declarations to define an equivalence relation on a type.
